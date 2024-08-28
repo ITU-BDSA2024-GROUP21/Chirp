@@ -4,7 +4,7 @@ using (var reader = new StreamReader("chirp_cli_db.csv"))
 {
     List<String> Authors = new List<String>();
     List<String> cheeps = new List<String>();
-    List<long> time  = new List<long>();
+    List<DateTime> time  = new List<DateTime>();
     int csvLength = System.IO.File.ReadAllLines("chirp_cli_db.csv").Length;
     
     Console.WriteLine(csvLength);
@@ -17,9 +17,11 @@ using (var reader = new StreamReader("chirp_cli_db.csv"))
         var values = line.Split(',');
         Authors.Add(values[0]);
         cheeps.Add(values[1]);
-        time.Add(long.Parse(values[2]));
+        time.Add(DateTimeOffset.FromUnixTimeSeconds(long.Parse(values[2])).AddHours(2).DateTime);
     }
     Console.WriteLine(Authors[0]);
+    Console.WriteLine(time[0]);
     
 }
+
 

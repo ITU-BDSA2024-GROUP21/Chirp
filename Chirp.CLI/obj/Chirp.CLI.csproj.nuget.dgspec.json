@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\krist\\RiderProjects\\Chirp\\Chirp.CLI\\Chirp.CLI.csproj": {}
+    "/Users/mathildemarcussen/Desktop/3. Semester/Chirp/Chirp.CLI/Chirp.CLI.csproj": {}
   },
   "projects": {
-    "C:\\Users\\krist\\RiderProjects\\Chirp\\Chirp.CLI\\Chirp.CLI.csproj": {
+    "/Users/mathildemarcussen/Desktop/3. Semester/Chirp/Chirp.CLI/Chirp.CLI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\krist\\RiderProjects\\Chirp\\Chirp.CLI\\Chirp.CLI.csproj",
+        "projectUniqueName": "/Users/mathildemarcussen/Desktop/3. Semester/Chirp/Chirp.CLI/Chirp.CLI.csproj",
         "projectName": "Chirp.CLI",
-        "projectPath": "C:\\Users\\krist\\RiderProjects\\Chirp\\Chirp.CLI\\Chirp.CLI.csproj",
-        "packagesPath": "C:\\Users\\krist\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\krist\\RiderProjects\\Chirp\\Chirp.CLI\\obj\\",
+        "projectPath": "/Users/mathildemarcussen/Desktop/3. Semester/Chirp/Chirp.CLI/Chirp.CLI.csproj",
+        "packagesPath": "/Users/mathildemarcussen/.nuget/packages/",
+        "outputPath": "/Users/mathildemarcussen/Desktop/3. Semester/Chirp/Chirp.CLI/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\krist\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "/Users/mathildemarcussen/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net7.0"
@@ -53,7 +53,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.410\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/7.0.410/RuntimeIdentifierGraph.json"
         }
       }
     }

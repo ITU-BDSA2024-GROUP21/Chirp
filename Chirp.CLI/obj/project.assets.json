@@ -8,19 +8,19 @@
     "net7.0": []
   },
   "packageFolders": {
-    "/Users/mathildemarcussen/.nuget/packages/": {}
+    "C:\\Users\\krist\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/mathildemarcussen/Desktop/3. Semester/Chirp/Chirp.CLI/Chirp.CLI.csproj",
+      "projectUniqueName": "C:\\Users\\krist\\RiderProjects\\Chirp\\Chirp.CLI\\Chirp.CLI.csproj",
       "projectName": "Chirp.CLI",
-      "projectPath": "/Users/mathildemarcussen/Desktop/3. Semester/Chirp/Chirp.CLI/Chirp.CLI.csproj",
-      "packagesPath": "/Users/mathildemarcussen/.nuget/packages/",
-      "outputPath": "/Users/mathildemarcussen/Desktop/3. Semester/Chirp/Chirp.CLI/obj/",
+      "projectPath": "C:\\Users\\krist\\RiderProjects\\Chirp\\Chirp.CLI\\Chirp.CLI.csproj",
+      "packagesPath": "C:\\Users\\krist\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\krist\\RiderProjects\\Chirp\\Chirp.CLI\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "/Users/mathildemarcussen/.nuget/NuGet/NuGet.Config"
+        "C:\\Users\\krist\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net7.0"
@@ -59,7 +59,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/7.0.410/RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.410\\RuntimeIdentifierGraph.json"
       }
     }
   }

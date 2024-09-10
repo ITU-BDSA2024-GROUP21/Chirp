@@ -44,9 +44,17 @@
         "net7.0": {
           "targetAlias": "net7.0",
           "dependencies": {
+            "CommandLineParser": {
+              "target": "Package",
+              "version": "[2.9.1, )"
+            },
             "CsvHelper": {
               "target": "Package",
               "version": "[33.0.1, )"
+            },
+            "System.CommandLine": {
+              "target": "Package",
+              "version": "[2.0.0-beta4, )"
             }
           },
           "imports": [

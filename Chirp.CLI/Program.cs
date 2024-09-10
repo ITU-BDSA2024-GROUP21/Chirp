@@ -4,12 +4,16 @@ using Chirp.CLI;
 using System.Globalization;
 using CsvHelper;
 using System.Collections.Generic;
+using SimpleDB;
 
-class Program {
+class Program
+{
     public record Cheep(string Author, string Message, long Timestamp);
-    
+
+
     public static void Main(string[] args)
     {
+        var database = new CSVDatabase();
         if (args.Length > 0)
         {
             switch (args[0])
@@ -18,25 +22,18 @@ class Program {
                     cheep.test(args);
                     return;
                 case "read":
-                    readCSV(args);
+                    var records = database.Read();
+                    foreach (var item in records)
+                    {
+                        var timestamp = (int)item.Timestamp;
+                        var dateTime = DateTimeOffset.FromUnixTimeSeconds(timestamp);
+                        Console.WriteLine(item.Author + " @ " + dateTime.ToString("MM/dd/yyyy HH:mm:ss") + ": " +
+                                          item.Message);
+                    }
+
                     return;
             }
         }
     }
-
-    static void readCSV(string[] args)
-
-    {   
-        using (var reader = new StreamReader("chirp_cli_db.csv"))
-        using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
-        {
-            var records = csv.GetRecords<Cheep>();
-            foreach (var item in records)
-            {
-                var timestamp = (int) item.Timestamp;
-                var dateTime = DateTimeOffset.FromUnixTimeSeconds(timestamp);
-                Console.WriteLine(item.Author + " @ " + dateTime.ToString("MM/dd/yyyy HH:mm:ss") + ": " + item.Message);
-            }
-        }
-    }
 }
+    

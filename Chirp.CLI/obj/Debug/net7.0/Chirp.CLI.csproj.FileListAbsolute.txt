@@ -57,3 +57,5 @@ C:\Users\andre\dev\Chirp\Chirp.CLI\bin\Debug\net7.0\CsvHelper.dll
 C:\Users\andre\dev\Chirp\Chirp.CLI\obj\Debug\net7.0\Chirp.CLI.csproj.CopyComplete
 C:\Users\andre\dev\Chirp\Chirp.CLI\obj\Debug\net7.0\Chirp.CLI.genruntimeconfig.cache
 C:\Users\andre\dev\Chirp\Chirp.CLI\obj\Debug\net7.0\ref\Chirp.CLI.dll
+C:\Users\andre\dev\Chirp\Chirp.CLI\bin\Debug\net7.0\SimpleDB.dll
+C:\Users\andre\dev\Chirp\Chirp.CLI\bin\Debug\net7.0\SimpleDB.pdb

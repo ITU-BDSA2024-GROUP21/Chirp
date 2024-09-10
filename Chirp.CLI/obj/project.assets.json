@@ -14,6 +14,19 @@
             "related": ".xml"
           }
         }
+      },
+      "SimpleDB/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v7.0",
+        "dependencies": {
+          "CsvHelper": "33.0.1"
+        },
+        "compile": {
+          "bin/placeholder/SimpleDB.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/SimpleDB.dll": {}
+        }
       }
     }
   },
@@ -45,11 +58,17 @@
         "lib/netstandard2.1/CsvHelper.dll",
         "lib/netstandard2.1/CsvHelper.xml"
       ]
+    },
+    "SimpleDB/1.0.0": {
+      "type": "project",
+      "path": "../SimpleDB/SimpleDB.csproj",
+      "msbuildProject": "../SimpleDB/SimpleDB.csproj"
     }
   },
   "projectFileDependencyGroups": {
     "net7.0": [
-      "CsvHelper >= 33.0.1"
+      "CsvHelper >= 33.0.1",
+      "SimpleDB >= 1.0.0"
     ]
   },
   "packageFolders": {
@@ -78,7 +97,11 @@
       "frameworks": {
         "net7.0": {
           "targetAlias": "net7.0",
-          "projectReferences": {}
+          "projectReferences": {
+            "C:\\Users\\andre\\dev\\Chirp\\SimpleDB\\SimpleDB.csproj": {
+              "projectPath": "C:\\Users\\andre\\dev\\Chirp\\SimpleDB\\SimpleDB.csproj"
+            }
+          }
         }
       },
       "warningProperties": {

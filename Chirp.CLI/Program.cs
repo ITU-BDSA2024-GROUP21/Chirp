@@ -1,8 +1,13 @@
 ﻿using System.IO;
 using System.Text.RegularExpressions;
 using Chirp.CLI;
+using System.Globalization;
+using CsvHelper;
+using System.Collections.Generic;
 
 class Program {
+    public record Cheep(string Author, string Message, long Timestamp);
+    
     public static void Main(string[] args)
     {
         if (args.Length > 0)
@@ -20,9 +25,19 @@ class Program {
     }
 
     static void readCSV(string[] args)
-        {
 
+    {
             using (var reader = new StreamReader("chirp_cli_db.csv"))
+            using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
+            {
+                var records = csv.GetRecords<Cheep>();
+                foreach (var item in records)
+                    Console.WriteLine(item);
+            }
+            
+            
+
+            /*
             {
 
                 List<String> authors = new List<String>();
@@ -52,5 +67,6 @@ class Program {
                     Console.WriteLine(authors[i] + " @ " + time[i].ToString("MM/dd/yyyy HH:mm:ss") + ": " + cheeps[i]);
                 }
             }
+            */
         }
     }

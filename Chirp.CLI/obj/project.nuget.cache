@@ -1,12 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "rZOLFOO6rzAM5Sy7iy+/AsxlRS0OYfrPgsWFNIky7MvK/Ru6n9iz7uvUewk8X90arwSSA0BBTjYE51OBdX8GkA==",
+  "dgSpecHash": "BRn4GPgs5A96WfoW16MAR6tP3XPxXRQXXmHkXEf2a/CIawr29aUP8nZma/fWRzJBoOphehbg+aLlShMjB7/Wag==",
   "success": true,
-  "projectFilePath": "C:\\Users\\andre\\dev\\Chirp\\Chirp.CLI\\Chirp.CLI.csproj",
+  "projectFilePath": "C:\\Users\\krist\\RiderProjects\\Chirp\\Chirp.CLI\\Chirp.CLI.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\andre\\.nuget\\packages\\commandlineparser\\2.9.1\\commandlineparser.2.9.1.nupkg.sha512",
-    "C:\\Users\\andre\\.nuget\\packages\\csvhelper\\33.0.1\\csvhelper.33.0.1.nupkg.sha512",
-    "C:\\Users\\andre\\.nuget\\packages\\system.commandline\\2.0.0-beta4.22272.1\\system.commandline.2.0.0-beta4.22272.1.nupkg.sha512"
+    "C:\\Users\\krist\\.nuget\\packages\\commandlineparser\\2.9.1\\commandlineparser.2.9.1.nupkg.sha512",
+    "C:\\Users\\krist\\.nuget\\packages\\csvhelper\\33.0.1\\csvhelper.33.0.1.nupkg.sha512",
+    "C:\\Users\\krist\\.nuget\\packages\\system.commandline\\2.0.0-beta4.22272.1\\system.commandline.2.0.0-beta4.22272.1.nupkg.sha512"
   ],
   "logs": [
     {

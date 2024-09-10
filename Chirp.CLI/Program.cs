@@ -11,10 +11,10 @@ class Program
 {
     public class Options
     {
-        [Option('c', "cheep", Required = true, HelpText = "Write your cheep.")]
+        [Option("cheep", Required = false, HelpText = "Write your cheep.")]
         public bool Cheep { get; set; }
         
-        [Option('r', "read", Required = true, HelpText = "Read all cheeps.")]
+        [Option( "read", Required = false, HelpText = "Read all cheeps.")]
         public bool Read { get; set; }
     }
     
@@ -26,11 +26,13 @@ class Program
             {
                 if (o.Cheep)
                 {
+                    Console.WriteLine("make Cheep");
                     var input = Console.ReadLine();
                     var cheep = new SimpleDB.Cheep(Environment.UserName, input, DateTimeOffset.Now.ToUnixTimeSeconds());
+                    Console.WriteLine(input);
                     database.Store(cheep);
                 }
-                if (o.Read)
+                else if (o.Read)
                 {
                     var records = database.Read();
                     UserInterface.PrintCheeps(records);

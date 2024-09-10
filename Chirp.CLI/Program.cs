@@ -8,9 +8,6 @@ using SimpleDB;
 
 class Program
 {
-    public record Cheep(string Author, string Message, long Timestamp);
-
-
     public static void Main(string[] args)
     {
         var database = new CSVDatabase();
@@ -19,8 +16,12 @@ class Program
             switch (args[0])
             {
                 case "cheep":
-                    cheep.test(args);
+                    Console.WriteLine("make Cheep");
+                    var input = Console.ReadLine();
+                    var cheep = new SimpleDB.Cheep(Environment.UserName, input, DateTimeOffset.Now.ToUnixTimeSeconds());
+                    database.Store(cheep);
                     return;
+                
                 case "read":
                     var records = database.Read();
                     foreach (var item in records)

@@ -24,13 +24,7 @@ class Program
                 
                 case "read":
                     var records = database.Read();
-                    foreach (var item in records)
-                    {
-                        var timestamp = (int)item.Timestamp;
-                        var dateTime = DateTimeOffset.FromUnixTimeSeconds(timestamp);
-                        Console.WriteLine(item.Author + " @ " + dateTime.ToString("MM/dd/yyyy HH:mm:ss") + ": " +
-                                          item.Message);
-                    }
+                    UserInterface.PrintCheeps(records);
 
                     return;
             }

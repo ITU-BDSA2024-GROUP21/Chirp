@@ -28,6 +28,8 @@ class Program
                 {
                     Console.WriteLine("make Cheep");
                     var input = Console.ReadLine();
+                    if (input == null)
+                        input = "";
                     var cheep = new SimpleDB.Cheep(Environment.UserName, input, DateTimeOffset.Now.ToUnixTimeSeconds());
                     Console.WriteLine(input);
                     database.Store(cheep);

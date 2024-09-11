@@ -11,10 +11,10 @@ class Program
 {
     public class Options
     {
-        [Option("cheep", Required = false, HelpText = "Write your cheep.")]
+        [Option('c', "cheep", Required = false, HelpText = "Write your cheep.")]
         public bool Cheep { get; set; }
         
-        [Option( "read", Required = false, HelpText = "Read all cheeps.")]
+        [Option('r', "read", Required = false, HelpText = "Read all cheeps.")]
         public bool Read { get; set; }
     }
     
@@ -44,27 +44,6 @@ class Program
                     Console.WriteLine("Write a proper command");
                 }
             });
-        /*
-        var database = new CSVDatabase();
-        if (args.Length > 0)
-        {
-            switch (args[0])
-            {
-                case "cheep":
-                    Console.WriteLine("make Cheep");
-                    var input = Console.ReadLine();
-                    var cheep = new SimpleDB.Cheep(Environment.UserName, input, DateTimeOffset.Now.ToUnixTimeSeconds());
-                    database.Store(cheep);
-                    return;
-                
-                case "read":
-                    var records = database.Read();
-                    UserInterface.PrintCheeps(records);
-
-                    return;
-            }
-        }
-        */
     }
 }
     

@@ -26,12 +26,11 @@ class Program
             {
                 if (o.Cheep)
                 {
-                    Console.WriteLine("make Cheep");
+                    UserInterface.startCheep();
                     var input = Console.ReadLine();
                     if (input == null)
                         input = "";
                     var cheep = new SimpleDB.Cheep(Environment.UserName, input, DateTimeOffset.Now.ToUnixTimeSeconds());
-                    Console.WriteLine(input);
                     database.Store(cheep);
                 }
                 else if (o.Read)
@@ -41,7 +40,7 @@ class Program
                 }
                 else
                 {
-                    Console.WriteLine("Write a proper command");
+                    UserInterface.invalidCommand();
                 }
             });
     }

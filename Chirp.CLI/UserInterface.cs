@@ -13,4 +13,14 @@ public static class UserInterface
                               item.Message);
         }
     }
+
+	public static void startCheep()
+    {
+        Console.WriteLine("Welcome to Chirp! Write your cheep:");
+    }
+
+	public static void invalidCommand()
+    {
+        Console.WriteLine("Write a proper command (--c, --cheep, --r, --read)");
+    }
 }

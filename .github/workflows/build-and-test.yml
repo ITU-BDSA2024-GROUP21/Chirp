@@ -18,7 +18,19 @@ jobs:
         dotnet-version: 7.0.x
     - name: Restore dependencies
       run: dotnet restore
+      working-directory: Chirp.CLI
     - name: Build
       run: dotnet build --no-restore
+      working-directory: Chirp.CLI
     - name: Test
       run: dotnet test --no-build --verbosity normal
+      working-directory: Chirp.CLI
+    - name: Restore dependencies
+      run: dotnet restore
+      working-directory: SimpleDB
+    - name: Build
+      run: dotnet build --no-restore
+      working-directory: SimpleDB
+    - name: Test
+      run: dotnet test --no-build --verbosity normal
+      working-directory: SimpleDB

@@ -1,4 +1,4 @@
-namespace Chirp.CLI;
+namespace Chirp;
 using SimpleDB;
 
 public static class UserInterface

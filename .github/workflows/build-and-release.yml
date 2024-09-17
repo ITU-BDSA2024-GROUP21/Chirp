@@ -1,0 +1,68 @@
+name: Build and Release
+
+on:
+  workflow_run:
+    workflows: ["Build and Test"]
+    types:
+      - completed
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout the repository
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Set up .NET 7
+      - name: Setup .NET 7
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '7.0.x'  # Adjust this to match your .NET version
+
+      # Build for Windows
+      - name: Build Chirp! for Windows
+        shell: bash
+        run: |
+          release_name="Chirp-win-x64-$tag"
+          dotnet publish Chirp.CLI/Chirp.CLI.csproj --framework netcoreapp3.1 --runtime win-x64 -c Release -o "$release_name"
+          zip -r "${release_name}.zip" "$release_name"
+          rm -r "$release_name"
+
+      # Build for Linux
+      - name: Build Chirp! for Linux
+        shell: bash
+        run: |
+          release_name="Chirp-linux-x64-$tag"
+          dotnet publish Chirp.CLI/Chirp.CLI.csproj --framework netcoreapp3.1 --runtime linux-x64 -c Release -o "$release_name"
+          zip -r "${release_name}.zip" "$release_name"
+          rm -r "$release_name"
+
+      # Build for macOS
+      - name: Build Chirp! for macOS
+        shell: bash
+        run: |
+          release_name="Chirp-osx-x64-$tag"
+          dotnet publish Chirp.CLI/Chirp.CLI.csproj --framework netcoreapp3.1 --runtime osx-x64 -c Release -o "$release_name"
+          zip -r "${release_name}.zip" "$release_name"
+          rm -r "$release_name"
+
+  release:
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Publish the release using the pre-built artifacts
+      - name: Publish GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            Chirp-win-x64-*.zip
+            Chirp-linux-x64-*.zip
+            Chirp-osx-x64-*.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

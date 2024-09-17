@@ -13,11 +13,11 @@ class Program
     {
         [Option('c', "cheep", Required = false, HelpText = "Write your cheep.")]
         public bool Cheep { get; set; }
-        
+
         [Option('r', "read", Required = false, HelpText = "Read all cheeps.")]
         public bool Read { get; set; }
     }
-    
+
     public static void Main(string[] args)
     {
         var database = new CSVDatabase();
@@ -45,4 +45,3 @@ class Program
             });
     }
 }
-    

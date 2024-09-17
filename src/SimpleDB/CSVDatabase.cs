@@ -7,7 +7,7 @@ public record Cheep(string Author, string Message, long Timestamp);
 
 public sealed class CSVDatabase : IDatabaseRepository<Cheep>
 {   
-    public string csvPath = "../SimpleDB/chirp_cli_db.csv";
+    public string csvPath = "../../data/chirp_cli_db.csv";
     public IEnumerable<Cheep> Read(int? limit = null)
     {
         if (limit.HasValue)

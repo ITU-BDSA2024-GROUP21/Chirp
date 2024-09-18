@@ -1,11 +1,13 @@
 using System.Diagnostics;
 using Chirp;
+using System;
+using System.IO;
 
 namespace Chirp.CLI.Client.Tests;
 
 public class timeConverterTests
 {
-    timeConverter timeConverter = new timeConverter(); 
+    timeConverter timeConverter = new timeConverter();
     [Fact]
     public void TestDateTimeToUnixTime()
     {
@@ -17,3 +19,24 @@ public class timeConverterTests
         Assert.Equal((long)1209625592, convertedDateAndTime);
     }
 }
+
+public class InputOutputTest
+{   
+    
+    [Fact]
+    public void TestOutputWhenIncorrect()
+    {
+        var sw = new StringWriter();
+        Console.SetOut(sw);
+        string[] args = { "Invalid" };
+
+        Program.Main(args);
+        
+        var output = sw.ToString().Trim();
+        Assert.Equal("Write a proper command (--c, --cheep, --r, --read)", output);
+ 
+    }
+    
+}
+
+

@@ -6,7 +6,7 @@ using System.Diagnostics;
 
 public class E2ETests
 {
-    string pathToDataBase =  "/Users/stinewittendorff/Desktop/Chirp/data/chirp_cli_db.csv";
+    string pathToDataBase =  "../../data/chirp_cli_db.csv";
 
     [Fact]
    public void CheepFunctionalityTests()

@@ -29,7 +29,7 @@ class Program
 
     public static void Main(string[] args)
     {
-        var database = new CSVDatabase();
+        var database = CSVDatabase.Instance;
         var timeConverter = new timeConverter();
         Parser.Default.ParseArguments<Options>(args)
             .WithParsed<Options>(o =>

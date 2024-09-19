@@ -30,7 +30,7 @@ public class E2ETests
            
            using (StreamWriter writer = new StreamWriter(pathToDataBase, append: true))
            {
-               writer.WriteLine("Hello!!");
+               writer.WriteLine(cheepMessage);
                writer.Flush();
            }
            
@@ -40,7 +40,7 @@ public class E2ETests
 
            
            var lines = File.ReadAllLines(pathToDataBase).Last();
-           Assert.EndsWith(lines, "Hello!!"); 
+           Assert.EndsWith(lines, "Hello!!!"); 
        }
    }
 }

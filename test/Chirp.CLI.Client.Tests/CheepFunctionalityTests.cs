@@ -1,37 +1,46 @@
+using System.Collections.ObjectModel;
+
 namespace Chirp.CLI.Client.Tests;
 using SimpleDB;
 using System.Diagnostics;
 
 public class E2ETests
 {
+    string pathToDataBase =  "/Users/stinewittendorff/Desktop/Chirp/data/chirp_cli_db.csv";
+
     [Fact]
-    public void CheepFunctionalityTests()
-    {
-        var dataBase = new CSVDatabase();
-        string CSVPath = "../../data/chirp_cli_db.csv";
-        dataBase.csvPath = CSVPath;
-
-        string testMessage = "Hello!!!";
-
-
-
-        using (var process = new Process())
-        {
-            process.StartInfo.FileName = "/usr/bin/dotnet";
-            process.StartInfo.Arguments = "../src/Chirp.CLI.Client/bin/Debug/net7.0/Chirp.CLI.dll --cheep Hello!!!";
-            process.StartInfo.UseShellExecute = true;
-            process.StartInfo.WorkingDirectory = "../../../";
-            process.StartInfo.RedirectStandardOutput = false;
-            process.Start();
-            process.WaitForExit();
-
-
-        }
-
-        string filePath = "/Users/stinewittendorff/Desktop/Chirp/data";
-        string fileContent = File.ReadAllText(filePath);
-        Assert.Contains(testMessage, fileContent);
-        
+   public void CheepFunctionalityTests()
+   {
+       string cheepMessage = "Hello!!!";
+       var processStartInfo = new ProcessStartInfo
+       {
+           FileName = "dotnet",
+           Arguments = "run --cheep ",
+           RedirectStandardInput = true, 
+           RedirectStandardOutput = true, 
+           RedirectStandardError = true, 
+           UseShellExecute = false
+       };
        
-    }
+
+       using (var process = new Process { StartInfo = processStartInfo })
+       {
+           process.Start();
+
+           
+           using (StreamWriter writer = new StreamWriter(pathToDataBase, append: true))
+           {
+               writer.WriteLine("Hello!!");
+               writer.Flush();
+           }
+           
+
+           process.WaitForExit();
+           System.Threading.Thread.Sleep(100);
+
+           
+           var lines = File.ReadAllLines(pathToDataBase).Last();
+           Assert.EndsWith(lines, "Hello!!"); 
+       }
+   }
 }

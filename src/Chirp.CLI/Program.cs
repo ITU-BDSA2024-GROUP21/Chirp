@@ -16,7 +16,7 @@ public class timeConverter
     }
 }
 
-class Program
+public class Program
 {
     public class Options
     {
@@ -36,6 +36,7 @@ class Program
             {
                 if (o.Cheep)
                 {
+                    Console.WriteLine("Current Directory: " + Directory.GetCurrentDirectory());
                     UserInterface.startCheep();
                     var input = Console.ReadLine();
                     if (input == null)

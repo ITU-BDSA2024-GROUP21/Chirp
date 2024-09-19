@@ -16,7 +16,7 @@ public class timeConverter
     }
 }
 
-class Program
+public class Program
 {
     public class Options
     {

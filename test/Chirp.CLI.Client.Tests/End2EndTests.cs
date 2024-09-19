@@ -11,8 +11,9 @@ public class End2EndTests
     public void testOutput()
     {
 		var database = new CSVDatabase();
-        string csvPath = "../../data/chirp_cli_db.csv";
+        string csvPath = "../../../../../data/chirp_cli_db.csv";
         database.csvPath = csvPath;
+        
         var cheeps = database.Read().Take(3).ToList();
         var expectedOutput = "ropf @ 08-01-2023 12:09:20: Hello, BDSA students!\r\n" + 
                              "adho @ 08-02-2023 12:19:38: Welcome to the course!\r\n" +

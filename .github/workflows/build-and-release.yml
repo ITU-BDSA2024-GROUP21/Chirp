@@ -9,11 +9,13 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+    - name: Checkout
+      uses: actions/checkout@v3
     - name: Setup .NET
       uses: actions/setup-dotnet@v3
       with:
         dotnet-version: 7.0.x
+      # Same code as build-and-test, purely to be absolutely sure we don't publish something that fails our tests
     - name: Restore dependencies
       run: dotnet restore
       working-directory: src/Chirp.CLI
@@ -32,10 +34,17 @@ jobs:
     - name: Test
       run: dotnet test --no-build --verbosity normal
       working-directory: src/SimpleDB
-
+      # Build our artefacts
+      # Inspired by: https://patriksvensson.se/posts/2020/03/creating-release-artifacts-with-github-actions
+    - name: Build
+      shell: bash
+      run: |
+        dotnet publish src/Chirp.CLI/Chirp.CLI.csproj --framework netcoreapp7 --runtime "${{ win-x64 }}" -c Release -o "$release_name"
+        7z a -tzip "${release_name}.zip" "./${release_name}/*"
+        rm -r "$release_name"
     - name: Release
       uses: softprops/action-gh-release@v2
       with:
-        files: |
-            src/Chirp.CLI
-            README.md
+        files: "src/Chirp.CLI*"
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

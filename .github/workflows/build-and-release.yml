@@ -2,9 +2,8 @@ name: Build and Release
 
 on:
   push:
-    branches: workflow-fun
-#    tags:
-#   - 'v*' 
+    tags:
+    - 'v*' 
 
 jobs:  
   build:

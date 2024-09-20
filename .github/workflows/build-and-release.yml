@@ -7,7 +7,7 @@ on:
 
 jobs:
   test: 
-    uses: ITU-BDSA2024-GROUP21/Chirp/.github/workflows/build-and-test.yml@main
+    uses: ITU-BDSA2024-GROUP21/Chirp/.github/workflows/build-and-test.yml@workflow-fun #TODO: Replace @workflow-fun with @main
   
   build:
     runs-on: ubuntu-latest

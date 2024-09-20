@@ -2,11 +2,9 @@ name: .NET Build and Test
 
 on:
   push:
-    tags:
-    - 'v*'  # This triggers on tags starting with 'v'
+    branches: [main, workflow-fun]
   pull_request:
-    tags:
-    - 'v*'  # This triggers on tags starting with 'v'
+    branches: [main, workflow-fun]
 
 jobs:
   build:

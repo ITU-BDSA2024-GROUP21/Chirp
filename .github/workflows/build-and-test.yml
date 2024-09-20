@@ -2,9 +2,9 @@ name: .NET Build and Test
 
 on:
   push:
-    branches: [main, workflow-fun]
+    branches: [main, workflow-fun] #TODO: Remove workflow-fun branch
   pull_request:
-    branches: [main, workflow-fun]
+    branches: [main, workflow-fun]  #TODO: Remove workflow-fun branch
 
 jobs:
   build:

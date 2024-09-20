@@ -2,8 +2,8 @@ name: Build and Release
 
 on:
   push:
-    tags:
-    - 'v*' 
+#    tags:
+#   - 'v*' 
 
 jobs:  
   build:
@@ -15,9 +15,6 @@ jobs:
       uses: actions/setup-dotnet@v3
       with:
         dotnet-version: 7.0.x
-    - name: Get tag
-      id: get-tag
-      run: echo "TAG_NAME=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
       # Same code as build-and-test, purely to be absolutely sure we don't publish something that fails our tests
     - name: Restore dependencies
       run: dotnet restore
@@ -39,10 +36,14 @@ jobs:
       working-directory: src/SimpleDB
       # Build our artefacts
       # Inspired by: https://patriksvensson.se/posts/2020/03/creating-release-artifacts-with-github-actions
+    - name: Get tag
+      id: get-tag
+      run: echo "TAG_NAME=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
     - name: Windows prefix
       run: |
-        tag=$(git describe --tags --abbrev=0)
+        tag=${{ env.TAG_NAME }}"
         release_name="win-$tag"
+    
     - name: Build
       shell: bash
       run: |

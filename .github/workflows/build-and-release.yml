@@ -41,15 +41,14 @@ jobs:
       # Inspired by: https://patriksvensson.se/posts/2020/03/creating-release-artifacts-with-github-actions
     - name: Windows prefix
       run: |
-        PREFIX="win_"
-        WINDOWS_RELEASE_NAME="${PREFIX}${TAG_NAME}"
-        echo "WINDOWS_RELEASE_NAME=${WINDOWS_RELEASE_NAME}" >> $GITHUB_ENV
+        tag=$(git describe --tags --abbrev=0)
+        release_name="win-$tag"
     - name: Build
       shell: bash
       run: |
-        dotnet publish src/Chirp.CLI/Chirp.CLI.csproj --framework net7.0 --runtime win-x64 -c Release -o "${{ env.TAG_NAME }}"
-        7z a -tzip "${{ env.WINDOWS_RELEASE_NAME }}.zip" "./${{ env.TAG_NAME }}/*"
-        rm -r "${{ env.TAG_NAME }}"
+        dotnet publish src/Chirp.CLI/Chirp.CLI.csproj --framework net7.0 --runtime win-x64 -c Release -o "$release_name"
+        7z a -tzip "${release_name}.zip" "./${release_name}/*"
+        rm -r "$release_name"
     - name: Release
       uses: softprops/action-gh-release@v2
       with:

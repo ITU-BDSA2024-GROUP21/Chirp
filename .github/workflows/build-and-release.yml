@@ -47,7 +47,7 @@ jobs:
     - name: Build
       shell: bash
       run: |
-        dotnet publish src/Chirp.CLI/Chirp.CLI.csproj --framework netcoreapp7 --runtime win-x64 -c Release -o "${{ env.TAG_NAME }}"
+        dotnet publish src/Chirp.CLI/Chirp.CLI.csproj --framework net7.0 --runtime win-x64 -c Release -o "${{ env.TAG_NAME }}"
         7z a -tzip "${{ env.WINDOWS_RELEASE_NAME }}".zip" "./${{ env.TAG_NAME }}/*"
         rm -r "${{ env.TAG_NAME }}"
     - name: Release

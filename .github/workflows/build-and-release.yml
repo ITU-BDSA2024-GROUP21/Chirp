@@ -41,7 +41,7 @@ jobs:
       run: echo "TAG_NAME=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
     - name: Windows prefix
       run: |
-        tag=${{ env.TAG_NAME }}"
+        tag=${{ env.TAG_NAME }}
         release_name="win-$tag"
     
     - name: Build

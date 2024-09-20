@@ -1,14 +1,17 @@
 name: Build and Release
 
 on:
-  workflow_run:
-    workflows: [Build and Test]
-    types:
-      - completed
+  push:
+    tags:
+    - 'v*' 
 
 jobs:
+  test: 
+    uses: ITU-BDSA2024-GROUP21/Chirp/.github/workflows/build-and-test.yml@main
+  
   build:
     runs-on: ubuntu-latest
+    needs: test
 
     steps:
       # Checkout the repository

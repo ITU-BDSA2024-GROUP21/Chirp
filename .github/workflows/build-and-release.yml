@@ -15,6 +15,9 @@ jobs:
       uses: actions/setup-dotnet@v3
       with:
         dotnet-version: 7.0.x
+    - name: Get tag
+      id: get-tag
+      run: echo "TAG_NAME=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
       # Same code as build-and-test, purely to be absolutely sure we don't publish something that fails our tests
     - name: Restore dependencies
       run: dotnet restore
@@ -36,12 +39,17 @@ jobs:
       working-directory: src/SimpleDB
       # Build our artefacts
       # Inspired by: https://patriksvensson.se/posts/2020/03/creating-release-artifacts-with-github-actions
+    - name: Windows prefix
+      run: |
+        PREFIX="win_"
+        WINDOWS_RELEASE_NAME="${PREFIX}${TAG_NAME}"
+        echo "WINDOWS_RELEASE_NAME=${WINDOWS_RELEASE_NAME}" >> $GITHUB_ENV
     - name: Build
       shell: bash
       run: |
-        dotnet publish src/Chirp.CLI/Chirp.CLI.csproj --framework netcoreapp7 --runtime win-x64 -c Release -o "$release_name"
-        7z a -tzip "${release_name}.zip" "./${release_name}/*"
-        rm -r "$release_name"
+        dotnet publish src/Chirp.CLI/Chirp.CLI.csproj --framework netcoreapp7 --runtime win-x64 -c Release -o "${{ env.TAG_NAME }}"
+        7z a -tzip "${{ env.WINDOWS_RELEASE_NAME }}".zip" "./${{ env.TAG_NAME }}/*"
+        rm -r "${{ env.TAG_NAME }}"
     - name: Release
       uses: softprops/action-gh-release@v2
       with:

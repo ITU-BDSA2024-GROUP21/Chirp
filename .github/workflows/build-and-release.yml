@@ -42,7 +42,8 @@ jobs:
     - name: Windows prefix
       run: |
         tag="${{ env.TAG_NAME }}"
-        release_name="win-$tag"
+        release_name="win-v0.0.1" 
+        # TODO: Change "v1.0.1" to $tag
     - name: Build
       shell: bash
       run: |

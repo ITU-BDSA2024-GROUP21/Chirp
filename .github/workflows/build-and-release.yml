@@ -40,10 +40,10 @@ jobs:
       id: get-tag
       run: echo "TAG_NAME=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
     - name: Windows prefix
-      run: release_name= win-v0.0.1
+      run: "release_name= win-v0.0.1"
         # tag="${{ env.TAG_NAME }}"
         # release_name="win-v0.0.1" 
-        # TODO: Change "v1.0.1" to $tag
+        # TODO: Change "v1.0.1" to $tag and remove above release name
     - name: Build
       shell: bash
       run: |

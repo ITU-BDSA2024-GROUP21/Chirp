@@ -15,5 +15,6 @@ public class timeConverterTests
         long convertedDateAndTime = timeConverter.ConvertToUnixTime(dateAndTime);
         
         Assert.Equal((long)1209625592, convertedDateAndTime);
+
     }
 }

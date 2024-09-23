@@ -30,6 +30,8 @@ public class Program
     public static void Main(string[] args)
     {
         var database = new CSVDatabase();
+        var csvPath = args[0].EndsWith(".csv") ? args[0] : "../../data/chirp_cli_db.csv";
+        database.csvPath = csvPath;
         var timeConverter = new timeConverter();
         Parser.Default.ParseArguments<Options>(args)
             .WithParsed<Options>(o =>
@@ -55,4 +57,5 @@ public class Program
                 }
             });
     }
+    
 }

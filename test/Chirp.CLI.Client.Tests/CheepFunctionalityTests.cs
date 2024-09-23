@@ -6,41 +6,31 @@ using System.Diagnostics;
 
 public class E2ETests
 {
-    string pathToDataBase =  "../../data/chirp_cli_db.csv";
-
+    //string pathToDataBase =  "../../../../../data/chirp_cli_db.csv";
+    
     [Fact]
-   public void CheepFunctionalityTests()
-   {
-       string cheepMessage = "Hello!!!";
-       var processStartInfo = new ProcessStartInfo
-       {
-           FileName = "dotnet",
-           Arguments = "run --cheep ",
-           RedirectStandardInput = true, 
-           RedirectStandardOutput = true, 
-           RedirectStandardError = true, 
-           UseShellExecute = false
-       };
-       
+    public void CheepFunctionalityTests()
+    {
+        var dataBase = new CSVDatabase();
+        dataBase.csvPath = "../../../../../data/chirp_cli_db.csv";
 
-       using (var process = new Process { StartInfo = processStartInfo })
-       {
-           process.Start();
+        var simulatedInput = new StringReader("Hello!!");
+        Console.SetIn(simulatedInput);
+        
+        var sw = new StringWriter(); 
+        Console.SetOut(sw); 
+        
+        string[] args = {"../../../../../data/chirp_cli_db.csv", "--cheep"};
+          
+        Program.Main(args);
+          
+        var output = sw.ToString().Trim();
+        Assert.Contains("Welcome to Chirp! Write your cheep:", output);
 
-           
-           using (StreamWriter writer = new StreamWriter(pathToDataBase, append: true))
-           {
-               writer.WriteLine(cheepMessage);
-               writer.Flush();
-           }
-           
+        var cheeps = dataBase.Read().ToList();
+        var lastcheep = cheeps.Last().Message;
 
-           process.WaitForExit();
-           System.Threading.Thread.Sleep(100);
 
-           
-           var lines = File.ReadAllLines(pathToDataBase).Last();
-           Assert.EndsWith(lines, "Hello!!!"); 
-       }
-   }
+        Assert.Equal("Hello!!", lastcheep);
+  }
 }

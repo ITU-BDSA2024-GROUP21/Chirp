@@ -39,12 +39,11 @@ jobs:
         dotnet publish src/Chirp.CLI/Chirp.CLI.csproj --framework net7.0 --runtime win-x64 -c Release -o "$release_name"
         
         7z a -tzip "${release_name}.zip" "./${release_name}/*"
-        fi
         
         rm -r "$release_name"
     - name: Release
       uses: softprops/action-gh-release@v2
       with:
-        files: "App*"
+        files: "win-*.zip"
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

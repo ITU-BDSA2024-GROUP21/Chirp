@@ -36,11 +36,14 @@ jobs:
         tag=$(git describe --tags --abbrev=0)
         release_name="win-$tag"
         
-        dotnet publish src/Chirp.CLI/Chirp.CLI.csproj --framework net7.0 --runtime win-x64 -c Release -o "$release_name"
+        dotnet publish src/Chirp.CLI/Chirp.CLI.csproj --framework net7.0 --runtime win-x64 -c Release -p:PublishSingleFile=true -p:PublishTrimmed=true -o "$release_name"        
+
+        executable_path="$release_name/Chirp.CLI.exe"
+        mv "$executable_path" "./$release_name.exe"
         
-        7z a -tzip "${release_name}.zip" "./${release_name}/*"
+        7z a -tzip "${release_name}.zip" "./${release_name}.exe"       
+        rm "./$release_name.exe"
         
-        rm -r "$release_name"
     - name: Release
       uses: softprops/action-gh-release@v2
       with:

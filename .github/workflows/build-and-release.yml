@@ -57,8 +57,6 @@ jobs:
     - name: Release
       uses: softprops/action-gh-release@v2
       with:
-        files: |
-          ${{ env.release_name }}/Chirp.CLI.exe
-          "${{ env.release_name }}.zip"
+        files: "App*"
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

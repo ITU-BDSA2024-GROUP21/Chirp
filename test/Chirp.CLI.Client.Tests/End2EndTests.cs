@@ -10,7 +10,7 @@ public class End2EndTests
     [Fact]
     public void testOutput()
     {
-		var database =  CSVDatabase.Instance;
+		var database = CSVDatabase.Instance;
         string csvPath = "../../../../../data/chirp_cli_db.csv";
         database.csvPath = csvPath;
         
@@ -25,6 +25,9 @@ public class End2EndTests
             var output = sw.ToString();
             Assert.Equal(expectedOutput, output);
         }
+
+		var originalOut = new StreamWriter(Console.OpenStandardOutput()) { AutoFlush = true };
+		Console.SetOut(originalOut);
 
     }
         

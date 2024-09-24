@@ -33,8 +33,8 @@ public class E2ETests
 
 
         Assert.Equal("Hello!!", lastcheep);
-        
-        Console.Clear();
-  }
+
+        sw.Close();
+    }
 }
 */

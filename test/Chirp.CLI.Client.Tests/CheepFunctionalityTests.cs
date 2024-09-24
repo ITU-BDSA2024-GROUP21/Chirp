@@ -11,7 +11,7 @@ public class E2ETests
     [Fact]
     public void CheepFunctionalityTests()
     {
-        var dataBase = new CSVDatabase();
+        var dataBase = CSVDatabase.Instance;
         dataBase.csvPath = "../../../../../data/chirp_cli_db.csv";
 
         var simulatedInput = new StringReader("Hello!!");

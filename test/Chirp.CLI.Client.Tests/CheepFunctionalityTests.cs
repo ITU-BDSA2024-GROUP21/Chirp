@@ -32,5 +32,6 @@ public class E2ETests
 
 
         Assert.Equal("Hello!!", lastcheep);
-  }
+        sw.Close();
+    }
 }

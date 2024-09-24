@@ -26,6 +26,9 @@ public class End2EndTests
             Assert.Equal(expectedOutput, output);
         }
 
+		var originalOut = new StreamWriter(Console.OpenStandardOutput()) { AutoFlush = true };
+		Console.SetOut(originalOut);
+
     }
         
 }

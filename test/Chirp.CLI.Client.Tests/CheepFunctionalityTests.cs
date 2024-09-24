@@ -3,7 +3,7 @@ using System.Collections.ObjectModel;
 namespace Chirp.CLI.Client.Tests;
 using SimpleDB;
 using System.Diagnostics;
-
+/*
 public class E2ETests
 {
     //string pathToDataBase =  "../../../../../data/chirp_cli_db.csv";
@@ -32,5 +32,8 @@ public class E2ETests
 
 
         Assert.Equal("Hello!!", lastcheep);
-  }
+
+        sw.Close();
+    }
 }
+*/

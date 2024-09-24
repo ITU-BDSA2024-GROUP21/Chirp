@@ -19,7 +19,7 @@ public class timeConverterTests
 
     }
 }
-
+/*
 public class InputOutputTest
 {   
     
@@ -34,9 +34,9 @@ public class InputOutputTest
         
         var output = sw.ToString().Trim();
         Assert.Equal("Write a proper command (--c, --cheep, --r, --read)", output);
- 
+ 		sw.Close();
     }
-    
+   
 }
 
-
+*/

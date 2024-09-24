@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 namespace Chirp.CLI.Client.Tests;
 using SimpleDB;
 using System.Diagnostics;
+
 /*
 public class E2ETests
 {
@@ -17,14 +18,14 @@ public class E2ETests
         var simulatedInput = new StringReader("Hello!!");
         Console.SetIn(simulatedInput);
         
-        var sw = new StringWriter(); 
-        Console.SetOut(sw); 
+        var sw1 = new StringWriter(); 
+        Console.SetOut(sw1); 
         
         string[] args = {"../../../../../data/chirp_cli_db.csv", "--cheep"};
           
         Program.Main(args);
           
-        var output = sw.ToString().Trim();
+        var output = sw1.ToString().Trim();
         Assert.Contains("Welcome to Chirp! Write your cheep:", output);
 
         var cheeps = dataBase.Read().ToList();

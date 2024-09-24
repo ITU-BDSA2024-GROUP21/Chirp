@@ -17,6 +17,8 @@ public class timeConverterTests
         
         Assert.Equal((long)1209625592, convertedDateAndTime);
     }
+	
+
 }
 
 public class InputOutputTest
@@ -33,8 +35,33 @@ public class InputOutputTest
         
         var output = sw.ToString().Trim();
         Assert.Equal("Write a proper command (--c, --cheep, --r, --read)", output);
- 
+	Console.Clear();
     }
+
+	[Fact]g
+		public void TestOutputWhenCheep(){
+    	//var originalOutput = Console.Out;
+   		var sw = new StringWriter();
+    	Console.SetOut(sw);
+    	string[] args = { "--cheep" };
+		
+/*
+    	var simulatedInput = "This is a test cheep.";
+    	var inputReader = new StringReader(simulatedInput);
+    	Console.SetIn(inputReader);
+*/
+
+    	Program.Main(args);
+
+    	var output = sw.ToString().Trim();
+
+    	Assert.Equal("Welcome to Chirp! Write your cheep:", output);
+
+
+    	//Console.SetOut(originalOutput);
+
+		}
+
     
 }
 

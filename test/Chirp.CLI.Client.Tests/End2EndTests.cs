@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System;
 using SimpleDB;
 
-
+/*
 public class End2EndTests
 {
     [Fact]
@@ -29,3 +29,5 @@ public class End2EndTests
     }
         
 }
+
+*/

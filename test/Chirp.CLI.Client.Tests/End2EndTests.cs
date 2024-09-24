@@ -4,13 +4,13 @@ using System.Diagnostics;
 using System;
 using SimpleDB;
 
-/*
+
 public class End2EndTests
 {
     [Fact]
     public void testOutput()
     {
-		var database = new CSVDatabase();
+		var database =  CSVDatabase.Instance;
         string csvPath = "../../../../../data/chirp_cli_db.csv";
         database.csvPath = csvPath;
         
@@ -30,4 +30,4 @@ public class End2EndTests
         
 }
 
-*/
+

@@ -16,7 +16,7 @@ public class timeConverterTests
         long convertedDateAndTime = timeConverter.ConvertToUnixTime(dateAndTime);
         
         Assert.Equal((long)1209625592, convertedDateAndTime);
-
+	Console.Clear();
     }
 	
 
@@ -24,10 +24,38 @@ public class timeConverterTests
 
 public class InputOutputTest
 {   
-    
+	
+
+
+   
     [Fact]
     public void TestOutputWhenIncorrect()
     {
+		
+        // Arrange
+        //ArrangeTestDatabase();
+        // Act
+        string output = "";
+        using (var process = new Process())
+        {
+            process.StartInfo.FileName = "/usr/local/share/dotnet/dotnet";
+            process.StartInfo.Arguments = "run Invalid";
+            process.StartInfo.UseShellExecute = false;
+            process.StartInfo.WorkingDirectory = "../../../../../src/Chirp.CLI";
+            process.StartInfo.RedirectStandardOutput = true;
+
+            process.StartInfo.RedirectStandardInput = true;
+            process.Start();
+
+            // Synchronously read the standard output of the spawned process.
+            StreamReader reader = process.StandardOutput;
+            output = reader.ReadToEnd();
+            process.WaitForExit();
+        }
+        string fstCheep = output.Split("\n")[0];
+        // Assert
+        Assert.Equal("Write a proper command (--c, --cheep, --r, --read)", fstCheep);
+	/*
         var sw = new StringWriter();
         Console.SetOut(sw);
         string[] args = { "Invalid" };
@@ -36,32 +64,9 @@ public class InputOutputTest
         
         var output = sw.ToString().Trim();
         Assert.Equal("Write a proper command (--c, --cheep, --r, --read)", output);
-	Console.Clear();
-    }
-
-	[Fact]g
-		public void TestOutputWhenCheep(){
-    	//var originalOutput = Console.Out;
-   		var sw = new StringWriter();
-    	Console.SetOut(sw);
-    	string[] args = { "--cheep" };
-		
-/*
-    	var simulatedInput = "This is a test cheep.";
-    	var inputReader = new StringReader(simulatedInput);
-    	Console.SetIn(inputReader);
 */
-
-    	Program.Main(args);
-
-    	var output = sw.ToString().Trim();
-
-    	Assert.Equal("Welcome to Chirp! Write your cheep:", output);
-
-
-    	//Console.SetOut(originalOutput);
-
-		}
+	
+    }
 
     
 }

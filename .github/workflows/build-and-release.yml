@@ -53,9 +53,6 @@ jobs:
         7z a -tzip "${linux_release_name}.zip" "./${linux_release_name}/Chirp.CLI"
         
         rm "./$windows_release_name.exe"
-
-    - name: DEBUG List generated files
-      run: ls -la
         
     - name: Release
       uses: softprops/action-gh-release@v2

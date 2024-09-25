@@ -21,20 +21,14 @@ public class timeConverterTests
 	
 
 }
-/*
+
 public class InputOutputTest
 {   
-	
-
-
    
     [Fact]
     public void TestOutputWhenIncorrect()
     {
 		
-        // Arrange
-        //ArrangeTestDatabase();
-        // Act
         string output = "";
         using (var process = new Process())
         {
@@ -51,23 +45,39 @@ public class InputOutputTest
             StreamReader reader = process.StandardOutput;
             output = reader.ReadToEnd();
             process.WaitForExit();
+			
         }
         string fstCheep = output.Split("\n")[0];
         // Assert
         Assert.Equal("Write a proper command (--c, --cheep, --r, --read)", fstCheep);
-	/*
-        var sw = new StringWriter();
-        Console.SetOut(sw);
-        string[] args = { "Invalid" };
-
-        Program.Main(args);
-        
-        var output = sw.ToString().Trim();
-        Assert.Equal("Write a proper command (--c, --cheep, --r, --read)", output);
- 		sw.Close();
+	
+		
     }
- 
+
+	[Fact]
+	public void TestOutputWhenCheep(){
+	 string output1 = "";
+        using (var process1 = new Process())
+        {
+            process1.StartInfo.FileName = "/usr/local/share/dotnet/dotnet";
+            process1.StartInfo.Arguments = "run --cheep";
+            process1.StartInfo.UseShellExecute = false;
+            process1.StartInfo.WorkingDirectory = "../../../../../src/Chirp.CLI";
+            process1.StartInfo.RedirectStandardOutput = true;
+
+            process1.StartInfo.RedirectStandardInput = true;
+            process1.Start();
+
+            // Synchronously read the standard output of the spawned process.
+            StreamReader reader = process1.StandardOutput;
+            output1 = reader.ReadToEnd();
+            process1.WaitForExit();
+        }
+        string fstCheep1 = output1.Split("\n")[0];
+        // Assert
+        Assert.Equal("Welcome to Chirp! Write your cheep:", fstCheep1);
+}
+	
 
 }
 
-*/

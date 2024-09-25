@@ -1,68 +1,65 @@
 name: Build and Release
 
 on:
-  workflow_run:
-    workflows: [Build and Test]
-    types:
-      - completed
+  push:
+    tags:
+    - 'v*' 
 
-jobs:
+jobs:  
   build:
     runs-on: ubuntu-latest
-
     steps:
-      # Checkout the repository
-      - name: Checkout code
-        uses: actions/checkout@v3
+    - name: Checkout
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 7.0.x
+      # Same code as build-and-test for CHirp.CLI, purely to be absolutely sure we don't publish something that fails our tests
+    - name: Restore dependencies
+      run: dotnet restore
+      working-directory: src/Chirp.CLI
+    - name: Build
+      run: dotnet build --no-restore
+      working-directory: src/Chirp.CLI
+    - name: Test
+      run: dotnet test --no-build --verbosity normal
+      working-directory: src/Chirp.CLI
 
-      # Set up .NET 7
-      - name: Setup .NET 7
-        uses: actions/setup-dotnet@v3
-        with:
-          dotnet-version: '7.0.x'  # Adjust this to match your .NET version
+      # Inspired by: https://patriksvensson.se/posts/2020/03/creating-release-artifacts-with-github-actions
+    - name: Build
+      shell: bash
+      run: |
+        tag=$(git describe --tags --abbrev=0)
+        windows_release_name="Chirp-win-x64-$tag"
+        mac_release_name="Chirp-mac-x64-$tag"
+        linux_release_name="Chirp-linux-x64-$tag"
+        
+        # Windows build
+        dotnet publish src/Chirp.CLI/Chirp.CLI.csproj --framework net7.0 --runtime win-x64 -c Release -p:PublishSingleFile=true -p:PublishTrimmed=true -o "$windows_release_name"        
+        win_executable_path="$windows_release_name/Chirp.CLI.exe"
+        mv "$win_executable_path" "./$windows_release_name.exe"
 
-      # Build for Windows
-      - name: Build Chirp! for Windows
-        shell: bash
-        run: |
-          release_name="Chirp-win-x64-$tag"
-          dotnet publish Chirp.CLI/Chirp.CLI.csproj --framework netcoreapp3.1 --runtime win-x64 -c Release -o "$release_name"
-          zip -r "${release_name}.zip" "$release_name"
-          rm -r "$release_name"
+        # Mac build
+        dotnet publish src/Chirp.CLI/Chirp.CLI.csproj --framework net7.0 --runtime osx-x64 -c Release -p:PublishSingleFile=true -p:PublishTrimmed=true -o "$mac_release_name"
 
-      # Build for Linux
-      - name: Build Chirp! for Linux
-        shell: bash
-        run: |
-          release_name="Chirp-linux-x64-$tag"
-          dotnet publish Chirp.CLI/Chirp.CLI.csproj --framework netcoreapp3.1 --runtime linux-x64 -c Release -o "$release_name"
-          zip -r "${release_name}.zip" "$release_name"
-          rm -r "$release_name"
-
-      # Build for macOS
-      - name: Build Chirp! for macOS
-        shell: bash
-        run: |
-          release_name="Chirp-osx-x64-$tag"
-          dotnet publish Chirp.CLI/Chirp.CLI.csproj --framework netcoreapp3.1 --runtime osx-x64 -c Release -o "$release_name"
-          zip -r "${release_name}.zip" "$release_name"
-          rm -r "$release_name"
-
-  release:
-    runs-on: ubuntu-latest
-    needs: build
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      # Publish the release using the pre-built artifacts
-      - name: Publish GitHub Release
-        uses: softprops/action-gh-release@v1
-        with:
-          files: |
-            Chirp-win-x64-*.zip
-            Chirp-linux-x64-*.zip
-            Chirp-osx-x64-*.zip
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        # Linux build
+        dotnet publish src/Chirp.CLI/Chirp.CLI.csproj --framework net7.0 --runtime linux-x64 -c Release -p:PublishSingleFile=true -p:PublishTrimmed=true -o "$linux_release_name"        
+        
+        7z a -tzip "${windows_release_name}.zip" "./${windows_release_name}.exe"      
+        7z a -tzip "${mac_release_name}.zip" "./${mac_release_name}/Chirp.CLI"
+        7z a -tzip "${linux_release_name}.zip" "./${linux_release_name}/Chirp.CLI"
+        
+        rm "./$windows_release_name.exe"
+        
+    - name: Release
+      uses: softprops/action-gh-release@v2
+      with:
+        files: |
+          ./Chirp-win-*.zip
+          ./Chirp-mac-*.zip
+          ./Chirp-linux-*.zip
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

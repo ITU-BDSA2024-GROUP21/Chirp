@@ -2,12 +2,9 @@ name: .NET Build and Test
 
 on:
   push:
-    tags:
-    - 'v*'  # This triggers on tags starting with 'v'
+    branches: main
   pull_request:
-    tags:
-    - 'v*'  # This triggers on tags starting with 'v'
-
+    branches: main
 jobs:
   build:
     runs-on: ubuntu-latest

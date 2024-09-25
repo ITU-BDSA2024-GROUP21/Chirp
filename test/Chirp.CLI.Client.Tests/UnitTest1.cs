@@ -21,24 +21,24 @@ public class timeConverterTests
 	
 
 }
-/*
+
 public class InputOutputTest
-{   
-	
+{
 
 
-   
+
+
     [Fact]
     public void TestOutputWhenIncorrect()
     {
-		
+
         // Arrange
         //ArrangeTestDatabase();
         // Act
         string output = "";
         using (var process = new Process())
         {
-            process.StartInfo.FileName = "/usr/local/share/dotnet/dotnet";
+            process.StartInfo.FileName = "dotnet";
             process.StartInfo.Arguments = "run Invalid";
             process.StartInfo.UseShellExecute = false;
             process.StartInfo.WorkingDirectory = "../../../../../src/Chirp.CLI";
@@ -52,22 +52,25 @@ public class InputOutputTest
             output = reader.ReadToEnd();
             process.WaitForExit();
         }
+
         string fstCheep = output.Split("\n")[0];
         // Assert
-        Assert.Equal("Write a proper command (--c, --cheep, --r, --read)", fstCheep);
-	/*
-        var sw = new StringWriter();
-        Console.SetOut(sw);
-        string[] args = { "Invalid" };
+        Assert.Equal("Write a proper command (--c, --cheep, --r, --read)\r", fstCheep);
+        /*
+            var sw = new StringWriter();
+            Console.SetOut(sw);
+            string[] args = { "Invalid" };
 
-        Program.Main(args);
-        
-        var output = sw.ToString().Trim();
-        Assert.Equal("Write a proper command (--c, --cheep, --r, --read)", output);
- 		sw.Close();
+            Program.Main(args);
+
+            var output = sw.ToString().Trim();
+            Assert.Equal("Write a proper command (--c, --cheep, --r, --read)", output);
+            sw.Close();
+
+        }
+        */
+
     }
- 
-
 }
 
-*/
+

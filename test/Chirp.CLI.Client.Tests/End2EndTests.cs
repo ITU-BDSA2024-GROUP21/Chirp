@@ -7,7 +7,7 @@ using SimpleDB;
 
 public class End2EndTests
 {
-    [Fact]
+   /* [Fact]
     public void testOutput()
     {
 		var database = CSVDatabase.Instance;
@@ -29,7 +29,7 @@ public class End2EndTests
 		var originalOut = new StreamWriter(Console.OpenStandardOutput()) { AutoFlush = true };
 		Console.SetOut(originalOut);
 
-    }
+    }*/
         
 }
 

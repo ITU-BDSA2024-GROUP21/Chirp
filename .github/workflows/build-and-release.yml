@@ -57,9 +57,6 @@ jobs:
     - name: Release
       uses: softprops/action-gh-release@v2
       with:
-        files: |
-          "win-*.zip"
-          "mac-*.zip"
-          "linux-*.zip"
+        files: "win-*.zip"
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

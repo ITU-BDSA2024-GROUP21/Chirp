@@ -33,9 +33,9 @@ jobs:
       shell: bash
       run: |
         tag=$(git describe --tags --abbrev=0)
-        windows_release_name="win-$tag"
-        mac_release_name="mac-$tag"
-        linux_release_name="linux-$tag"
+        windows_release_name="Chirp-win-x64-$tag"
+        mac_release_name="Chirp-mac-x64-$tag"
+        linux_release_name="Chirp-linux-x64-$tag"
         
         # Windows build
         dotnet publish src/Chirp.CLI/Chirp.CLI.csproj --framework net7.0 --runtime win-x64 -c Release -p:PublishSingleFile=true -p:PublishTrimmed=true -o "$windows_release_name"        
@@ -61,8 +61,8 @@ jobs:
       uses: softprops/action-gh-release@v2
       with:
         files: |
-          ./win-*.zip
-          ./mac-*.zip
-          ./linux-*.zip
+          ./Chirp-win-*.zip
+          ./Chirp-mac-*.zip
+          ./Chirp-linux-*.zip
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

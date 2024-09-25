@@ -37,26 +37,28 @@ jobs:
         mac_release_name="mac-$tag"
         linux_release_name="linux-$tag"
         
+        # Windows build
         dotnet publish src/Chirp.CLI/Chirp.CLI.csproj --framework net7.0 --runtime win-x64 -c Release -p:PublishSingleFile=true -p:PublishTrimmed=true -o "$windows_release_name"        
-        dotnet publish src/Chirp.CLI/Chirp.CLI.csproj --framework net7.0 --runtime osx-x64 -c Release -p:PublishSingleFile=true -p:PublishTrimmed=true -o "$mac_release_name" 
-        dotnet publish src/Chirp.CLI/Chirp.CLI.csproj --framework net7.0 --runtime linux-x64 -c Release -p:PublishSingleFile=true -p:PublishTrimmed=true -o "$linux_release_name"        
-
         win_executable_path="$windows_release_name/Chirp.CLI.exe"
-        mv "$windows_executable_path" "./$windows_release_name.exe"
+        mv "$win_executable_path" "./$windows_release_name.exe"
 
-        mac_executable_path="$mac_release_name/Chirp.CLI.exe"
-        mv "$mac_executable_path" "./$mac_release_name.exe"
+        # Mac build
+        dotnet publish src/Chirp.CLI/Chirp.CLI.csproj --framework net7.0 --runtime osx-x64 -c Release -p:PublishSingleFile=true -p:PublishTrimmed=true -o "$mac_release_name" 
+        mac_executable_path="$mac_release_name/Chirp.CLI"
+        mv "$mac_executable_path" "./$mac_release_name"
 
-        linux_executable_path="$linux_release_name/Chirp.CLI.exe"
-        mv "$linux_executable_path" "./$linux_release_name.exe"
+        # Linux build
+        dotnet publish src/Chirp.CLI/Chirp.CLI.csproj --framework net7.0 --runtime linux-x64 -c Release -p:PublishSingleFile=true -p:PublishTrimmed=true -o "$linux_release_name"        
+        linux_executable_path="$linux_release_name/Chirp.CLI"
+        mv "$linux_executable_path" "./$linux_release_name"
         
         7z a -tzip "${windows_release_name}.zip" "./${windows_release_name}.exe"      
-        7z a -tzip "${mac_release_name}.zip" "./${mac_release_name}.exe"
-        7z a -tzip "${linux_release_name}.zip" "./${linux_release_name}.exe"
+        7z a -tzip "${mac_release_name}.zip" "./${mac_release_name}"
+        7z a -tzip "${linux_release_name}.zip" "./${linux_release_name}"
         
         rm "./$windows_release_name.exe"
-        rm "./$mac_release_name.exe"
-        rm "./$linux_release_name.exe"
+        rm "./$mac_release_name"
+        rm "./$linux_release_name"
         
     - name: Release
       uses: softprops/action-gh-release@v2

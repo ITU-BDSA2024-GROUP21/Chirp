@@ -49,8 +49,8 @@ jobs:
         dotnet publish src/Chirp.CLI/Chirp.CLI.csproj --framework net7.0 --runtime linux-x64 -c Release -p:PublishSingleFile=true -p:PublishTrimmed=true -o "$linux_release_name"        
         
         7z a -tzip "${windows_release_name}.zip" "./${windows_release_name}.exe"      
-        7z a -tzip "${mac_release_name}.zip" "./${mac_release_name}"
-        7z a -tzip "${linux_release_name}.zip" "./${linux_release_name}"
+        7z a -tzip "${mac_release_name}.zip" "./${mac_release_name}/Chirp.CLI"
+        7z a -tzip "${linux_release_name}.zip" "./${linux_release_name}/Chirp.CLI"
         
         rm "./$windows_release_name.exe"
         

@@ -5,7 +5,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddSingleton<ICheepService, CheepService>();
-builder.Services.AddTransient<DBFacade>(_ => new DBFacade("chirp.db"));
+builder.Services.AddTransient<DBFacade>(_ => new DBFacade("/tmp/chirp.db"));
 
 
 var app = builder.Build();

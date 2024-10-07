@@ -3,11 +3,11 @@ using Microsoft.Data.Sqlite;
 
 var builder = WebApplication.CreateBuilder(args);
 
+ var chirpDbPath = Environment.GetEnvironmentVariable("CHIRPDBPATH") 
+                  ?? Path.Combine(Path.GetTempPath(), "chirp.db");
+
+
 // Add services to the container.
-builder.Services.AddRazorPages();
-
-
-
 string path = "../chirp.db";
 /*
 if (Environment.GetEnvironmentVariable("CHIRPDBPATH") != null)

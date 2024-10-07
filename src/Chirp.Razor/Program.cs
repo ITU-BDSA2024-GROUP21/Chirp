@@ -1,5 +1,6 @@
 using Chirp.Razor;
 
+
 public partial class Program
 {
     public static void Main(string[] args)
@@ -15,6 +16,7 @@ public partial class Program
         builder.Services.AddRazorPages();
         builder.Services.AddSingleton<ICheepService, CheepService>();
         builder.Services.AddTransient<DBFacade>(_ => new DBFacade(chirpDbPath));
+
 
 
         var app = builder.Build();
@@ -34,6 +36,8 @@ public partial class Program
 
         app.MapRazorPages();
 
+
         app.Run();
     }
 }
+

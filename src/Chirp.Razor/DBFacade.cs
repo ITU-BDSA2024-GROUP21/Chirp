@@ -1,17 +1,24 @@
-﻿namespace Chirp.Razor;
-
+﻿using System.Reflection;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Data.Sqlite;
+
+namespace Chirp.Razor;
+
 public class DBFacade
 {
-    private string path;
+    private string _path;
     public DBFacade(string path)
     {
-        this.path = path;
+        this._path = path;
+        if (path == Path.Combine(Path.GetTempPath(), "chirp.db"))
+        {
+            InitDB();
+        }
     }
     public List<CheepViewModel> CheepQuery(string query, int page, string? Author = null)
     {
         List<CheepViewModel> cheeps = new List<CheepViewModel>();
-        using (var connection = new SqliteConnection($"Data Source={path}"))
+        using (var connection = new SqliteConnection($"Data Source={_path}"))
         {
             connection.Open();
             var command = connection.CreateCommand();
@@ -32,5 +39,34 @@ public class DBFacade
             }
         }
         return cheeps;
+    }
+
+    private void InitDB()
+    {
+        var schema = ReadSql("data/schema.sql");
+        var dump = ReadSql("data/dump.sql");
+            
+        RunSql(schema);
+        RunSql(dump);
+    }
+
+    private string ReadSql(string sqlPath)
+    {
+        var embeddedProvider = new EmbeddedFileProvider(Assembly.GetExecutingAssembly());
+        
+        using var DBReader = embeddedProvider.GetFileInfo(sqlPath).CreateReadStream();
+        using var DBStreamReader = new StreamReader(DBReader);
+        var table = DBStreamReader.ReadToEnd();
+
+        return table;
+    }
+
+    private void RunSql(string query)
+    {
+        using var connection = new SqliteConnection($"Data Source={_path}");
+        connection.Open();
+        var command = connection.CreateCommand();
+        command.CommandText = query;
+        command.ExecuteNonQuery();
     }
 }

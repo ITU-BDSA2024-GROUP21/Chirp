@@ -28,6 +28,7 @@ public class DBFacade
             {
                 command.Parameters.AddWithValue("@author", Author);
             }
+
             using var reader = command.ExecuteReader();
             while (reader.Read())
             {
@@ -69,4 +70,5 @@ public class DBFacade
         command.CommandText = query;
         command.ExecuteNonQuery();
     }
+
 }

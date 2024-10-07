@@ -7,7 +7,6 @@ public class UserTimelineModel : PageModel
 {
     private readonly ICheepService _service;
     public List<CheepViewModel> Cheeps { get; set; }
-    
     private int page = 0;
 
     public UserTimelineModel(ICheepService service)
@@ -22,6 +21,7 @@ public class UserTimelineModel : PageModel
             page = int.Parse(Request.Query["page"]) -1;
         }
         Cheeps = _service.GetCheepsFromAuthor(author, page*32).ToList();
+
         return Page();
         
     }

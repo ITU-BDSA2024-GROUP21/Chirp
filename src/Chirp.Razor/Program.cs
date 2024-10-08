@@ -14,8 +14,9 @@ public partial class Program
 
 // Add services to the container.
         builder.Services.AddRazorPages();
-        builder.Services.AddSingleton<ICheepService, CheepService>();
+        builder.Services.AddSingleton<CheepService>();
         builder.Services.AddTransient<DBFacade>(_ => new DBFacade(chirpDbPath));
+        builder.Services.AddScoped<ICheepRepository, CheepRepository>();
 
 
 

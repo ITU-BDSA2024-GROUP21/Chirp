@@ -1,27 +1,23 @@
 ﻿namespace Chirp.Razor;
 
-public record CheepViewModel(string Author, string Message, string Timestamp);
-
 public interface ICheepRepository
 {
-    public List<CheepViewModel> GetCheeps(int page);
+    public Task<List<CheepDTO>> GetCheeps(int page);
 
-    public List<CheepViewModel> GetCheepsFromAuthor(string author, int page);
+    public Task<List<CheepDTO>> GetCheepsFromAuthor(string author, int page);
 }
 
 public class CheepRepository : ICheepRepository
 {
     private readonly DBFacade facade;
-    private static readonly List<CheepViewModel> _cheeps = new();
+    private static readonly List<CheepDTO> _cheeps = new();
     
     public CheepRepository(DBFacade facade)
     {
         this.facade = facade;
     }
     
-    
-    
-    public List<CheepViewModel> GetCheeps(int page)
+    public async Task<List<CheepDTO>> GetCheeps(int page)
     {
         string sqlQuery = 
             @"SELECT user.username, message.text, message.pub_date From message
@@ -30,7 +26,7 @@ public class CheepRepository : ICheepRepository
         return facade.CheepQuery(sqlQuery, page);
     }
     
-    public List<CheepViewModel> GetCheepsFromAuthor(string author, int page)
+    public async Task<List<CheepDTO>> GetCheepsFromAuthor(string author, int page)
     {
         string sqlQuery = 
             @"SELECT user.username, message.text, message.pub_date From message

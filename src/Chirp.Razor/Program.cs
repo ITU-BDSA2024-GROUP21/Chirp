@@ -12,17 +12,22 @@ public partial class Program
                           ?? Path.Combine(Path.GetTempPath(), "chirp.db");
 
 
-// Add services to the container.
+        // Add services to the container.
         builder.Services.AddRazorPages();
         builder.Services.AddSingleton<CheepService>();
-        builder.Services.AddTransient<DBFacade>(_ => new DBFacade(chirpDbPath));
+        builder.Services.AddTransient<DBFacade>(_ => new DBFacade(chirpDbPath)
+        {
+            Author = null,
+            Message = null,
+            Timestamp = 0
+        });
         builder.Services.AddScoped<ICheepRepository, CheepRepository>();
 
 
 
         var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+        // Configure the HTTP request pipeline.
         if (!app.Environment.IsDevelopment())
         {
             app.UseExceptionHandler("/Error");

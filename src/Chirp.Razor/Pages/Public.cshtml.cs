@@ -6,8 +6,7 @@ namespace Chirp.Razor.Pages;
 public class PublicModel : PageModel
 {
     private readonly ICheepRepository _repository;
-    public List<CheepViewModel> Cheeps { get; set; }
-
+    public List<CheepDTO> Cheeps { get; set; }
     private int page = 0;
 
     public PublicModel(ICheepRepository repository)
@@ -15,13 +14,14 @@ public class PublicModel : PageModel
         _repository = repository;
     }
 
-    public ActionResult OnGet()
+    public async Task<ActionResult> OnGet()
     {
         if (!string.IsNullOrEmpty(Request.Query["page"]) && int.Parse(Request.Query["page"]) > 0)
         {
             page = int.Parse(Request.Query["page"]) -1;
         }
-        Cheeps = _repository.GetCheeps(page * 32).ToList();
+        
+        Cheeps = await _repository.GetCheeps(page * 32);
         return Page();
     }
 }

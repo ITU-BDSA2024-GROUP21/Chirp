@@ -12,7 +12,7 @@ public partial class Program
         var chirpDbPath = Environment.GetEnvironmentVariable("CHIRPDBPATH")
                           ?? Path.Combine(Path.GetTempPath(), "chirp.db");
 
-
+        
         // Add services to the container.
         builder.Services.AddRazorPages();
         builder.Services.AddDbContext<ChirpDBContext>(options =>
@@ -22,6 +22,13 @@ public partial class Program
         
 
         var app = builder.Build();
+        
+        using (var scope = app.Services.CreateScope())
+        {
+            var db = scope.ServiceProvider.GetRequiredService<ChirpDBContext>();
+            db.Database.Migrate();
+            DbInitializer.SeedDatabase(db);
+        }
 
         // Configure the HTTP request pipeline.
         if (!app.Environment.IsDevelopment())

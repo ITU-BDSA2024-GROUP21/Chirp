@@ -5,9 +5,9 @@ namespace Chirp.Razor;
 
 public interface ICheepRepository
 {
-    public Task<List<Cheep>> GetCheeps(int page);
+    public Task<List<CheepDTO>> GetCheeps(int page);
 
-    public Task<List<Cheep>> GetCheepsFromAuthor(string author, int page);
+    public Task<List<CheepDTO>> GetCheepsFromAuthor(string author, int page);
 }
 
 
@@ -20,30 +20,47 @@ public class CheepRepository : ICheepRepository
         _chirpDbContext = chirpDbContext;
     }
     
-    public async Task<List<Cheep>> GetCheeps(int page)
+    public async Task<List<CheepDTO>> GetCheeps(int page)
     {
         var sqlQuery = _chirpDbContext.Cheeps
             .Select(cheep => cheep)
             .Include(cheep => cheep.Author)
-            .OrderBy(cheep => cheep.TimeStamp)
+            .OrderByDescending(cheep => cheep.TimeStamp)
             .Skip((page - 1) * 32)
             .Take(32);
 
         List<Cheep> result = await sqlQuery.ToListAsync();
-        return result;
+        var cheeps = DTOConversion(result);
+        return cheeps;
     }
     
-    public async Task<List<Cheep>> GetCheepsFromAuthor(string author, int page)
+    public async Task<List<CheepDTO>> GetCheepsFromAuthor(string author, int page)
     {
         var sqlQuery = _chirpDbContext.Cheeps
             .Where(cheep => cheep.Author.Name == author)    
             .Select(cheep => cheep)
             .Include(cheep => cheep.Author)
-            .OrderBy(cheep => cheep.TimeStamp)
+            .OrderByDescending(cheep => cheep.TimeStamp)
             .Skip((page - 1) * 32)
             .Take(32);
 
         List<Cheep> result = await sqlQuery.ToListAsync();
-        return result;
+        var cheeps = DTOConversion(result);
+        return cheeps;
+    }
+
+    private static List<CheepDTO> DTOConversion(List<Cheep> cheeps)
+    {
+        var list = new List<CheepDTO>();
+        foreach (var cheep in cheeps)
+        {
+            list.Add(new CheepDTO
+            {
+                Author = cheep.Author.Name,
+                Text = cheep.Text,
+                TimeStamp = cheep.TimeStamp.ToString()
+            });
+        }
+        return list;
     }
 }

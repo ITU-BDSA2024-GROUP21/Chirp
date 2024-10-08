@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-
 namespace Chirp.Razor;
 
 public class ChirpDBContext : DbContext
@@ -9,6 +8,8 @@ public class ChirpDBContext : DbContext
 
     public ChirpDBContext(DbContextOptions<ChirpDBContext> options) : base(options)
     {
-        DbInitializer.SeedDatabase(this);
     }
+
+ 
+    
 }

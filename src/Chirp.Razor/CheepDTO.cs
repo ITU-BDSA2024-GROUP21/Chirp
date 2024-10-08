@@ -3,7 +3,7 @@
 public class CheepDTO
 {
     public required string Author { get; set; }
-    public required string Message { get; set; }
-    public required double Timestamp { get; set; }
+    public required string Text { get; set; }
+    public required string TimeStamp { get; set; }
     
 }

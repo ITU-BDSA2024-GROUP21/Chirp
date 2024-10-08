@@ -1,4 +1,5 @@
 using Chirp.Razor;
+using Microsoft.EntityFrameworkCore;
 
 
 public partial class Program
@@ -14,16 +15,11 @@ public partial class Program
 
         // Add services to the container.
         builder.Services.AddRazorPages();
-        builder.Services.AddSingleton<CheepService>();
-        builder.Services.AddTransient<DBFacade>(_ => new DBFacade(chirpDbPath)
-        {
-            Author = null,
-            Message = null,
-            Timestamp = 0
-        });
+        builder.Services.AddDbContext<ChirpDBContext>(options =>
+            options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+        
         builder.Services.AddScoped<ICheepRepository, CheepRepository>();
-
-
+        
 
         var app = builder.Build();
 

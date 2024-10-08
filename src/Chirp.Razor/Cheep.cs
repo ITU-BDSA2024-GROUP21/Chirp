@@ -2,9 +2,10 @@
 
 public class Cheep
 {
-    string Text { get; set; }
-    DateTime Timestamp { get; set; }
-
-    Author author { get; set; }
+    public string Text { get; set; }
+    public DateTime TimeStamp { get; set; }
+    public int CheepId { get; set; }
+    public Author Author { get; set; }
+    public int AuthorId { get; set; }
 
 }

@@ -1,7 +1,7 @@
 ﻿@page "/"
 @model Chirp.Razor.Pages.PublicModel
 @{
-    ViewData["Title"] = "Chirp!";
+    ViewData["Title"] = "Twitter";
     Layout = "Shared/_Layout";
 }
 
@@ -18,8 +18,8 @@
                         <strong>
                             <a href="/@cheep.Author">@cheep.Author</a>
                         </strong>
-                        @cheep.Message
-                        <small>&mdash; @cheep.Timestamp</small>
+                        @cheep.Text
+                        <small>&mdash; @cheep.TimeStamp</small>
                     </p>
                 </li>
             }

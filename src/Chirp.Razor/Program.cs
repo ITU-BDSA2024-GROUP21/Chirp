@@ -1,4 +1,5 @@
 using Chirp.Razor;
+using Microsoft.EntityFrameworkCore;
 
 
 public partial class Program
@@ -11,21 +12,23 @@ public partial class Program
         var chirpDbPath = Environment.GetEnvironmentVariable("CHIRPDBPATH")
                           ?? Path.Combine(Path.GetTempPath(), "chirp.db");
 
-
+        
         // Add services to the container.
         builder.Services.AddRazorPages();
-        builder.Services.AddSingleton<CheepService>();
-        builder.Services.AddTransient<DBFacade>(_ => new DBFacade(chirpDbPath)
-        {
-            Author = null,
-            Message = null,
-            Timestamp = 0
-        });
+        builder.Services.AddDbContext<ChirpDBContext>(options =>
+            options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+        
         builder.Services.AddScoped<ICheepRepository, CheepRepository>();
-
-
+        
 
         var app = builder.Build();
+        
+        using (var scope = app.Services.CreateScope())
+        {
+            var db = scope.ServiceProvider.GetRequiredService<ChirpDBContext>();
+            db.Database.Migrate();
+            DbInitializer.SeedDatabase(db);
+        }
 
         // Configure the HTTP request pipeline.
         if (!app.Environment.IsDevelopment())

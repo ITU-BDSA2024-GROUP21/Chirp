@@ -15,7 +15,7 @@ public class DBFacade : CheepDTO
             InitDB();
         }
     }
-    public List<CheepDTO> CheepQuery(string query, int page, string? Author = null)
+    /*public List<CheepDTO> CheepQuery(string query, int page, string? Author = null)
     {
         List<CheepDTO> cheeps = new List<CheepDTO>();
         using (var connection = new SqliteConnection($"Data Source={_path}"))
@@ -45,6 +45,7 @@ public class DBFacade : CheepDTO
         }
         return cheeps;
     }
+    */
 
     private void InitDB()
     {

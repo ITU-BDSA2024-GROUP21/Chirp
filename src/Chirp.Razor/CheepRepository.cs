@@ -3,13 +3,6 @@ using Chirp.Razor.Pages;
 
 namespace Chirp.Razor;
 
-public interface ICheepRepository
-{
-    public Task<List<CheepDTO>> GetCheeps(int page);
-
-    public Task<List<CheepDTO>> GetCheepsFromAuthor(string author, int page);
-}
-
 
 public class CheepRepository : ICheepRepository
 {

@@ -19,6 +19,7 @@ public partial class Program
             options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
         
         builder.Services.AddScoped<ICheepRepository, CheepRepository>();
+        builder.Services.AddScoped<ICheepService, CheepService>();
         
 
         var app = builder.Build();

@@ -24,9 +24,10 @@ public class APITest : IClassFixture<WebApplicationFactory<Program>>
         var response = await _client.GetAsync("/");
         response.EnsureSuccessStatusCode();
         var content = await response.Content.ReadAsStringAsync();
-
-        Assert.Contains("Chirp!", content);
+        
         Assert.Contains("Public Timeline", content);
+        Assert.Contains("Jacqualine Gilcoine", content);
+        Assert.Contains("Starbuck now is what we hear the worst.", content);
     }
 
     [Theory]

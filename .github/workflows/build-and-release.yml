@@ -16,17 +16,17 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: 7.0.x
-      # Same code as build-and-test for CHirp.CLI, purely to be absolutely sure we don't publish something that fails our tests
+        dotnet-version: 8.0.x
+      # Same code as build-and-test for Chirp.Razor, purely to be absolutely sure we don't publish something that fails our tests
     - name: Restore dependencies
       run: dotnet restore
-      working-directory: src/Chirp.CLI
+      working-directory: src/Chirp.Razor
     - name: Build
       run: dotnet build --no-restore
-      working-directory: src/Chirp.CLI
+      working-directory: src/Chirp.Razor
     - name: Test
       run: dotnet test --no-build --verbosity normal
-      working-directory: src/Chirp.CLI
+      working-directory: src/Chirp.Razor
 
       # Inspired by: https://patriksvensson.se/posts/2020/03/creating-release-artifacts-with-github-actions
     - name: Build
@@ -38,19 +38,19 @@ jobs:
         linux_release_name="Chirp-linux-x64-$tag"
         
         # Windows build
-        dotnet publish src/Chirp.CLI/Chirp.CLI.csproj --framework net7.0 --runtime win-x64 -c Release -p:PublishSingleFile=true -p:PublishTrimmed=true -o "$windows_release_name"        
-        win_executable_path="$windows_release_name/Chirp.CLI.exe"
+        dotnet publish src/Chirp.Razor/Chirp.Razor.csproj --framework net8.0 --runtime win-x64 -c Release -p:PublishSingleFile=true -p:PublishTrimmed=true -o "$windows_release_name"        
+        win_executable_path="$windows_release_name/Chirp.Razor.exe"
         mv "$win_executable_path" "./$windows_release_name.exe"
 
         # Mac build
-        dotnet publish src/Chirp.CLI/Chirp.CLI.csproj --framework net7.0 --runtime osx-x64 -c Release -p:PublishSingleFile=true -p:PublishTrimmed=true -o "$mac_release_name"
+        dotnet publish src/Chirp.Razor/Chirp.Razor.csproj --framework net7.0 --runtime osx-x64 -c Release -p:PublishSingleFile=true -p:PublishTrimmed=true -o "$mac_release_name"
 
         # Linux build
-        dotnet publish src/Chirp.CLI/Chirp.CLI.csproj --framework net7.0 --runtime linux-x64 -c Release -p:PublishSingleFile=true -p:PublishTrimmed=true -o "$linux_release_name"        
+        dotnet publish src/Chirp.Razor/Chirp.Razor.csproj --framework net7.0 --runtime linux-x64 -c Release -p:PublishSingleFile=true -p:PublishTrimmed=true -o "$linux_release_name"        
         
         7z a -tzip "${windows_release_name}.zip" "./${windows_release_name}.exe"      
-        7z a -tzip "${mac_release_name}.zip" "./${mac_release_name}/Chirp.CLI"
-        7z a -tzip "${linux_release_name}.zip" "./${linux_release_name}/Chirp.CLI"
+        7z a -tzip "${mac_release_name}.zip" "./${mac_release_name}/Chirp.Razor"
+        7z a -tzip "${linux_release_name}.zip" "./${linux_release_name}/Chirp.Razor"
         
         rm "./$windows_release_name.exe"
         

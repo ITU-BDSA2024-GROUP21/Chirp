@@ -24,9 +24,6 @@ public class CheepRepository : ICheepRepository
 
         var result = await sqlQuery.ToListAsync();
         return result;
-        //List<Cheep> result = await sqlQuery.ToListAsync();
-        //var cheeps = DTOConversion(result);
-        //return cheeps;
     }
     
     public async Task<List<Cheep>> GetCheepsFromAuthor(string author, int page)
@@ -41,23 +38,6 @@ public class CheepRepository : ICheepRepository
 
         var result = await sqlQuery.ToListAsync();
         return result;
-        //List<Cheep> result = await sqlQuery.ToListAsync();
-        //var cheeps = DTOConversion(result);
-        //return cheeps;
     }
-
-    private static List<CheepDTO> DTOConversion(List<Cheep> cheeps)
-    {
-        var list = new List<CheepDTO>();
-        foreach (var cheep in cheeps)
-        {
-            list.Add(new CheepDTO
-            {
-                Author = cheep.Author.Name,
-                Text = cheep.Text,
-                TimeStamp = cheep.TimeStamp.ToString()
-            });
-        }
-        return list;
-    }
+    
 }

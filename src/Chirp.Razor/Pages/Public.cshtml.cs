@@ -10,9 +10,9 @@ public class PublicModel : PageModel
     public List<CheepDTO> Cheeps { get; set; }
     private int page = 0;
 
-    public PublicModel(ICheepRepository repository)
+    public PublicModel(ICheepService cheepService)
     {
-        _repository = repository;
+        _cheepService = cheepService;
     }
 
     public async Task<ActionResult> OnGet()

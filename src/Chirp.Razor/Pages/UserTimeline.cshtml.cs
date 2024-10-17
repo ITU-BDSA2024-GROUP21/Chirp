@@ -10,9 +10,9 @@ public class UserTimelineModel : PageModel
     public List<CheepDTO> Cheeps { get; set; }
     private int page = 0;
 
-    public UserTimelineModel(ICheepRepository repository)
+    public UserTimelineModel(ICheepService cheepService)
     {
-        _repository = repository;
+        _cheepService = cheepService;
     }
 
     public async Task<ActionResult> OnGet(string author)

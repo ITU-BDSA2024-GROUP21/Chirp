@@ -14,22 +14,13 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: 7.0.x
+        dotnet-version: 8.0.x
     - name: Restore dependencies
       run: dotnet restore
-      working-directory: src/Chirp.CLI
+      working-directory: src/Chirp.Razor
     - name: Build
       run: dotnet build --no-restore
-      working-directory: src/Chirp.CLI
+      working-directory: src/Chirp.Razor
     - name: Test
-      run: dotnet test --no-build --verbosity normal
-      working-directory: src/Chirp.CLI
-    - name: Restore dependencies
-      run: dotnet restore
-      working-directory: src/SimpleDB
-    - name: Build
-      run: dotnet build --no-restore
-      working-directory: src/SimpleDB
-    - name: Test
-      run: dotnet test --no-build --verbosity normal
-      working-directory: src/SimpleDB
+      run: dotnet test --verbosity normal
+      working-directory: test/Chirp.Razor.Tests

@@ -21,7 +21,7 @@ public class PublicModel : PageModel
             page = int.Parse(Request.Query["page"]) -1;
         }
         
-        Cheeps = await _cheepService.GetCheeps(page * 32);
+        Cheeps = await _cheepService.GetCheeps(page);
         return Page();
     }
 }

@@ -20,7 +20,7 @@ public class UserTimelineModel : PageModel
         {
             page = int.Parse(Request.Query["page"]) -1;
         }
-        Cheeps = await _cheepService.GetCheepsFromAuthor(author, page*32);
+        Cheeps = await _cheepService.GetCheepsFromAuthor(author, page);
 
         return Page();
     }

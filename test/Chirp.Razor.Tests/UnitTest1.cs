@@ -115,8 +115,8 @@ public class UnitTest
 
         await repository5.CreateCheeps(testCheepDTO, testAuthorDTO1);
 
-        var createdAuthor = await repository5.GetAuthorByEmail(testAuthorDTO1.Email);
-        var cheepsByAuthor = await repository5.GetCheepsFromAuthor(createdAuthor.Name, 1);
+        var createdAuthor = await repository5.GetAuthorByName(testAuthorDTO1.Name);
+        var cheepsByAuthor = await repository5.GetCheepsFromAuthor(createdAuthor.Name, 0);
 
         Assert.NotNull(createdAuthor);
         Assert.Equal(testCheepDTO.Text, cheepsByAuthor.First().Text);

@@ -6,7 +6,7 @@ using System.Runtime.CompilerServices;
 
 public class UnitTest
 {
-    public async Task<ICheepRepository> SetUpRepositoryAsync()
+    public async Task<ICheepRepository> RepositorySetUp()
     {
         // This is to create an in-memory SQLite connection
         var connection = new SqliteConnection("Filename=:memory:");
@@ -25,7 +25,7 @@ public class UnitTest
     [Fact]
     public async Task CheepRepositoryTest()
     {
-        var repository1 = await SetUpRepositoryAsync();
+        var repository1 = await RepositorySetUp();
         
         var cheeps = await repository1.GetCheeps(1);
 
@@ -37,7 +37,7 @@ public class UnitTest
     public async Task GetAuthorByEmailTest()
     {
         // Arrange
-        var repository2 = await SetUpRepositoryAsync();
+        var repository2 = await RepositorySetUp();
 
         var testAuthor = new Author
         {
@@ -60,7 +60,7 @@ public class UnitTest
     [Fact]
     public async Task GetAuthorByNameTest()
     {
-        var repository3 = await SetUpRepositoryAsync();
+        var repository3 = await RepositorySetUp();
 
         var testAuthor1 = new Author
         {
@@ -80,7 +80,7 @@ public class UnitTest
     [Fact]
     public async Task CreateNewAuthorTest()
     {
-        var repository4 = await SetUpRepositoryAsync();
+        var repository4 = await RepositorySetUp();
 
         var testAuthorDTO = new AuthorDTO
         {
@@ -98,7 +98,7 @@ public class UnitTest
     [Fact]
     public async Task CreateCheep()
     {
-        var repository5 = await SetUpRepositoryAsync();
+        var repository5 = await RepositorySetUp();
 
         var testAuthorDTO1 = new AuthorDTO
         {

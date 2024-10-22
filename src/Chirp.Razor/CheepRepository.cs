@@ -64,13 +64,13 @@ public class CheepRepository : ICheepRepository
     {
         var check = await CheckAuthorExists(author);
 
-        if (check == null)
+        if (check == null!)
         {
             Author newAuthor = new()
             {
                 Name = author.Name,
                 Email = author.Email,
-                Cheeps = null
+                Cheeps = null!
             };
             var g =await _chirpDbContext.Authors.AddAsync(newAuthor);
 
@@ -97,7 +97,7 @@ public class CheepRepository : ICheepRepository
         var doesAuthorExist = await  _chirpDbContext.Authors.FirstOrDefaultAsync(a => a.Name == author.Name || a.Email == author.Email);
         if (doesAuthorExist == null)
         {
-            return null;
+            return null!;
         }
 
         return doesAuthorExist;

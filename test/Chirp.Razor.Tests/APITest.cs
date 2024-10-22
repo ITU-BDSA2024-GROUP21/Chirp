@@ -17,7 +17,7 @@ public class APITest : IClassFixture<WebApplicationFactory<Program>>
             HandleCookies = true
         });
     }
-
+    
     [Fact]
     public async void CanSeePublicTimeline()
     {
@@ -29,7 +29,7 @@ public class APITest : IClassFixture<WebApplicationFactory<Program>>
         Assert.Contains("Jacqualine Gilcoine", content);
         Assert.Contains("Starbuck now is what we hear the worst.", content);
     }
-
+    
     [Theory]
     [InlineData("Helge")]
     [InlineData("Adrian")]
@@ -40,7 +40,7 @@ public class APITest : IClassFixture<WebApplicationFactory<Program>>
         response.EnsureSuccessStatusCode();
         var content = await response.Content.ReadAsStringAsync();
 
-        Assert.Contains("Chirp!", content);
+        Assert.Contains("Twitter", content);
         Assert.Contains($"{author}'s Timeline", content);
     }
 
@@ -53,7 +53,7 @@ public class APITest : IClassFixture<WebApplicationFactory<Program>>
         response.EnsureSuccessStatusCode();
         var content = await response.Content.ReadAsStringAsync();
 
-        Assert.Contains("Chirp!", content);
+        Assert.Contains("Twitter", content);
         Assert.Contains("Hej, velkommen til kurset", content);
 
     }
@@ -65,7 +65,7 @@ public class APITest : IClassFixture<WebApplicationFactory<Program>>
         response.EnsureSuccessStatusCode();
         var content = await response.Content.ReadAsStringAsync();
 
-        Assert.Contains("Chirp!", content);
+        Assert.Contains("Twitter", content);
         Assert.Contains("Hello, BDSA students!", content);
     }
 }

@@ -111,7 +111,7 @@ public class UnitTest
         var testCheepDTO = new CheepDTO
         {
             Text = "This is a test",
-            Author = testAuthorDTO1.ToString(),
+            Author = testAuthorDTO1.ToString()!,
             TimeStamp = "2023-07-21 10:30:45"
         };
 

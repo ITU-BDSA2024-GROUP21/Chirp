@@ -7,7 +7,7 @@ public class UserTimelineModel : PageModel
 {
     private readonly ICheepService _cheepService;
     public List<CheepDTO> Cheeps { get; set; } = null!;
-    private int page = 0;
+    private int _page;
 
     public UserTimelineModel(ICheepService cheepService)
     {
@@ -18,9 +18,9 @@ public class UserTimelineModel : PageModel
     {
         if (!string.IsNullOrEmpty(Request.Query["page"]) && int.Parse(Request.Query["page"]!) > 0)
         {
-            page = int.Parse(Request.Query["page"]!) -1;
+            _page = int.Parse(Request.Query["page"]!) -1;
         }
-        Cheeps = await _cheepService.GetCheepsFromAuthor(author, page);
+        Cheeps = await _cheepService.GetCheepsFromAuthor(author, _page);
 
         return Page();
     }

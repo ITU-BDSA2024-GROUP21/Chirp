@@ -8,7 +8,7 @@ public interface ICheepRepository
 
     public Task<Author> GetAuthorByName(string Name);
     public Task<Author> GetAuthorByEmail(string Email);
-    public Task<Author> CreateAuthors(AuthorDTO author);
-    public Task CreateCheeps(CheepDTO cheep, AuthorDTO author);
+    public Task<Author> ConvertAuthors(AuthorDTO author);
+    public Task ConvertCheeps(CheepDTO cheep, AuthorDTO author);
 
 }

@@ -26,7 +26,7 @@ public class CheepService : ICheepService
             Name = username,
             Email = email
         };
-        await _cheepRepository.CreateAuthors(newAuthor);
+        await _cheepRepository.ConvertAuthors(newAuthor);
     }
 
 
@@ -43,7 +43,7 @@ public class CheepService : ICheepService
             Text = message,
             TimeStamp = timestamp
         };
-        await _cheepRepository.CreateCheeps(newCheep, newAuthor);
+        await _cheepRepository.ConvertCheeps(newCheep, newAuthor);
     }
 
     public async Task<List<CheepDTO>> GetCheeps(int page)

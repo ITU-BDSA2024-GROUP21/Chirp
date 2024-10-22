@@ -47,7 +47,7 @@ public class CheepRepository : ICheepRepository
             .Where(author => author.Name.ToLower() == Name.ToLower());
         
         var result = await sqlQuery.FirstOrDefaultAsync();
-        return result;
+        return result ?? throw new InvalidOperationException();
     }
     
     public async Task<Author> GetAuthorByEmail(string Email)
@@ -57,30 +57,35 @@ public class CheepRepository : ICheepRepository
             .Where(author => author.Email.ToLower() == Email.ToLower());
         
         var result = await sqlQuery.FirstOrDefaultAsync();
-        return result;
+        return result!;
     }
 
-    public async Task<Author> CreateAuthors(AuthorDTO author)
+    public async Task<Author> ConvertAuthors(AuthorDTO author)
     {
-        var check = await CheckAuthorExists(author);
+        var _author = await CheckAuthorExists(author);
 
-        if (check == null)
+        if (_author == null!)
         {
-            Author newAuthor = new() { Name = author.Name, Email = author.Email };
-            var g =await _chirpDbContext.Authors.AddAsync(newAuthor);
+            Author newAuthor = new()
+            {
+                Name = author.Name,
+                Email = author.Email,
+                Cheeps = null!
+            };
+            var contextAuthor =await _chirpDbContext.Authors.AddAsync(newAuthor);
 
             await _chirpDbContext.SaveChangesAsync();
-            return g.Entity;
+            return contextAuthor.Entity;
         }
 
-        return check;
+        return _author;
     }
 
-    public async Task CreateCheeps(CheepDTO cheeps, AuthorDTO author)
+    public async Task ConvertCheeps(CheepDTO cheeps, AuthorDTO author)
     {
-        var a = await CreateAuthors(author);
+        var _author = await ConvertAuthors(author);
         
-        Cheep newCheep = new Cheep{ Author = a, Text = cheeps.Text, TimeStamp = DateTime.UtcNow };
+        Cheep newCheep = new Cheep{ Author = _author, Text = cheeps.Text, TimeStamp = DateTime.UtcNow };
         
         await _chirpDbContext.Cheeps.AddAsync(newCheep);
         await _chirpDbContext.SaveChangesAsync();
@@ -92,7 +97,7 @@ public class CheepRepository : ICheepRepository
         var doesAuthorExist = await  _chirpDbContext.Authors.FirstOrDefaultAsync(a => a.Name == author.Name || a.Email == author.Email);
         if (doesAuthorExist == null)
         {
-            return null;
+            return null!;
         }
 
         return doesAuthorExist;

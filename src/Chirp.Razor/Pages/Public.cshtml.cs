@@ -7,21 +7,22 @@ public class PublicModel : PageModel
 {
     private readonly ICheepService _cheepService;
     public List<CheepDTO> Cheeps { get; set; }
-    private int page = 0;
+    private int _page;
 
-    public PublicModel(ICheepService cheepService)
+    public PublicModel(ICheepService cheepService, List<CheepDTO> cheeps)
     {
         _cheepService = cheepService;
+        Cheeps = cheeps;
     }
 
     public async Task<ActionResult> OnGet()
     {
-        if (!string.IsNullOrEmpty(Request.Query["page"]) && int.Parse(Request.Query["page"]) > 0)
+        if (!string.IsNullOrEmpty(Request.Query["page"]) && int.Parse(Request.Query["page"]!) > 0)
         {
-            page = int.Parse(Request.Query["page"]) -1;
+            _page = int.Parse(Request.Query["page"]!) -1;
         }
         
-        Cheeps = await _cheepService.GetCheeps(page);
+        Cheeps = await _cheepService.GetCheeps(_page);
         return Page();
     }
 }

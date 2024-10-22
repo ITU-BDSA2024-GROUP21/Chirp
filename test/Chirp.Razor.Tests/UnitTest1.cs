@@ -42,11 +42,12 @@ public class UnitTest
         var testAuthor = new Author
         {
             Name = "Gummi Tarzan",
-            Email = "Gummi.Tarzan@gmail.com"
+            Email = "Gummi.Tarzan@gmail.com",
+            Cheeps = null!
         };
 
         // Seed the in-memory database with the test author
-        await repository2.CreateAuthors(new AuthorDTO { Name = testAuthor.Name, Email = testAuthor.Email });
+        await repository2.ConvertAuthors(new AuthorDTO { Name = testAuthor.Name, Email = testAuthor.Email });
 
         // Act
         var result = await repository2.GetAuthorByEmail(testAuthor.Email);
@@ -65,10 +66,11 @@ public class UnitTest
         var testAuthor1 = new Author
         {
             Name = "Scooby Doo",
-            Email = "Scooby.Doo@gmail.com"
+            Email = "Scooby.Doo@gmail.com",
+            Cheeps = null!
         };
 
-        await repository3.CreateAuthors(new AuthorDTO { Name = testAuthor1.Name, Email = testAuthor1.Email });
+        await repository3.ConvertAuthors(new AuthorDTO { Name = testAuthor1.Name, Email = testAuthor1.Email });
 
         var result = await repository3.GetAuthorByName(testAuthor1.Name);
 
@@ -88,7 +90,7 @@ public class UnitTest
             Email = "Percy.Jackson@gmail.com"
         };
 
-        var result = await repository4.CreateAuthors(testAuthorDTO);
+        var result = await repository4.ConvertAuthors(testAuthorDTO);
 
         Assert.NotNull(result);
         Assert.Equal(testAuthorDTO.Name, result.Name);
@@ -113,7 +115,7 @@ public class UnitTest
             TimeStamp = "2023-07-21 10:30:45"
         };
 
-        await repository5.CreateCheeps(testCheepDTO, testAuthorDTO1);
+        await repository5.ConvertCheeps(testCheepDTO, testAuthorDTO1);
 
         var createdAuthor = await repository5.GetAuthorByName(testAuthorDTO1.Name);
         var cheepsByAuthor = await repository5.GetCheepsFromAuthor(createdAuthor.Name, 0);

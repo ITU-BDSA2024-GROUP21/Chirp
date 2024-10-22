@@ -66,7 +66,12 @@ public class CheepRepository : ICheepRepository
 
         if (check == null)
         {
-            Author newAuthor = new() { Name = author.Name, Email = author.Email };
+            Author newAuthor = new()
+            {
+                Name = author.Name,
+                Email = author.Email,
+                Cheeps = null
+            };
             var g =await _chirpDbContext.Authors.AddAsync(newAuthor);
 
             await _chirpDbContext.SaveChangesAsync();

@@ -63,3 +63,8 @@ jobs:
           ./Chirp-linux-*.zip
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Deploy to Microsoft Azure
+      run: echo "az webapp up --sku F1 --name bdsagroup021chirprazor --os-type Linux --location westeurope --runtime DOTNETCORE:8.0"
+
+        

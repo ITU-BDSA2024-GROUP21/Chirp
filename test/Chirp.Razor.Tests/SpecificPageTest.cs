@@ -16,10 +16,11 @@ public class SpecificPageTest : IClassFixture<WebApplicationFactory<Program>>
         });
     }
 
-    [Fact]
-    public async Task GetCheepsSpecificPage()
+    [Theory]
+    [InlineData("?page=2")]
+    public async Task GetCheepsSpecificPage(string page)
     {
-        var response = await _client.GetAsync("/?page=2");
+        var response = await _client.GetAsync($"/{page}");
         response.EnsureSuccessStatusCode();
         var content = await response.Content.ReadAsStringAsync();
         
@@ -27,10 +28,11 @@ public class SpecificPageTest : IClassFixture<WebApplicationFactory<Program>>
         Assert.DoesNotContain("Starbuck now is what we hear the worst.", content);
     }
 
-    [Fact]
-    public async Task GetCheepsAuthorSpecificPage()
+    [Theory]
+    [InlineData("?page=6")]
+    public async Task GetCheepsAuthorSpecificPage(string page)
     {
-        var response = await _client.GetAsync("/?page=6");
+        var response = await _client.GetAsync($"/{page}");
         response.EnsureSuccessStatusCode();
         var content = await response.Content.ReadAsStringAsync();
 

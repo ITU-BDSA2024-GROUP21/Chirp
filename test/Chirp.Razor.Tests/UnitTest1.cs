@@ -2,6 +2,7 @@ namespace Chirp.Razor.Tests;
 using Chirp.Razor;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc.Testing;
 using System.Runtime.CompilerServices;
 
 public class UnitTest
@@ -22,6 +23,7 @@ public class UnitTest
         // In the end we return the CheepRepository instance for testing
         return new CheepRepository(context);
     }
+    
     [Fact]
     public async Task CheepRepositoryTest()
     {

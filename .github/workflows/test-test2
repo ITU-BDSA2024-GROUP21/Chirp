@@ -2,9 +2,9 @@ name: .NET Build and Test
 
 on:
   push:
-    branches: main
+    branches: Test2
   pull_request:
-    branches: main
+    branches: Test2
 jobs:
   build:
     runs-on: ubuntu-latest

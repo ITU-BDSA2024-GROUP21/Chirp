@@ -59,9 +59,9 @@ public class APITest : IClassFixture<WebApplicationFactory<Program>>
     }
     [Theory]
     [InlineData("Helge")]
-    public async Task CanSeeHTTPBody2(string author1)
+    public async Task CanSeeHTTPBody2(string author)
     {
-        var response = await _client.GetAsync($"/{author1}");
+        var response = await _client.GetAsync($"/{author}");
         response.EnsureSuccessStatusCode();
         var content = await response.Content.ReadAsStringAsync();
 

@@ -17,10 +17,10 @@ jobs:
         dotnet-version: 8.0.x
     - name: Restore dependencies
       run: dotnet restore
-      working-directory: src/Chirp.Razor
+      working-directory: src/Chirp.Razor/Chirp.Web
     - name: Build
       run: dotnet build --no-restore
-      working-directory: src/Chirp.Razor
+      working-directory: src/Chirp.Razor/Chirp.Web
     - name: Test
       run: dotnet test --verbosity normal
       working-directory: test/Chirp.Razor.Tests

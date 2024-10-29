@@ -23,11 +23,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Chirp.Core\" />
-    <Folder Include="Chirp.Infrastructure\Repositories\" />
-    <Folder Include="Chirp.Infrastructure\Services\" />
-    <Folder Include="Chirp.Web\" />
-    <Folder Include="Chirp.Data\" />
+    <Folder Include="..\Chirp.Core\" />
+    <Folder Include="..\Chirp.Infrastructure\Repositories\" />
+    <Folder Include="..\Chirp.Infrastructure\Services\" />
+    <Folder Include="..\Chirp.Infrastructure\Chirp.Data\" />
   </ItemGroup>
 
 

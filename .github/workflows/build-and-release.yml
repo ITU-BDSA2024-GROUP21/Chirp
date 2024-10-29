@@ -20,13 +20,13 @@ jobs:
       # Same code as build-and-test for Chirp.Razor, purely to be absolutely sure we don't publish something that fails our tests
     - name: Restore dependencies
       run: dotnet restore
-      working-directory: src/Chirp.Razor
+      working-directory: src/Chirp.Razor/Chirp.Web
     - name: Build
       run: dotnet build --no-restore
-      working-directory: src/Chirp.Razor
+      working-directory: src/Chirp.Razor/Chirp.Web
     - name: Test
       run: dotnet test --no-build --verbosity normal
-      working-directory: src/Chirp.Razor
+      working-directory: test/Chirp.Razor.Tests
     - name: Build with dotnet
       run: dotnet build --configuration Release
 
@@ -74,36 +74,3 @@ jobs:
           ./Chirp-linux-*.zip
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-    - name: Deploy to Microsoft Azure
-      run: echo "az webapp up --sku F1 --name bdsagroup021chirprazor --os-type Linux --location westeurope --runtime DOTNETCORE:8.0"
-
-  deploy:
-    runs-on: ubuntu-latest
-    needs: build
-    environment:
-      name: 'Production'
-      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
-    permissions:
-      id-token: write #This is required for requesting the JWT
-
-    steps:
-      - name: Download artifact from build job
-        uses: actions/download-artifact@v3
-        with:
-          name: .net-app
-      
-      - name: Login to Azure
-        uses: azure/login@v2
-        with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_FB60A92C9E0D4FC5A6F7CA7DA02FC357 }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_79C508FB889C48F38C74CAD77BA32B75 }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_5C9A4EBD099B47878A5454FDE09377B0 }}
-
-      - name: Deploy to Azure Web App
-        id: deploy-to-webapp
-        uses: azure/webapps-deploy@v3
-        with:
-          app-name: 'bdsagroup021chirprazor'
-          slot-name: 'Production'
-          package: .

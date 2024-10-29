@@ -23,10 +23,10 @@ public class SpecificPageTest : IClassFixture<WebApplicationFactory<Program>>
         var response = await _client.GetAsync($"/{page}");
         response.EnsureSuccessStatusCode();
         var content = await response.Content.ReadAsStringAsync();
+        response.Dispose();
         
         Assert.Contains("The student had drawn the body of it was I?", content);
         Assert.DoesNotContain("Starbuck now is what we hear the worst.", content);
-        response.Dispose();
     }
 
     [Theory]
@@ -36,11 +36,11 @@ public class SpecificPageTest : IClassFixture<WebApplicationFactory<Program>>
         var response = await _client.GetAsync($"/{page}");
         response.EnsureSuccessStatusCode();
         var content = await response.Content.ReadAsStringAsync();
-
+        response.Dispose();
+        
         Assert.Contains("Wendell Ballan", content);
         Assert.Contains("Johnnie Calixto", content);
         Assert.DoesNotContain("Helge", content);
-        response.Dispose();
     }
 
     [Theory]
@@ -50,6 +50,7 @@ public class SpecificPageTest : IClassFixture<WebApplicationFactory<Program>>
         var response = await _client.GetAsync($"/{author}/{page}");
         response.EnsureSuccessStatusCode();
         var content = await response.Content.ReadAsStringAsync();
+        response.Dispose();
 
         Assert.Contains("No small number of days and such evidence.", content);
         Assert.Contains($"{author}'s Timeline", content);
@@ -63,11 +64,11 @@ public class SpecificPageTest : IClassFixture<WebApplicationFactory<Program>>
         var response = await _client.GetAsync($"/{author}/{page}");
         response.EnsureSuccessStatusCode();
         var content = await response.Content.ReadAsStringAsync();
+        response.Dispose();
 
         Assert.Contains("Colonel Sebastian Moran, who shot one of them described as dimly lighted?", content);
         Assert.Contains($"{author}'s Timeline", content);
         Assert.DoesNotContain("If I go, but Holmes caught up the side of mankind devilish dark at that.", content);
-        response.Dispose();
     }
 
 

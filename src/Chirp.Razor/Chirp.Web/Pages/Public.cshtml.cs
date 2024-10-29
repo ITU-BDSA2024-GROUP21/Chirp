@@ -1,27 +1,27 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Chirp.Core;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+namespace Chirp.Web.Pages;
 
-namespace Chirp.Razor.Pages;
-
-public class UserTimelineModel : PageModel
+public class PublicModel : PageModel
 {
     private readonly ICheepService _cheepService;
-    public List<CheepDTO> Cheeps { get; set; } = null!;
+    public required List<CheepDTO> Cheeps { get; set; }
     private int _page;
 
-    public UserTimelineModel(ICheepService cheepService)
+    public PublicModel(ICheepService cheepService)
     {
         _cheepService = cheepService;
     }
 
-    public async Task<ActionResult> OnGet(string author)
+    public async Task<ActionResult> OnGet()
     {
         if (!string.IsNullOrEmpty(Request.Query["page"]) && int.Parse(Request.Query["page"]!) > 0)
         {
             _page = int.Parse(Request.Query["page"]!) -1;
         }
-        Cheeps = await _cheepService.GetCheepsFromAuthor(author, _page);
-
+        
+        Cheeps = await _cheepService.GetCheeps(_page);
         return Page();
     }
 }

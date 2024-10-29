@@ -1,7 +1,7 @@
 using System.Data;
 using Microsoft.Data.Sqlite;
-using Chirp.Razor;
 
+namespace Chirp.Infrastructure;
 
 public class CheepService : ICheepService
 {

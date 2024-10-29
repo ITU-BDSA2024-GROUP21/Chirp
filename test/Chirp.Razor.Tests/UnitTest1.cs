@@ -1,5 +1,6 @@
 namespace Chirp.Razor.Tests;
-using Chirp.Razor;
+using Chirp.Infrastructure;
+using Chirp.Core;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.Testing;

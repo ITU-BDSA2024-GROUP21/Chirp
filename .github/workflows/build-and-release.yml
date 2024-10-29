@@ -1,0 +1,76 @@
+name: Build and Release
+
+on:
+  push:
+    tags:
+    - 'v*' 
+
+jobs:  
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 8.0.x
+      # Same code as build-and-test for Chirp.Razor, purely to be absolutely sure we don't publish something that fails our tests
+    - name: Restore dependencies
+      run: dotnet restore
+      working-directory: src/Chirp.Razor/Chirp.Web
+    - name: Build
+      run: dotnet build --no-restore
+      working-directory: src/Chirp.Razor/Chirp.Web
+    - name: Test
+      run: dotnet test --no-build --verbosity normal
+      working-directory: test/Chirp.Razor.Tests
+    - name: Build with dotnet
+      run: dotnet build --configuration Release
+
+    - name: dotnet publish
+      run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
+
+    - name: Upload artifact for deployment job
+      uses: actions/upload-artifact@v3
+      with:
+        name: .net-app
+        path: ${{env.DOTNET_ROOT}}/myapp
+
+      # Inspired by: https://patriksvensson.se/posts/2020/03/creating-release-artifacts-with-github-actions
+    - name: Build
+      shell: bash
+      run: |
+        tag=$(git describe --tags --abbrev=0)
+        windows_release_name="Chirp-win-x64-$tag"
+        mac_release_name="Chirp-mac-x64-$tag"
+        linux_release_name="Chirp-linux-x64-$tag"
+        
+        # Windows build
+        dotnet publish src/Chirp.Razor/Chirp.Razor.csproj --framework net8.0 --runtime win-x64 -c Release -p:PublishSingleFile=true -p:PublishTrimmed=true -o "$windows_release_name"        
+        win_executable_path="$windows_release_name/Chirp.Razor.exe"
+        mv "$win_executable_path" "./$windows_release_name.exe"
+
+        # Mac build
+        dotnet publish src/Chirp.Razor/Chirp.Razor.csproj --framework net8.0 --runtime osx-x64 -c Release -p:PublishSingleFile=true -p:PublishTrimmed=true -o "$mac_release_name"
+
+        # Linux build
+        dotnet publish src/Chirp.Razor/Chirp.Razor.csproj --framework net8.0 --runtime linux-x64 -c Release -p:PublishSingleFile=true -p:PublishTrimmed=true -o "$linux_release_name"        
+        
+        7z a -tzip "${windows_release_name}.zip" "./${windows_release_name}.exe"      
+        7z a -tzip "${mac_release_name}.zip" "./${mac_release_name}/Chirp.Razor"
+        7z a -tzip "${linux_release_name}.zip" "./${linux_release_name}/Chirp.Razor"
+        
+        rm "./$windows_release_name.exe"
+        
+    - name: Release
+      uses: softprops/action-gh-release@v2
+      with:
+        files: |
+          ./Chirp-win-*.zip
+          ./Chirp-mac-*.zip
+          ./Chirp-linux-*.zip
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

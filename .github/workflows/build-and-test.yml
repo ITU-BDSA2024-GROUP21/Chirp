@@ -18,9 +18,10 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore
       working-directory: src/Chirp.Razor/Chirp.Web
-    - name: Build
-      run: dotnet build --no-restore
-      working-directory: src/Chirp.Razor/Chirp.Web
     - name: Test
       run: dotnet test --verbosity normal
       working-directory: test/Chirp.Razor.Tests
+    - name: Build
+      run: dotnet build --no-restore
+      working-directory: src/Chirp.Razor/Chirp.Web
+

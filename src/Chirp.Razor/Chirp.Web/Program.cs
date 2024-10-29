@@ -7,15 +7,22 @@ public partial class Program
     {
 
         var builder = WebApplication.CreateBuilder(args);
+        var connectionString = "";
+        if (builder.Environment.IsDevelopment())
+        {
+           // connectionString = "Filename=:memory:";
+            connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
-        var chirpDbPath = Environment.GetEnvironmentVariable("CHIRPDBPATH")
-                          ?? Path.Combine(Path.GetTempPath(), "chirp.db");
-
+        }
+        else
+        {
+            connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+        }
         
         // Add services to the container.
         builder.Services.AddRazorPages();
         builder.Services.AddDbContext<ChirpDBContext>(options =>
-            options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+            options.UseSqlite(connectionString));
         
         builder.Services.AddScoped<ICheepRepository, CheepRepository>();
         builder.Services.AddScoped<ICheepService, CheepService>();

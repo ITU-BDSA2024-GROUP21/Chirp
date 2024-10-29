@@ -26,7 +26,8 @@ public partial class Program
         using (var scope = app.Services.CreateScope())
         {
             var db = scope.ServiceProvider.GetRequiredService<ChirpDBContext>();
-            db.Database.Migrate();
+            //db.Database.Migrate();
+            db.Database.EnsureCreated();
             DbInitializer.SeedDatabase(db);
         }
 

@@ -18,12 +18,12 @@ jobs:
         with:
           dotnet-version: '8.x'
       - name: Build with dotnet
-        run: dotnet build --configuration Release
+        run: dotnet build src/Chirp.Razor/Chirp.Web --configuration Release
       - name: Test
         run: dotnet test --no-build --verbosity normal
-        working-directory: src/Chirp.Razor/Chirp.Web
+        working-directory: test/Chirp.Razor.Tests
       - name: dotnet publish
-        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
+        run: dotnet publish src/Chirp.Razor/Chirp.Web -c Release -o ${{env.DOTNET_ROOT}}/myapp
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
@@ -56,3 +56,6 @@ jobs:
           app-name: 'bdsagroup021chirprazor'
           slot-name: 'Production'
           package: .
+        env:
+            GitHub__ClientId: ${{ secrets.GITHUBCLIENTID }}
+            GitHub__ClientSecret: ${{ secrets.GITHUBCLIENTSECRET }}

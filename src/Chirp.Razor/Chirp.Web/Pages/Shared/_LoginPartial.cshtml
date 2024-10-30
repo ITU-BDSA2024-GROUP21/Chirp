@@ -1,34 +1,27 @@
-@using Microsoft.AspNetCore.Identity;
-@using Chirp.Infrastructure;
-@inject SignInManager<ApplicationUser> SignInManager;
-@inject UserManager<ApplicationUser> UserManager;
-
-<ul class="navbar-nav">
+@using Microsoft.AspNetCore.Identity
+@using Chirp.Web
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+<head>
+    <link href="~/css/style.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div class=navigation>
     @if (SignInManager.IsSignedIn(User))
     {
-        <li class="nav-item">
-            <a class="nav-link text-dark" asp-area="Identity"
-               asp-page="/Account/Manage/Index" title="Manage">
-                Hello @User.Identity.Name!</a>
-        </li>
-        <li class="nav-item">
-            <form class="form-inline" asp-page="/Account/Logout"
-                  asp-route-returnUrl="@Url.Page("/", new { area = "" })"
-                  asp-area="Identity" method="post" >
-                <button class="nav-link btn btn-link text-dark"
-                        type="submit">Logout</button>
-            </form>
-        </li>
+        <div>
+            <a href="/@(User.Identity.Name)">My timeline</a> |
+            <a href="/">Public timeline</a> |
+            <a href="/Identity/Account/Logout">Logout [@(User.Identity.Name)]</a>
+        </div>
     }
     else
     {
-        <li class="nav-item">
-            <a class="nav-link text-dark" asp-area="Identity"
-               asp-page="/Account/Register">Register</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link text-dark" asp-area="Identity"
-               asp-page="/Account/Login">Login</a>
-        </li>
+        <div>
+            <a href="/">Public timeline</a> |
+            <a href="/Identity/Account/Register" >Register</a> |
+            <a href="/Identity/Account/Login" >Login</a>
+        </div>
     }
-</ul>
+</div>
+</body>

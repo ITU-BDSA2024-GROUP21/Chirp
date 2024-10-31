@@ -1,5 +1,5 @@
 @using Microsoft.AspNetCore.Identity
-@using Chirp.Web
+@using Chirp.Core
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
 <head>
@@ -7,12 +7,12 @@
 </head>
 <body>
 <div class=navigation>
-    @if (SignInManager.IsSignedIn(User))
+    @if (User.Identity.IsAuthenticated)
     {
         <div>
             <a href="/@(User.Identity.Name)">My timeline</a> |
             <a href="/">Public timeline</a> |
-            <a href="/Identity/Account/Logout">Logout [@(User.Identity.Name)]</a>
+            <a href="/Identity/Account/Logout">Logout @(User.Identity.Name)</a>
         </div>
     }
     else

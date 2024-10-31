@@ -25,12 +25,7 @@ public partial class Program
         builder.Services.AddScoped<ICheepRepository, CheepRepository>();
         builder.Services.AddScoped<ICheepService, CheepService>();
         
-        builder.Services.AddAuthentication(options =>
-            {
-                options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = "GitHub";
-            })
+        builder.Services.AddAuthentication()
             .AddCookie()
             .AddGitHub(o =>
             {
@@ -39,12 +34,7 @@ public partial class Program
                 o.CallbackPath = "/signin-github";
             });
         
-        builder.Services.AddSession(options =>
-        {
-            options.IdleTimeout = TimeSpan.FromSeconds(1800);
-            options.Cookie.HttpOnly = true;
-            options.Cookie.IsEssential = true;
-        });
+            
 
         var app = builder.Build();
         
@@ -69,7 +59,7 @@ public partial class Program
         app.UseRouting();
         app.UseAuthentication();
         app.UseAuthorization();
-        app.UseSession();
+        //app.UseSession();
         
         app.MapRazorPages();
 

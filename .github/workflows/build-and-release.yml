@@ -25,7 +25,7 @@ jobs:
       run: dotnet build --no-restore
       working-directory: src/Chirp.Razor/Chirp.Web
     - name: Test
-      run: dotnet test --no-build --verbosity normal
+      run: dotnet test --verbosity normal
       working-directory: test/Chirp.Razor.Tests
     - name: Build with dotnet
       run: dotnet build --configuration Release

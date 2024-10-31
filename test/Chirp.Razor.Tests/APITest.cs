@@ -1,6 +1,4 @@
 namespace Chirp.Razor.Tests;
-using Chirp.Razor;
-using Microsoft.AspNetCore.Mvc.Testing;
 using System.Threading.Tasks;
 
 public class APITest : IClassFixture<WebApplicationFactory<Program>>

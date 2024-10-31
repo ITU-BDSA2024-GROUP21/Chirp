@@ -1,10 +1,5 @@
 namespace Chirp.Razor.Tests;
-using Chirp.Infrastructure;
-using Chirp.Core;
 using Microsoft.Data.Sqlite;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Mvc.Testing;
-using System.Runtime.CompilerServices;
 
 public class UnitTest
 {
@@ -19,6 +14,7 @@ public class UnitTest
         var context = new ChirpDBContext(builder.Options);
     
         // Then we ensure that the database schema is created
+        await context.Database.EnsureDeletedAsync();
         await context.Database.EnsureCreatedAsync();
 
         // In the end we return the CheepRepository instance for testing

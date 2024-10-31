@@ -11,7 +11,5 @@ public class ChirpDBContext : IdentityDbContext<ApplicationUser>
     public ChirpDBContext(DbContextOptions<ChirpDBContext> options) : base(options)
     {
     }
-
- 
     
 }

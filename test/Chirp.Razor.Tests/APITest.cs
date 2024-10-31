@@ -1,6 +1,4 @@
 namespace Chirp.Razor.Tests;
-using Chirp.Razor;
-using Microsoft.AspNetCore.Mvc.Testing;
 using System.Threading.Tasks;
 
 public class APITest : IClassFixture<WebApplicationFactory<Program>>
@@ -19,7 +17,7 @@ public class APITest : IClassFixture<WebApplicationFactory<Program>>
     }
     
     [Fact]
-    public async void CanSeePublicTimeline()
+    public async Task CanSeePublicTimeline()
     {
         var response = await _client.GetAsync("/");
         response.EnsureSuccessStatusCode();
@@ -34,7 +32,7 @@ public class APITest : IClassFixture<WebApplicationFactory<Program>>
     [InlineData("Helge")]
     [InlineData("Adrian")]
     [InlineData("Roger Histand")]
-    public async void CanSeePrivateTimeline(string author)
+    public async Task CanSeePrivateTimeline(string author)
     {
         var response = await _client.GetAsync($"/{author}");
         response.EnsureSuccessStatusCode();
@@ -47,7 +45,7 @@ public class APITest : IClassFixture<WebApplicationFactory<Program>>
 
     [Theory]
     [InlineData("Adrian")]
-    public async void CanSeeHTTPBody(string author)
+    public async Task CanSeeHTTPBody(string author)
     {
         var response = await _client.GetAsync($"/{author}");
         response.EnsureSuccessStatusCode();
@@ -59,9 +57,9 @@ public class APITest : IClassFixture<WebApplicationFactory<Program>>
     }
     [Theory]
     [InlineData("Helge")]
-    public async void CanSeeHTTPBody2(string author)
+    public async Task CanSeeHTTPBody2(string author1)
     {
-        var response = await _client.GetAsync($"/{author}");
+        var response = await _client.GetAsync($"/{author1}");
         response.EnsureSuccessStatusCode();
         var content = await response.Content.ReadAsStringAsync();
 

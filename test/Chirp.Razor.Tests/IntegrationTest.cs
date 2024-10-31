@@ -1,5 +1,4 @@
 ﻿using Microsoft.Data.Sqlite;
-using Microsoft.EntityFrameworkCore;
 using Xunit.Abstractions;
 
 namespace Chirp.Razor.Tests;
@@ -22,6 +21,7 @@ public class IntegrationTest
         var builder = new DbContextOptionsBuilder<ChirpDBContext>().UseSqlite(connection);
 
         await using var context = new ChirpDBContext(builder.Options);
+        await context.Database.EnsureDeletedAsync();
         await context.Database.EnsureCreatedAsync(); // Applies the schema to the database
 
         var repository = new CheepRepository(context);

@@ -1,8 +1,5 @@
 namespace Chirp.Razor.Tests;
-using Chirp.Razor;
 using Microsoft.Data.Sqlite;
-using Microsoft.EntityFrameworkCore;
-using System.Runtime.CompilerServices;
 
 public class UnitTest
 {
@@ -17,11 +14,13 @@ public class UnitTest
         var context = new ChirpDBContext(builder.Options);
     
         // Then we ensure that the database schema is created
+        await context.Database.EnsureDeletedAsync();
         await context.Database.EnsureCreatedAsync();
 
         // In the end we return the CheepRepository instance for testing
         return new CheepRepository(context);
     }
+    
     [Fact]
     public async Task CheepRepositoryTest()
     {

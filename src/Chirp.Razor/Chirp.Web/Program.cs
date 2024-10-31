@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 
 
 public partial class Program
@@ -16,6 +17,9 @@ public partial class Program
         builder.Services.AddRazorPages();
         builder.Services.AddDbContext<ChirpDBContext>(options =>
             options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+        builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
+            .AddEntityFrameworkStores<ChirpDBContext>();
         
         builder.Services.AddScoped<ICheepRepository, CheepRepository>();
         builder.Services.AddScoped<ICheepService, CheepService>();
@@ -25,7 +29,7 @@ public partial class Program
         using (var scope = app.Services.CreateScope())
         {
             var db = scope.ServiceProvider.GetRequiredService<ChirpDBContext>();
-            db.Database.Migrate();
+            db.Database.EnsureCreated();
             DbInitializer.SeedDatabase(db);
         }
 
@@ -41,6 +45,8 @@ public partial class Program
         app.UseStaticFiles();
 
         app.UseRouting();
+        app.UseAuthentication();
+        app.UseAuthorization();
 
         app.MapRazorPages();
 

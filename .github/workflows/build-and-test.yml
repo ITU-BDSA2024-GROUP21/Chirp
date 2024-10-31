@@ -24,3 +24,8 @@ jobs:
     - name: Test
       run: dotnet test --verbosity normal
       working-directory: test/Chirp.Razor.Tests
+    - name: TestOAuth
+      run: |
+        export GitHub__ClientId="${{ secrets.GITHUBCLIENTID }}"
+        export GitHub__ClientSecret="${{ secrets.GITHUBCLIENTSECRET }}"
+        dotnet test --verbosity normal

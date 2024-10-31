@@ -34,8 +34,8 @@ public partial class Program
             .AddCookie()
             .AddGitHub(o =>
             {
-                o.ClientId = builder.Configuration["authentication_github_clientId"];
-                o.ClientSecret = builder.Configuration["authentication_github_clientSecret"];
+                o.ClientId = builder.Configuration["authentication:github:clientId"] ?? throw new InvalidOperationException("Client ID is null");
+                o.ClientSecret = builder.Configuration["authentication:github:clientSecret"] ?? throw new InvalidOperationException("Client Secret is null");
                 o.CallbackPath = "/signin-github";
             });
         

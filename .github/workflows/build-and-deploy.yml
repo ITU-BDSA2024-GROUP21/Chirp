@@ -20,7 +20,7 @@ jobs:
       - name: Build with dotnet
         run: dotnet build src/Chirp.Razor/Chirp.Web --configuration Release
       - name: Test
-        run: dotnet test test/Chirp.Razor.Tests --no-build --verbosity normal
+        run: dotnet test test/Chirp.Razor.Tests --verbosity normal
       - name: dotnet publish
         run: dotnet publish src/Chirp.Razor/Chirp.Web -c Release -o ${{env.DOTNET_ROOT}}/myapp
       - name: Upload artifact for deployment job

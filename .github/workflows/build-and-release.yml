@@ -25,7 +25,7 @@ jobs:
       run: dotnet build --no-restore
       working-directory: src/Chirp.Razor/Chirp.Web
     - name: Test
-      run: dotnet test --no-build --verbosity normal
+      run: dotnet test --verbosity normal
       working-directory: test/Chirp.Razor.Tests
     - name: Build with dotnet
       run: dotnet build --configuration Release
@@ -49,19 +49,19 @@ jobs:
         linux_release_name="Chirp-linux-x64-$tag"
         
         # Windows build
-        dotnet publish src/Chirp.Razor/Chirp.Razor.csproj --framework net8.0 --runtime win-x64 -c Release -p:PublishSingleFile=true -p:PublishTrimmed=true -o "$windows_release_name"        
-        win_executable_path="$windows_release_name/Chirp.Razor.exe"
+        dotnet publish src/Chirp.Razor/Chirp.Web/Chirp.Web.csproj --framework net8.0 --runtime win-x64 -c Release -p:PublishSingleFile=true -p:PublishTrimmed=true -o "$windows_release_name"        
+        win_executable_path="$windows_release_name/Chirp.Web.exe"
         mv "$win_executable_path" "./$windows_release_name.exe"
 
         # Mac build
-        dotnet publish src/Chirp.Razor/Chirp.Razor.csproj --framework net8.0 --runtime osx-x64 -c Release -p:PublishSingleFile=true -p:PublishTrimmed=true -o "$mac_release_name"
+        dotnet publish src/Chirp.Razor/Chirp.Web/Chirp.Web.csproj --framework net8.0 --runtime osx-x64 -c Release -p:PublishSingleFile=true -p:PublishTrimmed=true -o "$mac_release_name"
 
         # Linux build
-        dotnet publish src/Chirp.Razor/Chirp.Razor.csproj --framework net8.0 --runtime linux-x64 -c Release -p:PublishSingleFile=true -p:PublishTrimmed=true -o "$linux_release_name"        
+        dotnet publish src/Chirp.Razor/Chirp.Web/Chirp.Web.csproj --framework net8.0 --runtime linux-x64 -c Release -p:PublishSingleFile=true -p:PublishTrimmed=true -o "$linux_release_name"        
         
         7z a -tzip "${windows_release_name}.zip" "./${windows_release_name}.exe"      
-        7z a -tzip "${mac_release_name}.zip" "./${mac_release_name}/Chirp.Razor"
-        7z a -tzip "${linux_release_name}.zip" "./${linux_release_name}/Chirp.Razor"
+        7z a -tzip "${mac_release_name}.zip" "./${mac_release_name}/src/Chirp.Razor/Chirp.Web"
+        7z a -tzip "${linux_release_name}.zip" "./${linux_release_name}/src/Chirp.Razor/Chirp.Web"
         
         rm "./$windows_release_name.exe"
         

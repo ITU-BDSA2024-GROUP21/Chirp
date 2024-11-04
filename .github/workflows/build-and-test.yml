@@ -22,7 +22,11 @@ jobs:
     - name: Build
       run: dotnet build --no-restore
       working-directory: src/Chirp.Razor/Chirp.Web
+    - name: TestOAuth
+      run: |
+        export GitHub__ClientId="${{ secrets.GITHUBCLIENTID }}"
+        export GitHub__ClientSecret="${{ secrets.GITHUBCLIENTSECRET }}"
+        dotnet test --verbosity normal
     - name: Test
-      env: ${{ secrets.GITHUB_TOKEN }}
       run: dotnet test --verbosity normal
       working-directory: test/Chirp.Razor.Tests

@@ -8,11 +8,11 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read          # Adjust permissions
-      id-token: write         # Allows OIDC authentication if needed for other operations
-      issues: write           # Write access if interacting with issues
-      pull-requests: write    # Write access if interacting with PRs
+    # permissions:
+      #contents: read          # Adjust permissions
+      #id-token: write         # Allows OIDC authentication if needed for other operations
+     # issues: write           # Write access if interacting with issues
+     # pull-requests: write    # Write access if interacting with PRs
 
     steps:
     - uses: actions/checkout@v3
@@ -20,25 +20,29 @@ jobs:
       uses: actions/setup-dotnet@v3
       with:
         dotnet-version: 8.0.x
-    - name: Authenticate and Test API Access
-      env:
-        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    #- name: Authenticate and Test API Access
+    #  env:
+     #   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #run: |
+       # gh auth status
+        #gh api user -H "Accept: application/vnd.github.v3+json"
+    - name: Test
       run: |
-        gh auth status
-        gh api user -H "Accept: application/vnd.github.v3+json"
-      
+        export GitHub__ClientId="${{ secrets.GITHUBCLIENTID }}"
+        export GitHub__ClientSecret="${{ secrets.GITHUBCLIENTSECRET }}"
+        dotnet test --no-build --verbosity normal 
     - name: Restore dependencies
       run: dotnet restore
       working-directory: src/Chirp.Razor/Chirp.Web
     - name: Build
       run: dotnet build --no-restore
       working-directory: src/Chirp.Razor/Chirp.Web
-      env:
-        GITHUB_CLIENT_ID: ${{ secrets.GITHUB_CLIENT_ID }}
-        GITHUB_CLIENT_SECRET: ${{ secrets.GITHUB_CLIENT_SECRET }}
+      #env:
+       # GITHUB_CLIENT_ID: ${{ secrets.GITHUB_CLIENT_ID }}
+        #GITHUB_CLIENT_SECRET: ${{ secrets.GITHUB_CLIENT_SECRET }}
     - name: Test
       run: dotnet test --verbosity normal
       working-directory: test/Chirp.Razor.Tests
-      env:
-        GITHUB_CLIENT_ID: ${{ secrets.GITHUB_CLIENT_ID }}
-        GITHUB_CLIENT_SECRET: ${{ secrets.GITHUB_CLIENT_SECRET }}
+     # env:
+      #  GITHUB_CLIENT_ID: ${{ secrets.GITHUB_CLIENT_ID }}
+       # GITHUB_CLIENT_SECRET: ${{ secrets.GITHUB_CLIENT_SECRET }}

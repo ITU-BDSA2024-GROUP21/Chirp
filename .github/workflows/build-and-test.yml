@@ -8,6 +8,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions: {}
 
     steps:
     - uses: actions/checkout@v3
@@ -22,5 +23,6 @@ jobs:
       run: dotnet build --no-restore
       working-directory: src/Chirp.Razor/Chirp.Web
     - name: Test
+      env: ${{ secrets.GITHUB_TOKEN }}
       run: dotnet test --verbosity normal
       working-directory: test/Chirp.Razor.Tests

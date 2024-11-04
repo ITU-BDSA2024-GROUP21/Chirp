@@ -21,8 +21,8 @@ public class SpecificPageTest : IClassFixture<CustomWebApplicationFactory>
             BaseAddress = new Uri("https://localhost:5773")
             
         });
-        var clientId = Environment.GetEnvironmentVariable("CLIENT_ID") ?? "dummy-client-id";
-        var clientSecret = Environment.GetEnvironmentVariable("CLIENT_SECRET") ?? "dummy-client-secret";
+        var clientId = Environment.GetEnvironmentVariable("client_id") ?? "dummy-client-id";
+        var clientSecret = Environment.GetEnvironmentVariable("client_secret") ?? "dummy-client-secret";
     }
     
 

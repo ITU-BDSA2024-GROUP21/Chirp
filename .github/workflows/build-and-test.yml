@@ -8,7 +8,11 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    permissions: {}
+    permissions:
+      contents: read          # Adjust permissions
+      id-token: write         # Allows OIDC authentication if needed for other operations
+      issues: write           # Write access if interacting with issues
+      pull-requests: write    # Write access if interacting with PRs
 
     steps:
     - uses: actions/checkout@v3

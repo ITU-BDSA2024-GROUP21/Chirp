@@ -16,17 +16,23 @@ jobs:
       uses: actions/setup-dotnet@v3
       with:
         dotnet-version: 8.0.x
+    - name: Set Environment Variables for GitHub OAuth
+      run : |
+        echo "GITHUB_CLIENT_ID=${{ secrets.GITHUB_CLIENT_ID }}" >> $GITHUB_ENV
+        echo "GITHUB_CLIENT_SECRET=${{ secrets.GITHUB_CLIENT_SECRET }}" >> $GITHUB_ENV
+      
     - name: Restore dependencies
       run: dotnet restore
       working-directory: src/Chirp.Razor/Chirp.Web
     - name: Build
       run: dotnet build --no-restore
       working-directory: src/Chirp.Razor/Chirp.Web
-    - name: TestOAuth
-      run: |
-        export GitHub__ClientId="${{ secrets.GITHUBCLIENTID }}"
-        export GitHub__ClientSecret="${{ secrets.GITHUBCLIENTSECRET }}"
-        dotnet test --verbosity normal
+      env:
+        GITHUB_CLIENT_ID: ${{ secrets.GITHUB_CLIENT_ID }}
+        GITHUB_CLIENT_SECRET: ${{ secrets.GITHUB_CLIENT_SECRET }}
     - name: Test
       run: dotnet test --verbosity normal
       working-directory: test/Chirp.Razor.Tests
+      env:
+        GITHUB_CLIENT_ID: ${{ secrets.GITHUB_CLIENT_ID }}
+        GITHUB_CLIENT_SECRET: ${{ secrets.GITHUB_CLIENT_SECRET }}

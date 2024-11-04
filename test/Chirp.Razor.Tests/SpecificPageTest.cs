@@ -1,3 +1,6 @@
+using System.Net.Http.Headers;
+using AspNet.Security.OAuth.GitHub;
+
 namespace Chirp.Razor.Tests;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,9 +17,14 @@ public class SpecificPageTest : IClassFixture<CustomWebApplicationFactory>
         _client = factory.CreateClient(new WebApplicationFactoryClientOptions
         {
             AllowAutoRedirect = true,
-            HandleCookies = true
+            HandleCookies = true,
+            BaseAddress = new Uri("https://localhost:5773")
+            
         });
+        var clientId = Environment.GetEnvironmentVariable("CLIENT_ID") ?? "dummy-client-id";
+        var clientSecret = Environment.GetEnvironmentVariable("CLIENT_SECRET") ?? "dummy-client-secret";
     }
+    
 
     [Theory]
     [InlineData("?page=2")]

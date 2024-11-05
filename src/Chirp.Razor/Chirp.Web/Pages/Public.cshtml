@@ -6,7 +6,8 @@
 }
 
 <div>
-    <h3> <partial name="Shared/_NootBoxPartial"/> </h3>
+    @{ await Html.RenderPartialAsync("_NootBoxPartial", NootBoxModel.Text); }
+    <partial name="Shared/_NootBoxPartial" model="Model.CheepInput"/>
     <h2> Public Timeline </h2>
 
     @if (Model.Cheeps.Any())

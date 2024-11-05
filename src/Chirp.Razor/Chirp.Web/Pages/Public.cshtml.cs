@@ -9,6 +9,9 @@ public class PublicModel : PageModel
     public required List<CheepDTO> Cheeps { get; set; }
     private int _page;
 
+    [BindProperty] 
+    public NootBoxModel CheepInput { get; set; }
+
     public PublicModel(ICheepService cheepService)
     {
         _cheepService = cheepService;

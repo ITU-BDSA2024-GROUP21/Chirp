@@ -1,6 +1,7 @@
 ﻿@using Chirp.Web
 @using Microsoft.AspNetCore.Identity
 
+
 @if (User.Identity.IsAuthenticated)
 {
     <head>
@@ -10,7 +11,9 @@
     <div class="cheepbox">
         <h3>Noot noot? @(User.Identity.Name)?</h3>
         <form method="post">
-            <input style="float: left">
+            <div asp-validation-summary="ModelOnly"></div>
+            <input style="float: left" type="text" asp-for="Message" class="form-control" >
+            <span asp-validation-for="Message"></span>
             <input type="submit" value="Share">
         </form>
     </div>

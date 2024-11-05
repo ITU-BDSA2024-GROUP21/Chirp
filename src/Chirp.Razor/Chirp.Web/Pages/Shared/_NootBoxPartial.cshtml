@@ -1,0 +1,18 @@
+﻿@using Chirp.Web
+@using Microsoft.AspNetCore.Identity
+
+@if (User.Identity.IsAuthenticated)
+{
+    <head>
+        <link href="~/css/style.css" rel="stylesheet" type="text/css"/>
+    </head>
+    <body>
+    <div class="cheepbox">
+        <h3>Noot noot? @(User.Identity.Name)?</h3>
+        <form method="post">
+            <input style="float: left">
+            <input type="submit" value="Share">
+        </form>
+    </div>
+    </body>
+}

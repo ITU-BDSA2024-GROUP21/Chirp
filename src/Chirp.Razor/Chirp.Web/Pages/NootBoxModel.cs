@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 public class NootBoxModel : PageModel {
 
     [BindProperty]
-    public static string Text { get; set; }
+    public string Text { get; set; }
 
     public IActionResult OnPost()
     {

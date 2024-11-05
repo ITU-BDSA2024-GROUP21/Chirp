@@ -30,12 +30,12 @@ public class CheepService : ICheepService
     }
 
 
-    public async void CreateCheep(string username, string email, string message, string timestamp)
+    public async Task<Cheep> CreateCheep(string username, string message, string timestamp)
     {
         AuthorDTO newAuthor = new AuthorDTO
         {
             Name = username,
-            Email = email,
+            Email = null,
         };
         CheepDTO newCheep = new CheepDTO
         {
@@ -43,7 +43,8 @@ public class CheepService : ICheepService
             Text = message,
             TimeStamp = timestamp
         };
-        await _cheepRepository.ConvertCheeps(newCheep, newAuthor);
+        var cheep = await _cheepRepository.ConvertCheeps(newCheep, newAuthor);
+        return cheep;
     }
 
     public async Task<List<CheepDTO>> GetCheeps(int page)

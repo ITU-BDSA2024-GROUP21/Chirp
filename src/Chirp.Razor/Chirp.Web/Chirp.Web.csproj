@@ -4,7 +4,8 @@
         <TargetFramework>net8.0</TargetFramework>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
-    </PropertyGroup>
+      <UserSecretsId>e4d04feb-cc53-4fd4-97d5-a951337b1337</UserSecretsId>
+  </PropertyGroup>
     
     <ItemGroup>
         <ProjectReference Include="..\Chirp.Core\Chirp.Core.csproj" />
@@ -12,6 +13,7 @@
     </ItemGroup>
 
     <ItemGroup>
+        <PackageReference Include="AspNet.Security.OAuth.GitHub" Version="8.2.0" />
         <PackageReference Include="Microsoft.Data.Sqlite.Core" Version="8.0.8" />
         <EmbeddedResource Include="data/**/*" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.8">
@@ -29,6 +31,7 @@
         <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="8.0.8" />
         <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.0" />
     </ItemGroup>
+    
     
     
     <ItemGroup>

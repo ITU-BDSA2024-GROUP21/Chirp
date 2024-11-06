@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 
@@ -23,6 +24,17 @@ public partial class Program
         
         builder.Services.AddScoped<ICheepRepository, CheepRepository>();
         builder.Services.AddScoped<ICheepService, CheepService>();
+        
+        builder.Services.AddAuthentication()
+            .AddCookie()
+            .AddGitHub(o =>
+            {
+                o.ClientId = builder.Configuration["authentication_github_clientId"] ?? throw new InvalidOperationException("Client ID is null");
+                o.ClientSecret = builder.Configuration["authentication_github_clientSecret"] ?? throw new InvalidOperationException("Client Secret is null");
+                o.CallbackPath = "/signin-github";
+            });
+        
+            
 
         var app = builder.Build();
         
@@ -47,7 +59,7 @@ public partial class Program
         app.UseRouting();
         app.UseAuthentication();
         app.UseAuthorization();
-
+        
         app.MapRazorPages();
 
 

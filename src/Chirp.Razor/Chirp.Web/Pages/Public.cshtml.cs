@@ -1,8 +1,10 @@
 ﻿using Azure;
-using Chirp.Core;
+using Chirp.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.IdentityModel.Tokens;
+
 namespace Chirp.Web.Pages;
 
 public class PublicModel : PageModel
@@ -10,8 +12,7 @@ public class PublicModel : PageModel
     private readonly ICheepService _cheepService;
     public required List<CheepDTO> Cheeps { get; set; }
     private int _page;
-
-    [BindProperty] 
+    
     public NootBoxModel CheepInput { get; set; }
 
     public PublicModel(ICheepService cheepService)
@@ -32,7 +33,7 @@ public class PublicModel : PageModel
 
     public async Task<IActionResult> OnPost()
     {
-        Console.WriteLine("HEJSA");
+        Console.WriteLine("Hejsa");
         if (string.IsNullOrWhiteSpace(CheepInput.Text))
         {
             ModelState.AddModelError("CheepInput.Text", "The message can't be empty.");

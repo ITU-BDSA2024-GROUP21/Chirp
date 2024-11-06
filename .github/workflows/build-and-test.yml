@@ -8,24 +8,23 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v3
     - name: Setup .NET
       uses: actions/setup-dotnet@v3
       with:
         dotnet-version: 8.0.x
+        
     - name: Restore dependencies
       run: dotnet restore
       working-directory: src/Chirp.Razor/Chirp.Web
+      
     - name: Build
       run: dotnet build --no-restore
       working-directory: src/Chirp.Razor/Chirp.Web
+
     - name: Test
-      run: dotnet test --verbosity normal
-      working-directory: test/Chirp.Razor.Tests
-    - name: TestOAuth
       run: |
-        export GitHub__ClientId="${{ secrets.GITHUBCLIENTID }}"
-        export GitHub__ClientSecret="${{ secrets.GITHUBCLIENTSECRET }}"
-        dotnet test --verbosity normal
+        export authentication_github_clientId="${{ secrets.GITHUBCLIENTID }}"
+        export authentication_github_clientSecret="${{ secrets.GITHUBCLIENTSECRET }}"
+        dotnet test test/Chirp.Razor.Tests --verbosity normal 

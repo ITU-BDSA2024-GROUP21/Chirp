@@ -25,6 +25,6 @@ jobs:
 
     - name: Test
       run: |
-        export GitHub__ClientId="${{ secrets.GITHUBCLIENTID }}"
-        export GitHub__ClientSecret="${{ secrets.GITHUBCLIENTSECRET }}"
+        export authentication_github_clientId"="${{ secrets.GITHUBCLIENTID }}"
+        export authentication_github_clientSecret="${{ secrets.GITHUBCLIENTSECRET }}"
         dotnet test test/Chirp.Razor.Tests --verbosity normal 

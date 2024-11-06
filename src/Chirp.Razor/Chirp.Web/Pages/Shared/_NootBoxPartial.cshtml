@@ -11,8 +11,8 @@
     <body>
     <div class="cheepbox">
         <h3>Noot noot? @(User.Identity.Name)?</h3>
-        <form method="post">
-            <div asp-validation-summary="ModelOnly"></div>
+        <form asp-page="post" method="post">
+            <div asp-validation-summary="All"></div>
             <input style="float: left" type="text" asp-for="Text" class="form-control" >
             <span asp-validation-for="Text"></span>
             <input type="submit" value="Share">

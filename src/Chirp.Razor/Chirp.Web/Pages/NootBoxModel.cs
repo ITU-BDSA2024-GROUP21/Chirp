@@ -3,7 +3,7 @@ using Chirp.Web.Pages;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-public class NootBoxModel : PageModel {
+public class NootBoxModel {
     
     [BindProperty]
     [Microsoft.Build.Framework.Required]
@@ -11,5 +11,5 @@ public class NootBoxModel : PageModel {
     [Display(Name = "Message Text")]
 
     public string Text { get; set; }
-    
+
 }

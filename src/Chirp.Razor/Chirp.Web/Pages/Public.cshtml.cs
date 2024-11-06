@@ -5,6 +5,11 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.IdentityModel.Tokens;
 
+using System.ComponentModel.DataAnnotations;
+using Chirp.Web.Pages;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+
 namespace Chirp.Web.Pages;
 
 public class PublicModel : PageModel
@@ -13,11 +18,14 @@ public class PublicModel : PageModel
     public required List<CheepDTO> Cheeps { get; set; }
     private int _page;
     
+    [BindProperty]
     public NootBoxModel CheepInput { get; set; }
+    
 
     public PublicModel(ICheepService cheepService)
     {
         _cheepService = cheepService;
+        
     }
 
     public async Task<ActionResult> OnGet()
@@ -49,7 +57,7 @@ public class PublicModel : PageModel
             return Page();
         }
 
-        await _cheepService.CreateCheep(User.Identity.Name.ToString(), CheepInput.Text, DateTime.Now.ToString());
+        await _cheepService.CreateCheep(User.Identity.Name.ToString(), CheepInput.Text, DateTime.Now.AddHours(1).ToString());
         return RedirectToPage("Public");
     }
     

@@ -35,7 +35,7 @@ public class CheepService : ICheepService
         AuthorDTO newAuthor = new AuthorDTO
         {
             Name = username,
-            Email = null,
+            Email = "brian@mail.dk",
         };
         CheepDTO newCheep = new CheepDTO
         {

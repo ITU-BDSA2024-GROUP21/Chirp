@@ -15,6 +15,7 @@ public class UserTimelineModel : PageModel
         _cheepService = cheepService;
     }
 
+    [BindProperty]
     public NootBoxModel CheepInput { get; set; }
 
     public async Task<ActionResult> OnGet(string author)
@@ -46,7 +47,7 @@ public class UserTimelineModel : PageModel
             return Page();
         }
 
-        await _cheepService.CreateCheep(User.Identity.Name.ToString(), CheepInput.Text, DateTime.Now.ToString());
+        await _cheepService.CreateCheep(User.Identity.Name, CheepInput.Text, DateTimeKind.Local.ToString());
         return RedirectToPage("Public");
     }
 }

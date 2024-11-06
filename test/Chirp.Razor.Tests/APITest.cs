@@ -5,7 +5,6 @@ public class APITest : IClassFixture<WebApplicationFactory<Program>>
 {
     private readonly WebApplicationFactory<Program> _fixture;
     private readonly HttpClient _client;
-
     public APITest(WebApplicationFactory<Program> fixture)
     {
         _fixture = fixture;

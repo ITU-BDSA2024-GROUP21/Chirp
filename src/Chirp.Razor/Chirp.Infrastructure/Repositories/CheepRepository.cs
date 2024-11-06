@@ -80,7 +80,7 @@ public class CheepRepository : ICheepRepository
         return _author;
     }
 
-    public async Task ConvertCheeps(CheepDTO cheeps, AuthorDTO author)
+    public async Task<Cheep> ConvertCheeps(CheepDTO cheeps, AuthorDTO author)
     {
         var _author = await ConvertAuthors(author);
         
@@ -88,6 +88,7 @@ public class CheepRepository : ICheepRepository
         
         await _chirpDbContext.Cheeps.AddAsync(newCheep);
         await _chirpDbContext.SaveChangesAsync();
+        return newCheep;
 
     }
     

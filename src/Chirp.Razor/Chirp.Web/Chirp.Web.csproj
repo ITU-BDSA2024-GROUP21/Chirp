@@ -39,9 +39,5 @@
         <_ContentIncludedByDefault Remove="Chirp\obj\project.assets.json" />
         <_ContentIncludedByDefault Remove="Chirp\obj\project.packagespec.json" />
     </ItemGroup>
-    
-    <ItemGroup>
-        <Folder Include="Pages\" />
-    </ItemGroup>
 
 </Project>

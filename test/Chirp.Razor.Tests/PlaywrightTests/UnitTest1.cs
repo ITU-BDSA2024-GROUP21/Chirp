@@ -4,6 +4,9 @@ using Microsoft.Playwright.NUnit;
 using NUnit.Framework;
 using System;
 using System.Threading.Tasks;
+using Xunit;
+using Assert = Xunit.Assert;
+
 
 [Parallelizable(ParallelScope.Self)]
 [TestFixture]
@@ -51,4 +54,29 @@ public class UnitTest1 : PageTest
         await Expect(Page.Locator("#Text")).Not.ToBeVisibleAsync();
         
     }
+
+    [Test]
+    public async Task NootBoxChatCharectarLimit()
+    {
+       
+        await Page.GotoAsync("https://localhost:5273/");
+        await Page.GetByRole(AriaRole.Link, new() { Name = "Login" }).ClickAsync();
+        await Page.GetByPlaceholder("name@example.com").ClickAsync();
+        await Page.GetByPlaceholder("name@example.com").FillAsync("marcus");
+        await Page.GetByPlaceholder("name@example.com").ClickAsync();
+        await Page.GetByPlaceholder("name@example.com").FillAsync("marcus@mail.dk");
+        await Page.GetByPlaceholder("password").ClickAsync();
+        await Page.GetByPlaceholder("password").FillAsync("Halløj1!");
+        await Page.GetByRole(AriaRole.Button, new() { Name = "Log in" }).ClickAsync();
+        await Page.Locator("#Text").ClickAsync();
+
+        String InputValue160 =
+            "jfdhfæahfiowehfoiwahefæowhfhjfjksbedfowehfioewhfoewihfjkbgvbdfhvæjdafihowejfpiowejfpoewjfowepjfopewjfoepjfpwøajf'wpjofp'woejhfvoewhbgvkbjelanfiewoøhfw'ihfiøwoeq";
+        
+        await Page.Locator("#Text").FillAsync(InputValue160);
+        int length = InputValue160.Length;
+        
+        Assert.Equal(160,length);
+    }
+    
 }

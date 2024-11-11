@@ -1,9 +1,9 @@
 ﻿@using Chirp.Web
 @using Microsoft.AspNetCore.Identity
 
-@model NootBoxModel
+@model Chirp.Web.Pages.NootBoxModel
 
-@if (User.Identity.IsAuthenticated)
+@if (User.Identity is { IsAuthenticated: true })
 {
     <head>
         <link href="~/css/style.css" rel="stylesheet" type="text/css"/>

@@ -7,8 +7,6 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
 using Chirp.Web.Pages;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Chirp.Web.Pages;
 
@@ -20,7 +18,7 @@ public class PublicModel : PageModel
     private readonly UserManager<ApplicationUser> _userManager;
 
     [BindProperty]
-    public NootBoxModel CheepInput { get; set; }
+    public required NootBoxModel CheepInput { get; set; }
     
 
     public PublicModel(ICheepService cheepService, UserManager<ApplicationUser> userManager)
@@ -59,9 +57,12 @@ public class PublicModel : PageModel
         }
         
         var user = await _userManager.GetUserAsync(User);
-        var email = user.Email;
+        var email = user?.Email;
+        
+        var userName = User.Identity?.Name ?? "UnknownUser";
+        var emailValue = email ?? "example@email.dk";
 
-        await _cheepService.CreateCheep(User.Identity.Name.ToString(),email.ToString() ,CheepInput.Text, DateTime.Now.AddHours(1).ToString());
+        await _cheepService.CreateCheep(userName.ToString(),emailValue.ToString() ,CheepInput.Text, DateTime.Now.AddHours(1).ToString());
         return RedirectToPage("Public");
     }
     

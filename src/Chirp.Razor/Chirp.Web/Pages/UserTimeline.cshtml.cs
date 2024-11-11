@@ -10,15 +10,17 @@ public class UserTimelineModel : PageModel
     public List<CheepDTO> Cheeps { get; set; } = null!;
     private int _page;
     private readonly UserManager<ApplicationUser> _userManager;
+    
+    [BindProperty]
+    [Required]
+    public NootBoxModel CheepInput { get; set; }
 
-    public UserTimelineModel(ICheepService cheepService, UserManager<ApplicationUser> userManager)
+    public UserTimelineModel(ICheepService cheepService, UserManager<ApplicationUser> userManager, NootBoxModel cheepInput)
     {
         _cheepService = cheepService;
         _userManager = userManager;
+        CheepInput = cheepInput;
     }
-
-    [BindProperty]
-    public NootBoxModel CheepInput { get; set; }
 
     public async Task<ActionResult> OnGet(string author)
     {
@@ -50,9 +52,12 @@ public class UserTimelineModel : PageModel
         }
         
         var user = await _userManager.GetUserAsync(User);
-        var email = user.Email;
+        var email = user?.Email;
 
-        await _cheepService.CreateCheep(User.Identity.Name.ToString(), email.ToString(),CheepInput.Text, DateTimeKind.Local.ToString());
+        var userName = User.Identity?.Name ?? "UnknownUser";
+        var emailValue = email ?? "example@email.dk";
+
+        await _cheepService.CreateCheep(userName.ToString(), emailValue.ToString(),CheepInput.Text, DateTimeKind.Local.ToString());
         return RedirectToPage("Public");
     }
 }

@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Chirp.Web.Pages;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
+
+namespace Chirp.Web.Pages;
 
 public class NootBoxModel {
     
@@ -10,6 +10,6 @@ public class NootBoxModel {
     [StringLength(160, ErrorMessage = "Maximum length is {1}")]
     [Display(Name = "Message Text")]
 
-    public string Text { get; set; }
+    public required string Text { get; set; }
 
 }

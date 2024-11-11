@@ -7,7 +7,7 @@
 </head>
 <body>
 <div class=navigation>
-    @if (User.Identity.IsAuthenticated)
+    @if (User.Identity is { IsAuthenticated: true })
     {
         <div>
             <a href="/@(User.Identity.Name)">My timeline</a> |

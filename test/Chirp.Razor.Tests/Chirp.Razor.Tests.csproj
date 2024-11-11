@@ -28,5 +28,10 @@
     <PackageReference Include="xunit" Version="2.x.x" />
   </ItemGroup>
 
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="PlaywrightTests\bin\Debug\net8.0\PlaywrightTests.deps.json" />
+    <_ContentIncludedByDefault Remove="PlaywrightTests\bin\Debug\net8.0\PlaywrightTests.runtimeconfig.json" />
+  </ItemGroup>
+
 </Project>
 

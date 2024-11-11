@@ -105,6 +105,30 @@ public class UnitTest1 : PageTest
         
         Assert.Equal(160,actualValue.Length);
     }
+
+    [Test]
+    public async Task SendingCheepsWorks()
+    {
+        await Page.GotoAsync("https://localhost:5273/");
+        await Page.GetByRole(AriaRole.Link, new() { Name = "Login" }).ClickAsync();
+        await Page.GetByPlaceholder("name@example.com").ClickAsync();
+        await Page.GetByPlaceholder("name@example.com").FillAsync("marcus@mail.dk");
+        await Page.GetByPlaceholder("password").ClickAsync();
+        await Page.GetByPlaceholder("password").FillAsync("Halløj1!");
+        await Page.GetByRole(AriaRole.Button, new() { Name = "Log in" }).ClickAsync();
+        
+        //Checks that the Noot-chat box is exiting
+        await Expect(Page.Locator("#Text")).ToBeVisibleAsync();
+        await Page.GetByRole(AriaRole.Link, new() { Name = "My timeline" }).ClickAsync();
+        //Checks that the Noot-chat box is exiting
+        await Expect(Page.Locator("#Text")).ToBeVisibleAsync();
+        await Page.Locator("#Text").ClickAsync();
+        await Page.Locator("#Text").FillAsync("hej med dig!");
+        await Page.GetByRole(AriaRole.Button, new() { Name = "Share" }).ClickAsync();
+        // Checks That the Noot is visible after posting
+        await Expect(Page.Locator("li").Filter(new() { HasText = "Marcus hej med dig!" })).ToBeVisibleAsync();
+        
+    }
     
     
 }

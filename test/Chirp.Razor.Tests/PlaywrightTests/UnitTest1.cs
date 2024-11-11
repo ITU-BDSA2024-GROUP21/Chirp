@@ -12,6 +12,9 @@ using Assert = Xunit.Assert;
 [TestFixture]
 public class UnitTest1 : PageTest
 {
+    //NOTE: PROGRAM SHOULD BE RUNNING BEFORE RUNNING THE UI TEST
+    
+    
     //NootBoxIsVisibleWhenloggedIn is testing that a nootchat is visible
     //when a user is logged in.
     [Test]
@@ -56,7 +59,7 @@ public class UnitTest1 : PageTest
     }
 
     [Test]
-    public async Task NootBoxChatCharectarLimit()
+    public async Task NootChatBoxCharacterLimit()
     {
        
         await Page.GotoAsync("https://localhost:5273/");
@@ -77,6 +80,30 @@ public class UnitTest1 : PageTest
         int length = InputValue160.Length;
         
         Assert.Equal(160,length);
+    }
+    [Test]  
+    public async Task NootChatBoxCharacterLimitMoreCharacters()
+    {
+       
+        await Page.GotoAsync("https://localhost:5273/");
+        await Page.GetByRole(AriaRole.Link, new() { Name = "Login" }).ClickAsync();
+        await Page.GetByPlaceholder("name@example.com").ClickAsync();
+        await Page.GetByPlaceholder("name@example.com").FillAsync("marcus");
+        await Page.GetByPlaceholder("name@example.com").ClickAsync();
+        await Page.GetByPlaceholder("name@example.com").FillAsync("marcus@mail.dk");
+        await Page.GetByPlaceholder("password").ClickAsync();
+        await Page.GetByPlaceholder("password").FillAsync("Halløj1!");
+        await Page.GetByRole(AriaRole.Button, new() { Name = "Log in" }).ClickAsync();
+        await Page.Locator("#Text").ClickAsync();
+
+        String InputValue161 =
+            "jfdhfæahfiowehfoiwahefæowhfhjfj2ksbedfowehfioewhfoewihfjkbgvbdfhvæjdafihowejfpiowejfpoewjfowepjfopewjfoepjfpwøajf'wpjofp'woejhfvoewhbgvkbjelanfiewoøhfw'ihfiøwoeq";
+        
+        await Page.Locator("#Text").FillAsync(InputValue161);
+        
+        string actualValue = await Page.Locator("#Text").InputValueAsync();
+        
+        Assert.Equal(160,actualValue.Length);
     }
     
     

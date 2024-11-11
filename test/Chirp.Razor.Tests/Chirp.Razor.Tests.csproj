@@ -25,12 +25,15 @@
     <ProjectReference Include="../../src/Chirp.Razor/Chirp.Web/Chirp.Web.csproj" />
     <ProjectReference Include="../../src/Chirp.Razor/Chirp.Infrastructure/Chirp.Infrastructure.csproj" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="8.0.8" />
-    <PackageReference Include="xunit" Version="2.x.x" />
+    
   </ItemGroup>
 
   <ItemGroup>
     <_ContentIncludedByDefault Remove="PlaywrightTests\bin\Debug\net8.0\PlaywrightTests.deps.json" />
     <_ContentIncludedByDefault Remove="PlaywrightTests\bin\Debug\net8.0\PlaywrightTests.runtimeconfig.json" />
+    <_ContentIncludedByDefault Remove="PlaywrightTests\obj\Debug\net8.0\PlaywrightTests.sourcelink.json" />
+    <_ContentIncludedByDefault Remove="PlaywrightTests\obj\PlaywrightTests.csproj.nuget.dgspec.json" />
+    <_ContentIncludedByDefault Remove="PlaywrightTests\obj\project.assets.json" />
   </ItemGroup>
 
 </Project>

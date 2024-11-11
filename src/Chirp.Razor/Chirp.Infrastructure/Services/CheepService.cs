@@ -30,12 +30,12 @@ public class CheepService : ICheepService
     }
 
 
-    public async Task<Cheep> CreateCheep(string username, string message, string timestamp)
+    public async Task<Cheep> CreateCheep(string username,  string email, string message, string timestamp)
     {
         AuthorDTO newAuthor = new AuthorDTO
         {
             Name = username,
-            Email = "brian@mail.dk",
+            Email = email,
         };
         CheepDTO newCheep = new CheepDTO
         {

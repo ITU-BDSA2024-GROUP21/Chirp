@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.ComponentModel.DataAnnotations;
-
+using Microsoft.AspNetCore.Identity;
 namespace Chirp.Web.Pages;
 
 public class UserTimelineModel : PageModel
@@ -9,10 +9,12 @@ public class UserTimelineModel : PageModel
     private readonly ICheepService _cheepService;
     public List<CheepDTO> Cheeps { get; set; } = null!;
     private int _page;
+    private readonly UserManager<ApplicationUser> _userManager;
 
-    public UserTimelineModel(ICheepService cheepService)
+    public UserTimelineModel(ICheepService cheepService, UserManager<ApplicationUser> userManager)
     {
         _cheepService = cheepService;
+        _userManager = userManager;
     }
 
     [BindProperty]
@@ -46,8 +48,11 @@ public class UserTimelineModel : PageModel
             Cheeps = await _cheepService.GetCheeps(1);
             return Page();
         }
+        
+        var user = await _userManager.GetUserAsync(User);
+        var email = user.Email;
 
-        await _cheepService.CreateCheep(User.Identity.Name, CheepInput.Text, DateTimeKind.Local.ToString());
+        await _cheepService.CreateCheep(User.Identity.Name.ToString(), email.ToString(),CheepInput.Text, DateTimeKind.Local.ToString());
         return RedirectToPage("Public");
     }
 }

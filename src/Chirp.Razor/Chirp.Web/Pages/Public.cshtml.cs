@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.IdentityModel.Tokens;
-
+using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
 using Chirp.Web.Pages;
 using Microsoft.AspNetCore.Mvc;
@@ -17,15 +17,16 @@ public class PublicModel : PageModel
     private readonly ICheepService _cheepService;
     public required List<CheepDTO> Cheeps { get; set; }
     private int _page;
-    
+    private readonly UserManager<ApplicationUser> _userManager;
+
     [BindProperty]
     public NootBoxModel CheepInput { get; set; }
     
 
-    public PublicModel(ICheepService cheepService)
+    public PublicModel(ICheepService cheepService, UserManager<ApplicationUser> userManager)
     {
         _cheepService = cheepService;
-        
+        _userManager = userManager;
     }
 
     public async Task<ActionResult> OnGet()
@@ -56,8 +57,11 @@ public class PublicModel : PageModel
             Cheeps = await _cheepService.GetCheeps(1);
             return Page();
         }
+        
+        var user = await _userManager.GetUserAsync(User);
+        var email = user.Email;
 
-        await _cheepService.CreateCheep(User.Identity.Name.ToString(), CheepInput.Text, DateTime.Now.AddHours(1).ToString());
+        await _cheepService.CreateCheep(User.Identity.Name.ToString(),email.ToString() ,CheepInput.Text, DateTime.Now.AddHours(1).ToString());
         return RedirectToPage("Public");
     }
     

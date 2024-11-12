@@ -3,7 +3,9 @@ using Microsoft.Playwright;
 using Microsoft.Playwright.NUnit;
 using NUnit.Framework;
 using System;
+using System.Diagnostics;
 using System.Threading.Tasks;
+using Chirp.UI.Tests;
 using Xunit;
 using Assert = Xunit.Assert;
 
@@ -12,6 +14,24 @@ using Assert = Xunit.Assert;
 [TestFixture]
 public class UnitTest1 : PageTest
 {
+    private Process _serverProcess;
+    
+    
+    [OneTimeSetUp]
+    public async Task OneTimeSetup()
+    {
+        _serverProcess = await ServerUtil.StartServer();
+    }
+    
+    [OneTimeTearDown]
+    public void OneTimeCleanup()
+    {
+        if (_serverProcess != null && !_serverProcess.HasExited)
+        {
+            _serverProcess.Kill();
+            _serverProcess.Dispose();
+        }
+    }
     //NOTE: PROGRAM SHOULD BE RUNNING BEFORE RUNNING THE UI TEST
     
     
@@ -123,12 +143,16 @@ public class UnitTest1 : PageTest
         //Checks that the Noot-chat box is exiting
         await Expect(Page.Locator("#Text")).ToBeVisibleAsync();
         await Page.Locator("#Text").ClickAsync();
-        await Page.Locator("#Text").FillAsync("hej med dig!");
+        //Makesure the test passes everytime by adding a unique identifier like timestamp
+        string uniqueMessage = $"hej med dig!! - {DateTime.Now:yyyy-MM-dd HH:mm:ss}";
+        await Page.Locator("#Text").FillAsync(uniqueMessage);
         await Page.GetByRole(AriaRole.Button, new() { Name = "Share" }).ClickAsync();
         // Checks That the Noot is visible after posting
-        await Expect(Page.Locator("li").Filter(new() { HasText = "Marcus hej med dig!" })).ToBeVisibleAsync();
+        await Expect(Page.Locator("li").Filter(new() { HasText = uniqueMessage })).ToBeVisibleAsync();
         
     }
+    
+    
     
     
 }

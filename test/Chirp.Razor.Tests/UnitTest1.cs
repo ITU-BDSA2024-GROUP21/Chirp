@@ -1,5 +1,6 @@
 namespace Chirp.Razor.Tests;
 using Microsoft.Data.Sqlite;
+using Xunit;
 
 public class UnitTest
 {

@@ -2,6 +2,7 @@ namespace Chirp.Razor.Tests;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Xunit;
 
 public class SpecificPageTest : IClassFixture<CustomWebApplicationFactory>
 {

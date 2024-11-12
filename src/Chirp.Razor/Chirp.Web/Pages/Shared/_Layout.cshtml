@@ -11,12 +11,23 @@
     <partial name="_LoginPartial" />
 
     <div class=body>
-            @RenderBody()
+        @RenderBody() 
+        @{
+        //Method to parse the current page from the query string, and by default set to 1 incase it isn't valid
+            int currPage;
+            if (!int.TryParse(Context.Request.Query["page"], out currPage))
+            {
+                currPage = 1; // Default to 1 if parsing fails
+            }
+                int nextPage = currPage + 1; // Calculating the next page
+        }
+        <a href="/?page=@nextPage" style="float: right;">Next page</a> 
     </div>
     <div class=footer>
         Chirp &mdash; An ASP.NET Application
     </div>
 </div>
+
 
 </body>
 @await RenderSectionAsync("Scripts", required: false)

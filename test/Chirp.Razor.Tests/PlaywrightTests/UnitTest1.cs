@@ -1,39 +1,49 @@
-using System.Text.RegularExpressions;
+using System.Diagnostics;
 using Microsoft.Playwright;
 using Microsoft.Playwright.NUnit;
-using NUnit.Framework;
-using System;
-using System.Diagnostics;
-using System.Threading.Tasks;
-using Chirp.UI.Tests;
-using Xunit;
 using Assert = Xunit.Assert;
+using NUnit.Framework;
 
+using Chirp.Razor.Tests.PlaywrightTests;
 
-[Parallelizable(ParallelScope.Self)]
+[Parallelizable(ParallelScope.None)]
 [TestFixture]
 public class UnitTest1 : PageTest
 {
     private Process _serverProcess;
+    protected IBrowser _browser;
     
+    public override BrowserNewContextOptions ContextOptions()
+    {
+        return new BrowserNewContextOptions
+        {
+            IgnoreHTTPSErrors = true
+        };
+    }
     
-    [OneTimeSetUp]
-    public async Task OneTimeSetup()
+    [SetUp]
+    public async Task Setup()
     {
         _serverProcess = await ServerUtil.StartServer();
+        Thread.Sleep(5000); // Increase this if needed
+
+        _browser = await Playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions {Headless = true});
+
     }
     
-    [OneTimeTearDown]
-    public void OneTimeCleanup()
+    [TearDown]
+    public async Task Cleanup()
     {
-        if (_serverProcess != null && !_serverProcess.HasExited)
-        {
-            _serverProcess.Kill();
-            _serverProcess.Dispose();
-        }
+
+        _serverProcess.Kill(true);
+
+        _serverProcess.Dispose();
+        await _browser.DisposeAsync();
+
     }
-    //NOTE: PROGRAM SHOULD BE RUNNING BEFORE RUNNING THE UI TEST
     
+    //NOTE: PROGRAM SHOULD BE RUNNING BEFORE RUNNING THE UI TEST
+
     
     //NootBoxIsVisibleWhenloggedIn is testing that a nootchat is visible
     //when a user is logged in.
@@ -151,8 +161,5 @@ public class UnitTest1 : PageTest
         await Expect(Page.Locator("li").Filter(new() { HasText = uniqueMessage })).ToBeVisibleAsync();
         
     }
-    
-    
-    
     
 }

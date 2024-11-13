@@ -1,17 +1,50 @@
-using System.Text.RegularExpressions;
+using System.Diagnostics;
 using Microsoft.Playwright;
 using Microsoft.Playwright.NUnit;
-using NUnit.Framework;
-using System;
-using System.Threading.Tasks;
-using Xunit;
 using Assert = Xunit.Assert;
+using NUnit.Framework;
 
+using Chirp.Razor.Tests.PlaywrightTests;
 
-[Parallelizable(ParallelScope.Self)]
+[Parallelizable(ParallelScope.None)]
 [TestFixture]
 public class UnitTest1 : PageTest
 {
+    private Process _serverProcess;
+    protected IBrowser _browser;
+    
+    public override BrowserNewContextOptions ContextOptions()
+    {
+        return new BrowserNewContextOptions
+        {
+            IgnoreHTTPSErrors = true
+        };
+    }
+    
+    [SetUp]
+    public async Task Setup()
+    {
+        _serverProcess = await ServerUtil.StartServer();
+        Thread.Sleep(5000); // Increase this if needed
+
+        _browser = await Playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions {Headless = true});
+
+    }
+    
+    [TearDown]
+    public async Task Cleanup()
+    {
+
+        _serverProcess.Kill(true);
+
+        _serverProcess.Dispose();
+        await _browser.DisposeAsync();
+
+    }
+    
+    //NOTE: PROGRAM SHOULD BE RUNNING BEFORE RUNNING THE UI TEST
+
+    
     //NootBoxIsVisibleWhenloggedIn is testing that a nootchat is visible
     //when a user is logged in.
     [Test]
@@ -56,7 +89,7 @@ public class UnitTest1 : PageTest
     }
 
     [Test]
-    public async Task NootBoxChatCharectarLimit()
+    public async Task NootChatBoxCharacterLimit()
     {
        
         await Page.GotoAsync("https://localhost:5273/");
@@ -78,6 +111,55 @@ public class UnitTest1 : PageTest
         
         Assert.Equal(160,length);
     }
-    
+    [Test]  
+    public async Task NootChatBoxCharacterLimitMoreCharacters()
+    {
+       
+        await Page.GotoAsync("https://localhost:5273/");
+        await Page.GetByRole(AriaRole.Link, new() { Name = "Login" }).ClickAsync();
+        await Page.GetByPlaceholder("name@example.com").ClickAsync();
+        await Page.GetByPlaceholder("name@example.com").FillAsync("marcus");
+        await Page.GetByPlaceholder("name@example.com").ClickAsync();
+        await Page.GetByPlaceholder("name@example.com").FillAsync("marcus@mail.dk");
+        await Page.GetByPlaceholder("password").ClickAsync();
+        await Page.GetByPlaceholder("password").FillAsync("Halløj1!");
+        await Page.GetByRole(AriaRole.Button, new() { Name = "Log in" }).ClickAsync();
+        await Page.Locator("#Text").ClickAsync();
+
+        String InputValue161 =
+            "jfdhfæahfiowehfoiwahefæowhfhjfj2ksbedfowehfioewhfoewihfjkbgvbdfhvæjdafihowejfpiowejfpoewjfowepjfopewjfoepjfpwøajf'wpjofp'woejhfvoewhbgvkbjelanfiewoøhfw'ihfiøwoeq";
+        
+        await Page.Locator("#Text").FillAsync(InputValue161);
+        
+        string actualValue = await Page.Locator("#Text").InputValueAsync();
+        
+        Assert.Equal(160,actualValue.Length);
+    }
+
+    [Test]
+    public async Task SendingCheepsWorks()
+    {
+        await Page.GotoAsync("https://localhost:5273/");
+        await Page.GetByRole(AriaRole.Link, new() { Name = "Login" }).ClickAsync();
+        await Page.GetByPlaceholder("name@example.com").ClickAsync();
+        await Page.GetByPlaceholder("name@example.com").FillAsync("marcus@mail.dk");
+        await Page.GetByPlaceholder("password").ClickAsync();
+        await Page.GetByPlaceholder("password").FillAsync("Halløj1!");
+        await Page.GetByRole(AriaRole.Button, new() { Name = "Log in" }).ClickAsync();
+        
+        //Checks that the Noot-chat box is exiting
+        await Expect(Page.Locator("#Text")).ToBeVisibleAsync();
+        await Page.GetByRole(AriaRole.Link, new() { Name = "My timeline" }).ClickAsync();
+        //Checks that the Noot-chat box is exiting
+        await Expect(Page.Locator("#Text")).ToBeVisibleAsync();
+        await Page.Locator("#Text").ClickAsync();
+        //Makesure the test passes everytime by adding a unique identifier like timestamp
+        string uniqueMessage = $"hej med dig!! - {DateTime.Now:yyyy-MM-dd HH:mm:ss}";
+        await Page.Locator("#Text").FillAsync(uniqueMessage);
+        await Page.GetByRole(AriaRole.Button, new() { Name = "Share" }).ClickAsync();
+        // Checks That the Noot is visible after posting
+        await Expect(Page.Locator("li").Filter(new() { HasText = uniqueMessage })).ToBeVisibleAsync();
+        
+    }
     
 }

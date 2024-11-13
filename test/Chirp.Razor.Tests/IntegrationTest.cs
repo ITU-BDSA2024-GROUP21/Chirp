@@ -1,5 +1,6 @@
 ﻿using Microsoft.Data.Sqlite;
 using Xunit.Abstractions;
+using Assert = Xunit.Assert;
 
 namespace Chirp.Razor.Tests;
 

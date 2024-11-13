@@ -1,5 +1,6 @@
 namespace Chirp.Razor.Tests;
 using System.Threading.Tasks;
+using Xunit;
 
 public class APITest : IClassFixture<WebApplicationFactory<Program>>
 {

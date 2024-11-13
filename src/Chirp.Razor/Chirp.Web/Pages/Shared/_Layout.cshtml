@@ -23,12 +23,12 @@
             }
                 int nextPage = currPage + 1; // Calculating the next page
         }
-        <a href="/?page=@nextPage" style="float: right;">Next page</a> 
+        <button onclick="document.location='/?page=@nextPage'" style="float: right;">Next Page</button>
         @{
         //Method to parse the current page from the query string, and by default set to 1 incase it isn't valid
-            int prevPage = currPage - 1; // Calculating the previous page
+            int prevPage = currPage - 1; // Calculating the  page
         }
-        <a href="/?page=@prevPage">Previous page</a> 
+        <button onclick="document.location='/?page=@prevPage'">Previous Page</button>
     </div>
     <div class=footer>
         Chirp &mdash; An ASP.NET Application

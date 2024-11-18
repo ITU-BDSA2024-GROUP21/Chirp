@@ -47,7 +47,7 @@ jobs:
         name: .net-app
 
     - name: List downloaded files
-      run: ls -la ./.net-app
+      run: ls -la ./myapp/.net-app
 
     - name: Login to Azure
       uses: azure/login@v2
@@ -62,7 +62,7 @@ jobs:
       with:
         app-name: 'bdsagroup021chirprazor'
         slot-name: 'Production'
-        package: ./.net-app
+        package: ./myapp/.net-app
         runtime-stack: 'DOTNETCORE|8.0'
       env:
         GitHub__ClientId: ${{ secrets.GITHUBCLIENTID }}

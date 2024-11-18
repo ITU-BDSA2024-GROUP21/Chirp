@@ -85,7 +85,12 @@ namespace Chirp.Web.Areas.Identity.Pages.Account
             [EmailAddress]
             public string Email { get; set; }
             
-            public string UserName { get; set; }
+            public string Username { get; set; }
+            
+            public bool Complete()
+            {
+                return Email != null && Username != null;
+            }
         }
         
         public IActionResult OnGet() => RedirectToPage("./Login");
@@ -131,11 +136,15 @@ namespace Chirp.Web.Areas.Identity.Pages.Account
                 ProviderDisplayName = info.ProviderDisplayName;
                 if (info.Principal.HasClaim(c => c.Type == ClaimTypes.Email))
                 {
-                    Input = new InputModel
-                    {
-                        Email = info.Principal.FindFirstValue(ClaimTypes.Email),
-                        UserName = info.Principal.Identity.Name
-                    };
+                    Input.Email = info.Principal.FindFirstValue(ClaimTypes.Email);
+                }
+                if (info.Principal.HasClaim(c => c.Type == ClaimTypes.Name))
+                {
+                    Input.Username = info.Principal.FindFirstValue(ClaimTypes.Name);
+                }
+                if (Input.Complete())
+                {
+                    return await OnPostConfirmationAsync("~/");
                 }
                 return Page();
             }
@@ -156,7 +165,7 @@ namespace Chirp.Web.Areas.Identity.Pages.Account
             {
                 var user = CreateUser();
 
-                await _userStore.SetUserNameAsync(user, Input.UserName, CancellationToken.None);
+                await _userStore.SetUserNameAsync(user, Input.Username, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
 
                 var result = await _userManager.CreateAsync(user);

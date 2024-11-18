@@ -24,10 +24,13 @@ jobs:
           dotnet test test/Chirp.Razor.Tests --verbosity normal
       - name: dotnet publish
         run: dotnet publish src/Chirp.Razor/Chirp.Web -c Release -o ./myapp
+      - name: Verify publish output
+        run: ls -la ./myapp
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
           name: .net-app
+          path: ./myapp
 
   deploy:
     runs-on: ubuntu-latest
@@ -44,7 +47,7 @@ jobs:
         name: .net-app
 
     - name: List downloaded files
-      run: ls -la /.net-app
+      run: ls -la ./.net-app
 
     - name: Login to Azure
       uses: azure/login@v2
@@ -59,7 +62,7 @@ jobs:
       with:
         app-name: 'bdsagroup021chirprazor'
         slot-name: 'Production'
-        package: /.net-app
+        package: ./.net-app
         runtime-stack: 'DOTNETCORE|8.0'
       env:
         GitHub__ClientId: ${{ secrets.GITHUBCLIENTID }}

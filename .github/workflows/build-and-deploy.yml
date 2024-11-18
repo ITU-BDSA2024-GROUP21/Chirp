@@ -57,6 +57,12 @@ jobs:
         tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_79C508FB889C48F38C74CAD77BA32B75 }}
         subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_5C9A4EBD099B47878A5454FDE09377B0 }}
 
+    - name: Configure App Service Deployment Settings
+      run: |
+        az webapp config appsettings set --name bdsagroup021chirprazor \
+          --resource-group YOUR_RESOURCE_GROUP_NAME \
+          --settings SCM_DO_BUILD_DURING_DEPLOYMENT=false
+
     - name: Deploy to Azure Web App
       id: deploy-to-webapp
       uses: azure/webapps-deploy@v3

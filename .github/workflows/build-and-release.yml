@@ -25,8 +25,11 @@ jobs:
       run: dotnet build --no-restore
       working-directory: src/Chirp.Razor/Chirp.Web
     - name: Test
-      run: dotnet test --verbosity normal
-      working-directory: test/Chirp.Razor.Tests
+      run: |
+        export authentication_github_clientId="${{ secrets.GITHUBCLIENTID }}"
+        export authentication_github_clientSecret="${{ secrets.GITHUBCLIENTSECRET }}"
+        dotnet test test/Chirp.Razor.Tests --verbosity normal 
+        
     - name: Build with dotnet
       run: dotnet build --configuration Release
 

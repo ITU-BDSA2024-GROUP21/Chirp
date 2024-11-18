@@ -39,26 +39,30 @@ jobs:
     permissions:
       id-token: write
     steps:
-      - name: Download artifact from build job
-        uses: actions/download-artifact@v4
-        with:
-          name: .net-app
+    - name: Download artifact from build job
+      uses: actions/download-artifact@v4
+      with:
+        name: .net-app
 
-      - name: Login to Azure
-        uses: azure/login@v2
-        with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_FB60A92C9E0D4FC5A6F7CA7DA02FC357 }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_79C508FB889C48F38C74CAD77BA32B75 }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_5C9A4EBD099B47878A5454FDE09377B0 }}
+    - name: List downloaded files
+      run: ls -la ./.net-app
 
-      - name: Deploy to Azure Web App
-        id: deploy-to-webapp
-        uses: azure/webapps-deploy@v3
-        with:
-          app-name: 'bdsagroup021chirprazor'
-          slot-name: 'Production'
-          package: ./myapp
-          runtime-stack: 'DOTNETCORE|8.0'
-        env:
-          GitHub__ClientId: ${{ secrets.GITHUBCLIENTID }}
-          GitHub__ClientSecret: ${{ secrets.GITHUBCLIENTSECRET }}
+    - name: Login to Azure
+      uses: azure/login@v2
+      with:
+        client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_FB60A92C9E0D4FC5A6F7CA7DA02FC357 }}
+        tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_79C508FB889C48F38C74CAD77BA32B75 }}
+        subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_5C9A4EBD099B47878A5454FDE09377B0 }}
+
+    - name: Deploy to Azure Web App
+      id: deploy-to-webapp
+      uses: azure/webapps-deploy@v3
+      with:
+        app-name: 'bdsagroup021chirprazor'
+        slot-name: 'Production'
+        package: ./.net-app
+        runtime-stack: 'DOTNETCORE|8.0'
+      env:
+        GitHub__ClientId: ${{ secrets.GITHUBCLIENTID }}
+        GitHub__ClientSecret: ${{ secrets.GITHUBCLIENTSECRET }}
+

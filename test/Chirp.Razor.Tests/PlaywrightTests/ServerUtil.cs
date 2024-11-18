@@ -6,7 +6,7 @@ namespace Chirp.Razor.Tests.PlaywrightTests;
     {
         public static async Task<Process> StartServer()
         {
-            string projectPath = "/Users/stinewittendorff/Desktop/John3/src/Chirp.Razor/Chirp.Web";
+            string projectPath = "/Users/mathildemarcussen/Desktop/Chirp_/Chirp/src/Chirp.Razor/Chirp.Web";
 
             var serverProcess = new Process
             {

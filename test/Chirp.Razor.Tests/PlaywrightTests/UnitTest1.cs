@@ -162,4 +162,30 @@ public class UnitTest1 : PageTest
         
     }
     
+    [Test]
+    public async Task CheckingThatWeHandleXSSAttacks()
+    {
+        await Page.GotoAsync("https://localhost:5273/");
+        await Page.GetByRole(AriaRole.Link, new() { Name = "Login" }).ClickAsync();
+        await Page.GetByPlaceholder("name@example.com").ClickAsync();
+        await Page.GetByPlaceholder("name@example.com").FillAsync("marcus@mail.dk");
+        await Page.GetByPlaceholder("password").ClickAsync();
+        await Page.GetByPlaceholder("password").FillAsync("Halløj1!");
+        await Page.GetByRole(AriaRole.Button, new() { Name = "Log in" }).ClickAsync();
+        
+        //Checks that the Noot-chat box is exiting
+        await Expect(Page.Locator("#Text")).ToBeVisibleAsync();
+        await Page.GetByRole(AriaRole.Link, new() { Name = "My timeline" }).ClickAsync();
+        //Checks that the Noot-chat box is exiting
+        await Expect(Page.Locator("#Text")).ToBeVisibleAsync();
+        await Page.Locator("#Text").ClickAsync();
+        //Makesure the test passes everytime by adding a unique identifier like timestamp
+        string uniqueMessage = $"Hello, I am feeling good!<script>alert('If you see this in a popup, you are in trouble!');</script>\n\n - {DateTime.Now:yyyy-MM-dd HH:mm:ss}";
+        await Page.Locator("#Text").FillAsync(uniqueMessage);
+        await Page.GetByRole(AriaRole.Button, new() { Name = "Share" }).ClickAsync();
+        // Checks That the Noot is visible after posting
+        await Expect(Page.Locator("li").Filter(new() { HasText = uniqueMessage })).ToBeVisibleAsync();
+        
+    }
+    
 }

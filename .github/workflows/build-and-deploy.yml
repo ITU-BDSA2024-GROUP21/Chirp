@@ -45,9 +45,10 @@ jobs:
       uses: actions/download-artifact@v4
       with:
         name: .net-app
+        path: ./downloaded-artifact
 
     - name: List downloaded files
-      run: ls -la ./myapp/.net-app
+      run: ls -la ./downloaded-artifact
 
     - name: Login to Azure
       uses: azure/login@v2
@@ -62,7 +63,7 @@ jobs:
       with:
         app-name: 'bdsagroup021chirprazor'
         slot-name: 'Production'
-        package: ./myapp/.net-app
+        package: ./downloaded-artifact
         runtime-stack: 'DOTNETCORE|8.0'
       env:
         GitHub__ClientId: ${{ secrets.GITHUBCLIENTID }}

@@ -204,8 +204,6 @@ public class UnitTest1 : PageTest
         await Page.GetByLabel("Confirm Password").FillAsync("Halløj1!");
         
         await Page.GetByRole(AriaRole.Button, new() { Name = "Register" }).ClickAsync();
-        //string robert = "Username 'Robert'); DROP";
-        //await Expect(Page.GetByRole(AriaRole.Listitem).Filter(new() { HasText = robert })).ToBeVisibleAsync();
         
         var _content = await Page.ContentAsync();
         Console.WriteLine(_content);

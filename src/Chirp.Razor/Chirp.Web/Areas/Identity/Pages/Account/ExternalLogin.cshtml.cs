@@ -134,6 +134,9 @@ namespace Chirp.Web.Areas.Identity.Pages.Account
                 // If the user does not have an account, then ask the user to create an account.
                 ReturnUrl = returnUrl;
                 ProviderDisplayName = info.ProviderDisplayName;
+                // Checks if the user has specific claims (username and email in this case) within their identity
+                // if that is the case a new input model is made with the claims
+                // info.principal represents the current user's identity
                 if (info.Principal.HasClaim(c => c.Type == ClaimTypes.Email) && info.Principal.HasClaim(c => c.Type == ClaimTypes.Name))
                 {
                     Input = new InputModel

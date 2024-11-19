@@ -134,13 +134,13 @@ namespace Chirp.Web.Areas.Identity.Pages.Account
                 // If the user does not have an account, then ask the user to create an account.
                 ReturnUrl = returnUrl;
                 ProviderDisplayName = info.ProviderDisplayName;
-                if (info.Principal.HasClaim(c => c.Type == ClaimTypes.Email))
+                if (info.Principal.HasClaim(c => c.Type == ClaimTypes.Email) && info.Principal.HasClaim(c => c.Type == ClaimTypes.Name))
                 {
-                    Input.Email = info.Principal.FindFirstValue(ClaimTypes.Email);
-                }
-                if (info.Principal.HasClaim(c => c.Type == ClaimTypes.Name))
-                {
-                    Input.Username = info.Principal.FindFirstValue(ClaimTypes.Name);
+                    Input = new InputModel
+                    {
+                        Email = info.Principal.FindFirstValue(ClaimTypes.Email),
+                        Username = info.Principal.FindFirstValue(ClaimTypes.Name)
+                    };
                 }
                 if (Input.Complete())
                 {

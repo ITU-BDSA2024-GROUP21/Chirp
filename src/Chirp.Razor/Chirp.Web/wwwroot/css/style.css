@@ -110,6 +110,11 @@ div.page div.footer {
   padding: 5px 10px;
   font-size: 12px;
 }
+.PageButton {
+    font-size:12px;
+    height:30px;
+    width:115px;
+}
 
 div.page div.followstatus {
   border: 1px solid #ccc;

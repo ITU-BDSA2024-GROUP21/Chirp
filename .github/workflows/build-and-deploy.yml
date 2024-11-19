@@ -56,7 +56,7 @@ jobs:
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
         with:
-          app-name: 'bdsagroup021chirprazor2024'
+          app-name: 'bdsagroup021chirprazor'
           slot-name: 'Production'
           package: .
           startup-command: 'dotnet Chirp.Web.dll'

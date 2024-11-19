@@ -187,5 +187,58 @@ public class UnitTest1 : PageTest
         await Expect(Page.Locator("li").Filter(new() { HasText = uniqueMessage })).ToBeVisibleAsync();
         
     }
+
+    [Test]
+    public async Task CheckingThatWeHandleSQLInjections()
+    {
+        await Page.GotoAsync("https://localhost:5273/");
+
+        await Page.GetByRole(AriaRole.Link, new() { Name = "Register" }).ClickAsync();
+        await Page.GetByPlaceholder("username").ClickAsync();
+        await Page.GetByPlaceholder("username").FillAsync("Robert'); DROP TABLE Students;-- ");
+        await Page.GetByPlaceholder("name@example.com").ClickAsync();
+        await Page.GetByPlaceholder("name@example.com").FillAsync("robert@mail.dk");
+        await Page.GetByLabel("Password", new() { Exact = true }).ClickAsync();
+        await Page.GetByLabel("Password", new() { Exact = true }).FillAsync("Halløj1!");
+        await Page.GetByLabel("Confirm Password").ClickAsync();
+        await Page.GetByLabel("Confirm Password").FillAsync("Halløj1!");
+        
+        await Page.GetByRole(AriaRole.Button, new() { Name = "Register" }).ClickAsync();
+        //string robert = "Username 'Robert'); DROP";
+        //await Expect(Page.GetByRole(AriaRole.Listitem).Filter(new() { HasText = robert })).ToBeVisibleAsync();
+        
+        var _content = await Page.ContentAsync();
+        Console.WriteLine(_content);
+        
+        await Expect(Page.GetByText("Username 'Robert'); DROP TABLE Students;-- ' is invalid, can only contain letters or digits." )).ToBeVisibleAsync();
+    }
+    
+    [Test]
+    public async Task Registerworks()
+    {
+        await Page.GotoAsync("https://localhost:5273/");
+    
+        await Page.GetByRole(AriaRole.Link, new() { Name = "Register" }).ClickAsync();
+    
+        await Page.GetByPlaceholder("username").ClickAsync();
+        await Page.GetByPlaceholder("username").FillAsync("Carla69");
+        await Page.GetByPlaceholder("name@example.com").ClickAsync();
+        await Page.GetByPlaceholder("name@example.com").FillAsync("carla69@mail.dk");
+        await Page.GetByLabel("Password", new() { Exact = true }).ClickAsync();
+        await Page.GetByLabel("Password", new() { Exact = true }).FillAsync("Halløj691!");
+        await Page.GetByLabel("Confirm Password").ClickAsync();
+        await Page.GetByLabel("Confirm Password").FillAsync("Halløj691!");
+    
+        await Page.GetByRole(AriaRole.Button, new() { Name = "Register" }).ClickAsync();
+        var _content = await Page.ContentAsync();
+        Console.WriteLine(_content);
+        //await Page.WaitForURLAsync("**/RegisterConfirmation?email=*&returnUrl=*");
+
+        
+        await Expect(Page.GetByRole(AriaRole.Link, new() { Name = "Click here to confirm your" })).ToBeVisibleAsync();
+        await Page.GetByRole(AriaRole.Link, new() { Name = "Click here to confirm your" }).ClickAsync();
+    
+    }
+    
     
 }

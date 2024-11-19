@@ -55,4 +55,6 @@ public class UserTimelineModel : PageModel
         await _cheepService.CreateCheep(User.Identity.Name.ToString(), email.ToString(),CheepInput.Text, DateTimeKind.Local.ToString());
         return RedirectToPage("Public");
     }
+    
+    
 }

@@ -40,7 +40,8 @@
     {
         <em>There are no cheeps so far.</em>
     }
-
+    @if (currPage > 1) {
     <button onclick="document.location='/?page=@prevPage'" @if (currPage <= 1) { <text>disabled</text> } class="PageButton" >Previous Page</button>
+    }
     <button onclick="document.location='/?page=@nextPage'" style="float: right;" class="PageButton">Next Page</button>
 </div>

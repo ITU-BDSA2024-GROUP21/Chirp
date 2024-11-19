@@ -48,24 +48,27 @@ public class UIEnd2EndTest : PageTest
     public async Task End2EndTest1()
     {
         await Page.GotoAsync("https://localhost:5273/");
-        await Page.GetByRole(AriaRole.Link, new() { Name = "register" }).ClickAsync();
+        
+        await Page.GetByRole(AriaRole.Link, new() { Name = "Register" }).ClickAsync();
         await Page.GetByPlaceholder("username").ClickAsync();
-        await Page.GetByPlaceholder("username").FillAsync("Alan");
+        //CHANGE NUMBER HERE
+        await Page.GetByPlaceholder("username").FillAsync("Alan8");
         await Page.GetByPlaceholder("name@example.com").ClearAsync();
-        await Page.GetByPlaceholder("name@example.com").FillAsync("Alan@mail.dk");
+        //CHANGE NUMBER HERE
+        await Page.GetByPlaceholder("name@example.com").FillAsync("Alan8@mail.dk");
         await Page.GetByLabel("Password", new() { Exact = true }).ClickAsync();
         await Page.GetByLabel("Password", new() { Exact = true }).FillAsync("Halløj1!");
         await Page.GetByLabel("Confirm Password").ClickAsync();
         await Page.GetByLabel("Confirm Password").FillAsync("Halløj1!");
         // Note det er som om den ikke registrere vi kommer videre når vi klikker på linket register
         
+        var _content = await Page.ContentAsync();
+        Console.WriteLine(_content);
+        
         await Page.GetByRole(AriaRole.Button, new() { Name = "Register" }).ClickAsync();
-        //await Page.GotoAsync("https://localhost:5273/Identity/Account/RegisterConfirmation?email=alan@mail.dk&returnUrl=%2F");
-        //await Expect(Page).ToHaveURLAsync("https://localhost:5273/Identity/Account/RegisterConfirmation?email=alan@mail.dk&returnUrl=%2F");
-        
+       
         //Checking that we can confirm our email
-        await Expect(Page.GetByRole(AriaRole.Button, new() { Name = "Click here to confirm your" })).ToBeVisibleAsync();
-        
+        await Expect(Page.GetByRole(AriaRole.Link, new() { Name = "Click here to confirm your" })).ToBeVisibleAsync();
         await Page.GetByRole(AriaRole.Link, new() { Name = "Click here to confirm your" }).ClickAsync();
         
 
@@ -80,19 +83,23 @@ public class UIEnd2EndTest : PageTest
         
         await Page.GetByRole(AriaRole.Link, new() { Name = "My timeline" }).ClickAsync();
         //Checking that the noot box is visible
-        await Expect(Page.GetByText("Noot noot? Alan? Share")).ToBeVisibleAsync();
+        //CHANGE NUMBER HERE
+        await Expect(Page.GetByText("Noot noot? Alan8? Share")).ToBeVisibleAsync();
         
         await Page.Locator("#Text").ClickAsync();
-        await Page.Locator("#Text").FillAsync("Hej med Dig");
+        string uniqueMessage = $"hej med Dig - {DateTime.Now:yyyy-MM-dd HH:mm:ss}";
+        
+        await Page.Locator("#Text").FillAsync(uniqueMessage);
         await Page.GetByRole(AriaRole.Button, new() { Name = "Share" }).ClickAsync();
         await Page.GetByRole(AriaRole.Link, new() { Name = "My timeline" }).ClickAsync();
         
-        string uniqueMessage = $"hej med Dig - {DateTime.Now:yyyy-MM-dd HH:mm:ss}";
+        
         
         //Checking that the Noot is visible on my timeline
         await Expect(Page.Locator("li").Filter(new() { HasText = uniqueMessage })).ToBeVisibleAsync();
         
-        await Page.GetByRole(AriaRole.Link, new() { Name = "Logout Alan" }).ClickAsync();
+        //CHANGE NUMBER HERE
+        await Page.GetByRole(AriaRole.Link, new() { Name = "Logout Alan8" }).ClickAsync();
         await Page.GetByRole(AriaRole.Button, new() { Name = "Click here to Logout" }).ClickAsync();
 
     }

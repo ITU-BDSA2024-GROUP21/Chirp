@@ -44,8 +44,8 @@
                     @if (User.Identity.IsAuthenticated && User.Identity.Name == cheep.Author)
                     {
                         <form method="post" asp-page-handler="DeleteCheep">
-                            <input type="hidden" name="cheepId" value="@cheep.CheepId" />
-                            <button type="submit" class="DeleteButton">Delete</button>
+                            <input type="hidden" name="cheepId" value="@cheep.CheepId.ToString()" />
+                            <button type="submit" class="btn btn-danger">Delete</button>
                         </form>
                     }
                 </li>

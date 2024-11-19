@@ -60,4 +60,3 @@ jobs:
           slot-name: 'Production'
           package: .
           startup-command: 'dotnet Chirp.Web.dll'
-

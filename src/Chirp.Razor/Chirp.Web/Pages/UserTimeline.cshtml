@@ -40,6 +40,14 @@
                         @cheep.Text
                         <small>&mdash; @cheep.TimeStamp</small>
                     </p>
+
+                    @if (User.Identity.IsAuthenticated && User.Identity.Name == cheep.Author)
+                    {
+                        <form method="post" asp-page-handler="DeleteCheep">
+                            <input type="hidden" name="cheepId" value="@cheep.CheepId" />
+                            <button type="submit" class="DeleteButton">Delete</button>
+                        </form>
+                    }
                 </li>
             }
         </ul>

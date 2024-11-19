@@ -10,11 +10,18 @@ public class UserTimelineModel : PageModel
     public List<CheepDTO> Cheeps { get; set; } = null!;
     private int _page;
     private readonly UserManager<ApplicationUser> _userManager;
+    private readonly CheepRepository _cheepRepository;
 
     public UserTimelineModel(ICheepService cheepService, UserManager<ApplicationUser> userManager)
     {
         _cheepService = cheepService;
         _userManager = userManager;
+    }
+    
+    public async Task<IActionResult> OnPostDeleteCheepAsync(Guid cheepId)
+    {
+        await _cheepRepository.DeleteCheep(cheepId);
+        return RedirectToPage(new { author = RouteData.Values["author"] });
     }
 
     [BindProperty]
@@ -51,8 +58,11 @@ public class UserTimelineModel : PageModel
         
         var user = await _userManager.GetUserAsync(User);
         var email = user.Email;
+        
+        var guid = Guid.NewGuid();
+        var cheepId = BitConverter.ToInt32(guid.ToByteArray(), 0);
 
-        await _cheepService.CreateCheep(User.Identity.Name.ToString(), email.ToString(),CheepInput.Text, DateTimeKind.Local.ToString());
+        await _cheepService.CreateCheep(User.Identity.Name.ToString(), email.ToString(),CheepInput.Text, DateTimeKind.Local.ToString(), cheepId);
         return RedirectToPage("Public");
     }
     

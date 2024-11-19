@@ -30,7 +30,7 @@ public class CheepService : ICheepService
     }
 
 
-    public async Task<Cheep> CreateCheep(string username,  string email, string message, string timestamp)
+    public async Task<Cheep> CreateCheep(string username,  string email, string message, string timestamp, int id)
     {
         AuthorDTO newAuthor = new AuthorDTO
         {
@@ -41,7 +41,8 @@ public class CheepService : ICheepService
         {
             Author = username,
             Text = message,
-            TimeStamp = timestamp
+            TimeStamp = timestamp,
+            CheepId = id
         };
         var cheep = await _cheepRepository.ConvertCheeps(newCheep, newAuthor);
         return cheep;
@@ -60,8 +61,10 @@ public class CheepService : ICheepService
         var cheeps = DTOConversion(result);
         return cheeps;
     }
-    
-    
+
+   
+
+
     private static List<CheepDTO> DTOConversion(List<Cheep> cheeps)
     {
         var list = new List<CheepDTO>();
@@ -71,7 +74,8 @@ public class CheepService : ICheepService
             {
                 Author = cheep.Author.Name,
                 Text = cheep.Text,
-                TimeStamp = cheep.TimeStamp.ToString()
+                TimeStamp = cheep.TimeStamp.ToString(),
+                CheepId = cheep.CheepId
             });
         }
         return list;

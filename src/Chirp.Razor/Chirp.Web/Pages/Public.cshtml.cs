@@ -60,8 +60,11 @@ public class PublicModel : PageModel
         
         var user = await _userManager.GetUserAsync(User);
         var email = user.Email;
+        
+        var guid = Guid.NewGuid();
+        var cheepId = BitConverter.ToInt32(guid.ToByteArray(), 0);
 
-        await _cheepService.CreateCheep(User.Identity.Name.ToString(),email.ToString() ,CheepInput.Text, DateTime.Now.AddHours(1).ToString());
+        await _cheepService.CreateCheep(User.Identity.Name.ToString(),email.ToString() ,CheepInput.Text, DateTime.Now.AddHours(1).ToString(), cheepId);
         return RedirectToPage("Public");
     }
     

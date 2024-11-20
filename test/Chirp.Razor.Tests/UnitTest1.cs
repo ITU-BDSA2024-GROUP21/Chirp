@@ -112,7 +112,8 @@ public class UnitTest
         {
             Text = "This is a test",
             Author = testAuthorDTO1.ToString()!,
-            TimeStamp = "2023-07-21 10:30:45"
+            TimeStamp = "2023-07-21 10:30:45",
+            CheepId = 2147483647
         };
 
         await repository5.ConvertCheeps(testCheepDTO, testAuthorDTO1);

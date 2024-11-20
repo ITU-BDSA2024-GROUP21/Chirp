@@ -25,6 +25,18 @@ public class CheepRepository : ICheepRepository
         return result;
     }
     
+    public async Task DeleteCheep(int cheepId)
+    {
+        var cheep = await _chirpDbContext.Cheeps.FindAsync(cheepId);
+        if (cheep != null)
+        { 
+            _chirpDbContext.Cheeps.Remove(cheep);
+        }
+        
+        await _chirpDbContext.SaveChangesAsync();
+        
+    }
+    
     public async Task<List<Cheep>> GetCheepsFromAuthor(string author, int page)
     {
         var sqlQuery = _chirpDbContext.Cheeps

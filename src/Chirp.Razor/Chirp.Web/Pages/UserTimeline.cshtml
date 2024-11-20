@@ -12,13 +12,21 @@
         currPage = 1; // Default to 1 if parsing fails
     }
 
+    bool followed;
+
     int nextPage = currPage + 1; // Calculate the next page
     int prevPage = currPage > 1 ? currPage - 1 : 1; // This is to ensure that the previous page doesn't go below 1
 }
 
 <div>
     <partial name ="Shared/_NootBoxPartial" model="Model.CheepInput"/>
-    <h2> @routeName's Timeline </h2>
+    <h2> @routeName's Timeline 
+        
+        @if (User.Identity.IsAuthenticated && User.Identity.Name != @routeName.ToString())
+        {
+            <button onclick="toggleLabel()" >Follow</button>
+        }
+    </h2> 
     @if (Model.Cheeps.Any())
     {
         <ul id="messagelist" class="cheeps">
@@ -32,6 +40,14 @@
                         @cheep.Text
                         <small>&mdash; @cheep.TimeStamp</small>
                     </p>
+
+                    @if (User.Identity.IsAuthenticated && User.Identity.Name == cheep.Author)
+                    {
+                        <form method="post" asp-page-handler="DeleteCheep">
+                            <input type="hidden" name="cheepId" value="@cheep.CheepId.ToString()" />
+                            <button type="submit" class="btn btn-danger">Delete</button>
+                        </form>
+                    }
                 </li>
             }
         </ul>
@@ -40,6 +56,20 @@
     {
         <em>There are no cheeps so far.</em>
     }
-    <button onclick="document.location='/@routeName?page=@prevPage'" @if (currPage <= 1) { <text>disabled</text> } class="PageButton" >Previous Page</button>
+    @if (currPage > 1) {
+        <button onclick="document.location='/@routeName?page=@prevPage'" @if (currPage <= 1) { <text>disabled</text> } class="PageButton" >Previous Page</button>
+    }
+    
     <button onclick="document.location='/@routeName/?page=@nextPage'" style="float: right;" class="PageButton">Next Page</button>
 </div>
+<script> 
+    function toggleLabel() {
+    console.log("FUCK")
+    const btn =
+        document.querySelector('button');
+    if (btn.innerText === 'Follow') {
+        btn.innerText = 'Unfollow';
+    } else {
+        btn.innerText = 'Follow';
+    }
+}</script>

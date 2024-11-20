@@ -1,5 +1,5 @@
 body {
-  background: #eccaca;
+  background: #E4F1FF;
   font-family: 'Trebuchet MS', sans-serif;
   font-size: 14px;
 }
@@ -42,13 +42,13 @@ input[type="submit"] {
 
 div.page {
   background: white;
-  border: 1px solid #cc6e6e;
+  border: 1px solid #99B1DDFF;
   width: 700px;
   margin: 30px auto;
 }
 
 div.page > h1 {
-  background: #cc6e6e;
+  background: #99B1DDFF;
   margin: 0;
   padding: 10px 14px;
   color: white;
@@ -161,7 +161,7 @@ div.page div.cheepbox {
   margin: 10px 0;
   padding: 5px;
   background: #F0FAF9;
-  border: 1px solid #e29494;
+  border: 1px solid #99B1DDFF;
   border-radius: 2px;
   -moz-border-radius: 5px;
   -webkit-border-radius: 5px;
@@ -190,8 +190,8 @@ div.message {
   list-style: none;
   margin: 10px 10px 0 10px;
 
-  background: #f3b9b9;
-  border: 1px solid #ce8181;
+  background: #99B1DDFF;
+  border: 1px solid #99B1DDFF;
   border-radius: 2px;
   -moz-border-radius: 2px;
   -webkit-border-radius: 2px;
@@ -200,8 +200,8 @@ div.message {
 }
 
 ul.message li {
-  background: #f3b9b9;
-  border: 1px solid #ce8181;
+  background: #99B1DDFF;
+  border: 1px solid #99B1DDFF;
   border-radius: 2px;
   -moz-border-radius: 2px;
   -webkit-border-radius: 2px;
@@ -224,7 +224,7 @@ div.topics {
   width: 180px;
   height: 250px;
   background: #ffffff;
-  border: 1px solid #e29494;
+  border: 1px solid #99B1DDFF;
   border-radius: 2px;
   position: fixed;
   top: 50%;
@@ -253,10 +253,11 @@ li.topic {
 
 form * {
     margin: 2px 0;
+ 
 }
 
 button {
-    background-color: #cc6e6e;
+    background-color: #99B1DDFF;
     border: none;
     color: white;
     padding: 8px 16px;
@@ -274,7 +275,7 @@ ul.nav {
     margin: 0;
     padding: 0;
     overflow: hidden;
-    background-color: #cc6e6e;
+    background-color: #99B1DDFF;
 }
 
 ul.nav li {

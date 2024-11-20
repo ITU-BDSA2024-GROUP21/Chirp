@@ -308,4 +308,5 @@ ul.nav li a:hover {
     position: absolute;
     width: 100px;
     z-index: 5;
+    transition: all 0.5s ease;
 }

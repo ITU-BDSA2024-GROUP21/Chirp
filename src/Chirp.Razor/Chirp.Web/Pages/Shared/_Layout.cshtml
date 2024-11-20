@@ -24,7 +24,9 @@
     const pingu = document.getElementById('pingu');
     const page = document.querySelector('.page');
 
-    // Function to get a random position avoiding the .page
+    let currentX = 0;
+    let currentY = 0;
+
     function getRandomPosition() {
         const pageRect = page.getBoundingClientRect();
         const maxX = window.innerWidth - pingu.offsetWidth;
@@ -40,22 +42,34 @@
             x < pageRect.right &&
             y + pingu.offsetHeight > pageRect.top &&
             y < pageRect.bottom
-            );
+        );
 
         return { x, y };
     }
-
-    // Move Pingu to a random position
+    
+    function calculateDistanceMoved(x1, y1, x2, y2) {
+        const dx = x2 - x1;
+        const dy = y2 - y1;
+        return Math.sqrt(dx * dx + dy * dy);
+    }
+    
     function movePingu() {
         const { x, y } = getRandomPosition();
+        const distance = calculateDistanceMoved(currentX, currentY, x, y);
+
+        const speed = 0.004; // Adjust this multiplier for desired speed
+        const duration = distance * speed;
+        
+        pingu.style.transition = `left ${duration}s linear, top ${duration}s linear`;
         pingu.style.left = `${x}px`;
         pingu.style.top = `${y}px`;
+
+        currentX = x;
+        currentY = y;
     }
 
-    // Set an interval to move Pingu every second
-    setInterval(movePingu, 1000);
-
-    // Start with an initial random position
+    setInterval(movePingu, 2000);
+    
     movePingu();
 </script>
 

@@ -162,4 +162,81 @@ public class UnitTest1 : PageTest
         
     }
     
+    [Test]
+    public async Task CheckingThatWeHandleXSSAttacks()
+    {
+        await Page.GotoAsync("https://localhost:5273/");
+        await Page.GetByRole(AriaRole.Link, new() { Name = "Login" }).ClickAsync();
+        await Page.GetByPlaceholder("name@example.com").ClickAsync();
+        await Page.GetByPlaceholder("name@example.com").FillAsync("marcus@mail.dk");
+        await Page.GetByPlaceholder("password").ClickAsync();
+        await Page.GetByPlaceholder("password").FillAsync("Halløj1!");
+        await Page.GetByRole(AriaRole.Button, new() { Name = "Log in" }).ClickAsync();
+        
+        //Checks that the Noot-chat box is exiting
+        await Expect(Page.Locator("#Text")).ToBeVisibleAsync();
+        await Page.GetByRole(AriaRole.Link, new() { Name = "My timeline" }).ClickAsync();
+        //Checks that the Noot-chat box is exiting
+        await Expect(Page.Locator("#Text")).ToBeVisibleAsync();
+        await Page.Locator("#Text").ClickAsync();
+        //Makesure the test passes everytime by adding a unique identifier like timestamp
+        string uniqueMessage = $"Hello, I am feeling good!<script>alert('If you see this in a popup, you are in trouble!');</script>\n\n - {DateTime.Now:yyyy-MM-dd HH:mm:ss}";
+        await Page.Locator("#Text").FillAsync(uniqueMessage);
+        await Page.GetByRole(AriaRole.Button, new() { Name = "Share" }).ClickAsync();
+        // Checks That the Noot is visible after posting
+        await Expect(Page.Locator("li").Filter(new() { HasText = uniqueMessage })).ToBeVisibleAsync();
+        
+    }
+
+    [Test]
+    public async Task CheckingThatWeHandleSQLInjections()
+    {
+        await Page.GotoAsync("https://localhost:5273/");
+
+        await Page.GetByRole(AriaRole.Link, new() { Name = "Register" }).ClickAsync();
+        await Page.GetByPlaceholder("username").ClickAsync();
+        await Page.GetByPlaceholder("username").FillAsync("Robert'); DROP TABLE Students;-- ");
+        await Page.GetByPlaceholder("name@example.com").ClickAsync();
+        await Page.GetByPlaceholder("name@example.com").FillAsync("robert@mail.dk");
+        await Page.GetByLabel("Password", new() { Exact = true }).ClickAsync();
+        await Page.GetByLabel("Password", new() { Exact = true }).FillAsync("Halløj1!");
+        await Page.GetByLabel("Confirm Password").ClickAsync();
+        await Page.GetByLabel("Confirm Password").FillAsync("Halløj1!");
+        
+        await Page.GetByRole(AriaRole.Button, new() { Name = "Register" }).ClickAsync();
+        
+        var _content = await Page.ContentAsync();
+        Console.WriteLine(_content);
+        
+        await Expect(Page.GetByText("Username 'Robert'); DROP TABLE Students;-- ' is invalid, can only contain letters or digits." )).ToBeVisibleAsync();
+    }
+    
+    [Test]
+    public async Task Registerworks()
+    {
+        await Page.GotoAsync("https://localhost:5273/");
+    
+        await Page.GetByRole(AriaRole.Link, new() { Name = "Register" }).ClickAsync();
+    
+        await Page.GetByPlaceholder("username").ClickAsync();
+        await Page.GetByPlaceholder("username").FillAsync("Carla69");
+        await Page.GetByPlaceholder("name@example.com").ClickAsync();
+        await Page.GetByPlaceholder("name@example.com").FillAsync("carla69@mail.dk");
+        await Page.GetByLabel("Password", new() { Exact = true }).ClickAsync();
+        await Page.GetByLabel("Password", new() { Exact = true }).FillAsync("Halløj691!");
+        await Page.GetByLabel("Confirm Password").ClickAsync();
+        await Page.GetByLabel("Confirm Password").FillAsync("Halløj691!");
+    
+        await Page.GetByRole(AriaRole.Button, new() { Name = "Register" }).ClickAsync();
+        var _content = await Page.ContentAsync();
+        Console.WriteLine(_content);
+        //await Page.WaitForURLAsync("**/RegisterConfirmation?email=*&returnUrl=*");
+
+        
+        await Expect(Page.GetByRole(AriaRole.Link, new() { Name = "Click here to confirm your" })).ToBeVisibleAsync();
+        await Page.GetByRole(AriaRole.Link, new() { Name = "Click here to confirm your" }).ClickAsync();
+    
+    }
+    
+    
 }

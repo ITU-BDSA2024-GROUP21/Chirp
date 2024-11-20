@@ -18,6 +18,46 @@
     </div>
 </div>
 
+<img id="pingu" src="/images/pingu.gif" alt="Pingu Walking">
+
+<script>
+    const pingu = document.getElementById('pingu');
+    const page = document.querySelector('.page');
+
+    // Function to get a random position avoiding the .page
+    function getRandomPosition() {
+        const pageRect = page.getBoundingClientRect();
+        const maxX = window.innerWidth - pingu.offsetWidth;
+        const maxY = window.innerHeight - pingu.offsetHeight;
+
+        let x, y;
+
+        do {
+            x = Math.random() * maxX;
+            y = Math.random() * maxY;
+        } while (
+            x + pingu.offsetWidth > pageRect.left &&
+            x < pageRect.right &&
+            y + pingu.offsetHeight > pageRect.top &&
+            y < pageRect.bottom
+            );
+
+        return { x, y };
+    }
+
+    // Move Pingu to a random position
+    function movePingu() {
+        const { x, y } = getRandomPosition();
+        pingu.style.left = `${x}px`;
+        pingu.style.top = `${y}px`;
+    }
+
+    // Set an interval to move Pingu every second
+    setInterval(movePingu, 1000);
+
+    // Start with an initial random position
+    movePingu();
+</script>
 
 </body>
 @await RenderSectionAsync("Scripts", required: false)

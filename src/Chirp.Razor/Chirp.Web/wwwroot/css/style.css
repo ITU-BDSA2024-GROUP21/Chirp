@@ -3,7 +3,6 @@ body {
   font-family: 'Trebuchet MS', sans-serif;
   font-size: 14px;
   margin: 0;
-  overflow: hidden;
   height: 100vh;
   position: relative;
 }
@@ -303,10 +302,17 @@ ul.nav li a:hover {
     background-color: #8b4949;
 }
 
+.pingu-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    z-index: 5; 
+}
 
 #pingu {
     position: absolute;
     width: 100px;
-    z-index: 5;
-    transition: all 0.5s ease;
 }

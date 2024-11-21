@@ -14,7 +14,6 @@ public class UIEnd2EndTest : PageTest
 {
     private Process _serverProcess;
     protected IBrowser _browser;
-
     public override BrowserNewContextOptions ContextOptions()
     {
         return new BrowserNewContextOptions
@@ -22,7 +21,6 @@ public class UIEnd2EndTest : PageTest
             IgnoreHTTPSErrors = true
         };
     }
-
     [SetUp]
     public async Task Setup()
     {
@@ -48,7 +46,6 @@ public class UIEnd2EndTest : PageTest
     public async Task End2EndTest1()
     {
         await Page.GotoAsync("https://localhost:5273/");
-
         await Page.GetByRole(AriaRole.Link, new() { Name = "Register" }).ClickAsync();
         await Page.GetByPlaceholder("username").ClickAsync();
         //CHANGE NUMBER HERE
@@ -75,17 +72,14 @@ public class UIEnd2EndTest : PageTest
         //checking that we are now direkte to our public timeline
         await Expect(Page.GetByRole(AriaRole.Heading, new() { Name = "Public Timeline" })).ToBeVisibleAsync();
 
-
         //Checkign That Alan is logged in and can log out
         await Expect(Page.GetByRole(AriaRole.Link, new() { Name = "Logout Alan" })).ToBeVisibleAsync();
         //Checking that the Mytimeline button is visible
         await Expect(Page.GetByRole(AriaRole.Link, new() { Name = "My timeline" })).ToBeVisibleAsync();
-
         await Page.GetByRole(AriaRole.Link, new() { Name = "My timeline" }).ClickAsync();
         //Checking that the noot box is visible
         //CHANGE NUMBER HERE
         await Expect(Page.GetByText("Noot noot? Alan8? Share")).ToBeVisibleAsync();
-
         await Page.Locator("#Text").ClickAsync();
         string uniqueMessage = $"hej med Dig - {DateTime.Now:yyyy-MM-dd HH:mm:ss}";
 
@@ -116,7 +110,6 @@ public class UIEnd2EndTest : PageTest
     public async Task End2EndTest2()
     {
         await Page.GotoAsync("https://localhost:5273/");
-
         await Page.GetByRole(AriaRole.Link, new() { Name = "Register" }).ClickAsync();
         await Page.GetByPlaceholder("username").ClickAsync();
         //CHANGE NUMBER HERE
@@ -162,6 +155,7 @@ public class UIEnd2EndTest : PageTest
         await Expect(Page.Locator("li").Filter(new() { HasText = uniqueMessage })).ToBeVisibleAsync();
         
         await Page.GetByRole(AriaRole.Link, new() { Name = "My timeline" }).ClickAsync();
+
         
         //Checking that the Noot is visible on my timeline
         await Expect(Page.Locator("li").Filter(new() { HasText = uniqueMessage })).ToBeVisibleAsync();
@@ -180,5 +174,6 @@ public class UIEnd2EndTest : PageTest
         await Page.GetByRole(AriaRole.Button, new() { Name = "Click here to Logout" }).ClickAsync();
 
     }
+
 
 }

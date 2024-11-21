@@ -59,11 +59,17 @@
 
         const speed = 0.004; // Adjust this multiplier for desired speed
         const duration = distance * speed;
+
+        if (x > currentX) {
+            pingu.style.transform = 'scaleX(1)';
+        } else {
+            pingu.style.transform = 'scaleX(-1)';
+        }
         
         pingu.style.transition = `left ${duration}s linear, top ${duration}s linear`;
         pingu.style.left = `${x}px`;
         pingu.style.top = `${y}px`;
-
+        
         currentX = x;
         currentY = y;
     }

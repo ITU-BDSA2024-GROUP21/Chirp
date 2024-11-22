@@ -24,7 +24,7 @@
         <ul id="messagelist" class="cheeps">
             @foreach (var cheep in Model.Cheeps)
             {
-                <li>
+                <li class="Noot">
                     <p>
                         <strong>
                             <a href="/@cheep.Author">@cheep.Author</a>
@@ -32,6 +32,11 @@
                         @cheep.Text
                         <small>&mdash; @cheep.TimeStamp</small>
                     </p>
+                    
+                    @if (User.Identity.IsAuthenticated && User.Identity.Name != cheep.Author)
+                    {
+                        <button onclick="toggleLabel(event)" class="FollowButtonPublic" >Follow</button>
+                    }
                 </li>
             }
         </ul>
@@ -45,3 +50,13 @@
     }
     <button onclick="document.location='/?page=@nextPage'" style="float: right;" class="PageButton">Next Page</button>
 </div>
+<script> 
+    function toggleLabel(event) {
+    console.log("FUCK")
+    const btn = event.target;
+    if (btn.innerText === 'Follow') {
+        btn.innerText = 'Unfollow';
+    } else {
+        btn.innerText = 'Follow';
+    }
+}</script>

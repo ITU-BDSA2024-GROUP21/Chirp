@@ -116,6 +116,21 @@ div.page div.footer {
     width:115px;
 }
 
+.Noot{
+    display: flex;
+    justify-content: space-between;
+}
+
+.FollowButtonPublic{
+    width: 70px;
+    height: 30px;
+    margin-inside: auto;
+}
+
+.FollowButtonPublic:hover{
+    background-color: #657ba3;
+}
+
 div.page div.followstatus {
   border: 1px solid #ccc;
   background: #E3EBEA;

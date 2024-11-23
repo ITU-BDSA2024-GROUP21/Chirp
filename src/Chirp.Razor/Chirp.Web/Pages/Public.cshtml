@@ -35,7 +35,12 @@
                     
                     @if (User.Identity.IsAuthenticated && User.Identity.Name != cheep.Author)
                     {
-                        <button onclick="toggleLabel(event)" class="FollowButtonPublic" >Follow</button>
+                        <form method="post" asp-page-handler="Follow">
+                            <input type="hidden" name="followingAuthorId" value="@cheep.AuthorId"/>
+                            <input type="hidden" name="followerAuthor" value="@User.Identity.Name"/>
+                            <input type="hidden" name="page" value="@currPage"/>
+                            <button onclick="toggleLabel(event)" class="FollowButtonPublic" >Follow</button>
+                        </form>
                     }
                 </li>
             }

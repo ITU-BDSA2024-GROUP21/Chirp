@@ -15,6 +15,7 @@ namespace Chirp.Web.Pages;
 public class PublicModel : PageModel
 {
     private readonly ICheepService _cheepService;
+    private readonly ICheepRepository _cheepRepository;
     public required List<CheepDTO> Cheeps { get; set; }
     private int _page;
     private readonly UserManager<ApplicationUser> _userManager;
@@ -23,9 +24,10 @@ public class PublicModel : PageModel
     public NootBoxModel CheepInput { get; set; }
     
 
-    public PublicModel(ICheepService cheepService, UserManager<ApplicationUser> userManager)
+    public PublicModel(ICheepService cheepService, UserManager<ApplicationUser> userManager, ICheepRepository cheepRepository)
     {
         _cheepService = cheepService;
+        _cheepRepository = cheepRepository;
         _userManager = userManager;
     }
 
@@ -66,6 +68,24 @@ public class PublicModel : PageModel
 
         await _cheepService.CreateCheep(User.Identity.Name.ToString(),email.ToString() ,CheepInput.Text, DateTime.Now.AddHours(1).ToString(), cheepId);
         return RedirectToPage("Public");
+    }
+
+    public async Task<IActionResult> OnPostFollow(int followingAuthorId, string followerAuthor, int page)
+    {
+        if (string.IsNullOrEmpty(followerAuthor))
+        {
+            ModelState.AddModelError("", "User identity is not valid.");
+            Console.WriteLine("whoopsies");
+            return Redirect($"/?page={page}");
+        }
+        Console.WriteLine(followerAuthor);
+        
+        
+        Author author = await _cheepService.GetAuthorByName(followerAuthor);
+        int id = author.AuthorId;
+        Console.WriteLine(followingAuthorId);
+        await _cheepRepository.FollowAuthor(id,followingAuthorId);
+        return Redirect($"/?page={page}");
     }
     
 }

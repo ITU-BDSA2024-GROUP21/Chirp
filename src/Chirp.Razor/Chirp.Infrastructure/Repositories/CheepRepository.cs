@@ -114,4 +114,18 @@ public class CheepRepository : ICheepRepository
 
         return doesAuthorExist;
     }
+
+    public async Task FollowAuthor(int followingAuthorId, int followedAuthorId)
+    {
+        var followRelation = new AuthorFollow
+        {
+            FollowerId = followingAuthorId,
+            FollowingId = followedAuthorId
+        };
+        _chirpDbContext.AuthorFollows.Add(followRelation);
+
+        await _chirpDbContext.SaveChangesAsync();
+    }
+    
+    
 }

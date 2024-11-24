@@ -34,7 +34,23 @@ public class UserTimelineModel : PageModel
         {
             _page = int.Parse(Request.Query["page"]!) -1;
         }
-        Cheeps = await _cheepService.GetCheepsFromAuthor(author, _page);
+        
+        var user = await _userManager.GetUserAsync(User);
+        if (user == null)
+        {
+            return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+        }
+        
+        var currentAuthor = await _cheepService.GetAuthorByName(user.UserName);
+        if (currentAuthor == null)
+        {
+            return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+        }
+        
+        var followedAuthors = await _cheepService.GetFollowedAuthors(currentAuthor.AuthorId);
+        followedAuthors.Add(user.UserName);
+        
+        Cheeps = await _cheepService.GetCheepsFromFollowedAuthor(followedAuthors, _page);
 
         return Page();
     }

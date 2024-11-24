@@ -82,6 +82,16 @@ public class CheepService : ICheepService
     {
         await _cheepRepository.FollowAuthor(followingAuthorId, followedAuthorId);
     }
+
+    public async Task<List<string>> GetFollowedAuthors(int authorId)
+    {
+        return await _cheepRepository.GetFollowedAuthorsAsync(authorId);
+    }
+
+    public async Task<List<CheepDTO>> GetCheepsFromFollowedAuthor(IEnumerable<string> followedAuthors, int authorId)
+    {
+        return await _cheepRepository.GetCheepsFromFollowedAuthorsAsync(followedAuthors, authorId);
+    }
     
 
 }

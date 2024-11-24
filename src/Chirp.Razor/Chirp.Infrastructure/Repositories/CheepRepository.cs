@@ -127,5 +127,31 @@ public class CheepRepository : ICheepRepository
         await _chirpDbContext.SaveChangesAsync();
     }
     
+    public async Task<List<String>> GetFollowedAuthorsAsync(int authorId)
+    {
+        return await _chirpDbContext.AuthorFollows
+            .Where(f => f.FollowerId == authorId)
+            .Select(f => f.following.Name)
+            .ToListAsync();
+    }
+
+    public async Task<List<CheepDTO>> GetCheepsFromFollowedAuthorsAsync(IEnumerable<string> followedAuthors, int page)
+    {
+        return await _chirpDbContext.Cheeps
+            .Where(c => followedAuthors.Contains(c.Author.Name))
+            .OrderByDescending(c => c.TimeStamp)
+            .Skip(page * 32)
+            .Take(32)
+            .Select(c => new CheepDTO
+            {
+                Author = c.Author.Name,
+                Text = c.Text,
+                TimeStamp = c.TimeStamp.ToString(),
+                CheepId = c.CheepId,
+                AuthorId = c.Author.AuthorId
+            })
+            .ToListAsync();
+    }
+    
     
 }

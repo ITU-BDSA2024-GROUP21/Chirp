@@ -12,5 +12,7 @@ public interface ICheepRepository
     public Task<Cheep> ConvertCheeps(CheepDTO cheep, AuthorDTO author);
     public Task DeleteCheep(int id);
     public Task FollowAuthor(int followingAuthorId, int followedAuthorId);
+    public Task<List<string>> GetFollowedAuthorsAsync(int authorId);
+    public Task<List<CheepDTO>> GetCheepsFromFollowedAuthorsAsync(IEnumerable<string> authors, int page);
 
 }

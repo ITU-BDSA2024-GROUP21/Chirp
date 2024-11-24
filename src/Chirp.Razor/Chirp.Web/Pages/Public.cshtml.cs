@@ -19,6 +19,7 @@ public class PublicModel : PageModel
     public required List<CheepDTO> Cheeps { get; set; }
     private int _page;
     private readonly UserManager<ApplicationUser> _userManager;
+    private Dictionary<string, bool> FollowerMap;
 
     [BindProperty]
     public NootBoxModel CheepInput { get; set; }
@@ -29,7 +30,9 @@ public class PublicModel : PageModel
         _cheepService = cheepService;
         _cheepRepository = cheepRepository;
         _userManager = userManager;
+        FollowerMap = new Dictionary<string, bool>();
     }
+    
 
     public async Task<ActionResult> OnGet()
     {
@@ -39,6 +42,18 @@ public class PublicModel : PageModel
         }
         
         Cheeps = await _cheepService.GetCheeps(_page);
+        Author author = await _cheepService.GetAuthorByName(User.Identity.Name);
+        int id = author.AuthorId;
+
+        if (User.Identity.IsAuthenticated)
+        {
+            foreach (var cheep in Cheeps)
+            {
+                FollowerMap[cheep.Author] = await _cheepService.IsFollowing(id, cheep.AuthorId);
+            }
+        }
+        ViewData["FollowerMap"] = FollowerMap;
+        
         return Page();
     }
 
@@ -83,8 +98,10 @@ public class PublicModel : PageModel
         
         Author author = await _cheepService.GetAuthorByName(followerAuthor);
         int id = author.AuthorId;
+        
         Console.WriteLine(followingAuthorId);
         await _cheepRepository.FollowAuthor(id,followingAuthorId);
+        FollowerMap[author.Name] = true;
         return Redirect($"/?page={page}");
     }
     

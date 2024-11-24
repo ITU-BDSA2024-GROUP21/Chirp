@@ -152,6 +152,11 @@ public class CheepRepository : ICheepRepository
             })
             .ToListAsync();
     }
+    public async Task<bool> IsFollowing(int followingAuthorId, int followedAuthorId)
+    {
+        return await _chirpDbContext.AuthorFollows
+            .AnyAsync(f => f.FollowerId == followingAuthorId && f.FollowingId == followedAuthorId);
+    }
     
     
 }

@@ -92,6 +92,11 @@ public class CheepService : ICheepService
     {
         return await _cheepRepository.GetCheepsFromFollowedAuthorsAsync(followedAuthors, authorId);
     }
+
+    public async Task<bool> IsFollowing(int followingAuthorId, int followedAuthorId)
+    {
+        return await _cheepRepository.IsFollowing(followingAuthorId, followedAuthorId);
+    }
     
 
 }

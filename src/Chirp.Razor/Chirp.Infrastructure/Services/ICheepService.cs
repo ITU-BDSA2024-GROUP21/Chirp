@@ -9,4 +9,5 @@ public interface ICheepService
     public Task<Author> GetAuthorByName(string name);
     public Task<List<CheepDTO>> GetCheepsFromFollowedAuthor(IEnumerable<string> authors, int page);
     public Task<List<string>> GetFollowedAuthors(int authorId);
+    public Task<bool> IsFollowing(int followingAuthorId, int followerAuthorId);
 }

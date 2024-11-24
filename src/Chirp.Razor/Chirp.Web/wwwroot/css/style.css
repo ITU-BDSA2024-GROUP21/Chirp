@@ -1,5 +1,7 @@
 body {
-  background: #E4F1FF;
+  background-image: url("../images/igloo.png"),  url("../images/Ice_tundra.png");
+  background-repeat: no-repeat, repeat-x;  
+  background-color: #e7f0ef;
   font-family: 'Trebuchet MS', sans-serif;
   font-size: 14px;
   margin: 0;

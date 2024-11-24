@@ -104,5 +104,24 @@ public class PublicModel : PageModel
         FollowerMap[author.Name] = true;
         return Redirect($"/?page={page}");
     }
+    public async Task<IActionResult> OnPostUnfollow(int followingAuthorId, string followerAuthor, int page)
+    {
+        if (string.IsNullOrEmpty(followerAuthor))
+        {
+            ModelState.AddModelError("", "User identity is not valid.");
+            Console.WriteLine("whoopsies");
+            return Redirect($"/?page={page}");
+        }
+        Console.WriteLine(followerAuthor);
+        
+        
+        Author author = await _cheepService.GetAuthorByName(followerAuthor);
+        int id = author.AuthorId;
+        
+        Console.WriteLine(followingAuthorId);
+        await _cheepRepository.Unfollow(id,followingAuthorId);
+        FollowerMap[author.Name] = false;
+        return Redirect($"/?page={page}");
+    }
     
 }

@@ -157,6 +157,14 @@ public class CheepRepository : ICheepRepository
         return await _chirpDbContext.AuthorFollows
             .AnyAsync(f => f.FollowerId == followingAuthorId && f.FollowingId == followedAuthorId);
     }
-    
+
+    public async Task Unfollow(int followingAuthorId, int followedAuthorId)
+    {
+        
+        var followRelation = await _chirpDbContext.AuthorFollows
+            .FirstOrDefaultAsync(f => f.FollowerId == followingAuthorId && f.FollowingId == followedAuthorId);
+        _chirpDbContext.AuthorFollows.Remove(followRelation!);
+        await _chirpDbContext.SaveChangesAsync();
+    }
     
 }

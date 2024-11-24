@@ -97,6 +97,11 @@ public class CheepService : ICheepService
     {
         return await _cheepRepository.IsFollowing(followingAuthorId, followedAuthorId);
     }
+
+    public async Task Unfollow(int followingAuthorId, int followedAuthorId)
+    {
+        await _cheepRepository.Unfollow(followingAuthorId, followedAuthorId);
+    }
     
 
 }

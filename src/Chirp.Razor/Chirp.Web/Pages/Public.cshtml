@@ -48,6 +48,12 @@
                         }
                         else
                         {
+                            <form method="post" asp-page-handler="Unfollow">
+                                <input type="hidden" name="followingAuthorId" value="@cheep.AuthorId"/>
+                                <input type="hidden" name="followerAuthor" value="@User.Identity.Name"/>
+                                <input type="hidden" name="page" value="@currPage"/>
+                                <button class="UnfollowButtonPublic" type="submit">Unfollow</button>
+                            </form>
                             
                         }
                     }

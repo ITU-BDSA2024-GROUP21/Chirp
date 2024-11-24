@@ -16,6 +16,8 @@
 
     int nextPage = currPage + 1; // Calculate the next page
     int prevPage = currPage > 1 ? currPage - 1 : 1; // This is to ensure that the previous page doesn't go below 1
+    var followerMap = ViewData["followerMap"] as Dictionary<string, bool> ?? new Dictionary<string, bool>();
+
 }
 
 <div>
@@ -48,6 +50,15 @@
                             <button type="submit" class="btn btn-danger">Delete</button>
                         </form>
                         
+                    }
+                    @if (User.Identity!.IsAuthenticated && User.Identity.Name != cheep.Author)
+                    {
+                        <form method="post" asp-page-handler="Unfollow">
+                            <input type="hidden" name="followingAuthorId" value="@cheep.AuthorId"/>
+                            <input type="hidden" name="followerAuthor" value="@User.Identity.Name"/>
+                            <input type="hidden" name="page" value="@currPage"/>
+                            <button class="UnfollowButtonPublic" type="submit">Unfollow</button>
+                        </form>
                     }
                 </li>
             }

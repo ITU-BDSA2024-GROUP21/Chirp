@@ -11,12 +11,14 @@ public class UserTimelineModel : PageModel
     private int _page;
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly ICheepRepository _cheepRepository;
+    private Dictionary<string, bool> FollowerMap;
 
     public UserTimelineModel(ICheepService cheepService, UserManager<ApplicationUser> userManager,ICheepRepository cheepRepository )
     {
         _cheepService = cheepService;
         _userManager = userManager;
         _cheepRepository = cheepRepository;
+        FollowerMap = new Dictionary<string, bool>();
     }
     
     public async Task<IActionResult> OnPostDeleteCheepAsync(int cheepId)
@@ -51,6 +53,18 @@ public class UserTimelineModel : PageModel
         followedAuthors.Add(user.UserName);
         
         Cheeps = await _cheepService.GetCheepsFromFollowedAuthor(followedAuthors, _page);
+        
+        Author _author = await _cheepService.GetAuthorByName(User.Identity.Name);
+        int id = _author.AuthorId;
+
+        if (User.Identity.IsAuthenticated)
+        {
+            foreach (var cheep in Cheeps)
+            {
+                FollowerMap[cheep.Author] = await _cheepService.IsFollowing(id, cheep.AuthorId);
+            }
+        }
+        ViewData["FollowerMap"] = FollowerMap;
 
         return Page();
     }
@@ -86,6 +100,25 @@ public class UserTimelineModel : PageModel
     public static int ConvertGuidToInt(Guid guid)
     {
         return BitConverter.ToInt32(guid.ToByteArray(), 0);
+    }
+    public async Task<IActionResult> OnPostUnfollow(int followingAuthorId, string followerAuthor, int page)
+    {
+        if (string.IsNullOrEmpty(followerAuthor))
+        {
+            ModelState.AddModelError("", "User identity is not valid.");
+            Console.WriteLine("whoopsies");
+            return Redirect($"/?page={page}");
+        }
+        Console.WriteLine(followerAuthor);
+        
+        
+        Author author = await _cheepService.GetAuthorByName(followerAuthor);
+        int id = author.AuthorId;
+        
+        Console.WriteLine(followingAuthorId);
+        await _cheepRepository.Unfollow(id,followingAuthorId);
+        FollowerMap[author.Name] = false;
+        return Redirect($"/{author.Name}");
     }
     
     

@@ -90,16 +90,12 @@ public class PublicModel : PageModel
         if (string.IsNullOrEmpty(followerAuthor))
         {
             ModelState.AddModelError("", "User identity is not valid.");
-            Console.WriteLine("whoopsies");
             return Redirect($"/?page={page}");
         }
-        Console.WriteLine(followerAuthor);
-        
         
         Author author = await _cheepService.GetAuthorByName(followerAuthor);
         int id = author.AuthorId;
         
-        Console.WriteLine(followingAuthorId);
         await _cheepRepository.FollowAuthor(id,followingAuthorId);
         FollowerMap[author.Name] = true;
         return Redirect($"/?page={page}");
@@ -109,11 +105,8 @@ public class PublicModel : PageModel
         if (string.IsNullOrEmpty(followerAuthor))
         {
             ModelState.AddModelError("", "User identity is not valid.");
-            Console.WriteLine("whoopsies");
             return Redirect($"/?page={page}");
         }
-        Console.WriteLine(followerAuthor);
-        
         
         Author author = await _cheepService.GetAuthorByName(followerAuthor);
         int id = author.AuthorId;

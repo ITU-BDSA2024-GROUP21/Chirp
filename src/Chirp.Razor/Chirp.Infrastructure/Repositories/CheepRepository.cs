@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 
 namespace Chirp.Infrastructure;
 
@@ -6,10 +7,13 @@ namespace Chirp.Infrastructure;
 public class CheepRepository : ICheepRepository
 {
     private readonly ChirpDBContext _chirpDbContext;
+    private readonly UserManager<ApplicationUser> _userManager;
     
-    public CheepRepository(ChirpDBContext chirpDbContext)
+    
+    public CheepRepository(ChirpDBContext chirpDbContext, UserManager<ApplicationUser> userManager)
     {
         _chirpDbContext = chirpDbContext;
+        _userManager = userManager;
     }
     
     public async Task<List<Cheep>> GetCheeps(int page)
@@ -59,11 +63,17 @@ public class CheepRepository : ICheepRepository
         if (auth != null)
         {
             //This remoces all the cheeps from the author from the database
-            var cheeps = _chirpDbContext.Cheeps.Where(c => c.AuthorId == auth.AuthorId);
+            var cheeps = _chirpDbContext.Cheeps.Where(c => c.Author == auth);
             _chirpDbContext.Cheeps.RemoveRange(cheeps);
             
             //This removes the author from the database
             _chirpDbContext.Authors.Remove(auth);
+            
+            var user = await _userManager.FindByIdAsync(auth.AuthorId.ToString());
+            if (user != null)
+            {
+                await _userManager.DeleteAsync(user);
+            }
 
         }
 

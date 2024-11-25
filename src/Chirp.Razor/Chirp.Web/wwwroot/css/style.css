@@ -293,3 +293,11 @@ ul.nav li a {
 ul.nav li a:hover {
     background-color: #8b4949;
 }
+
+.ForgetMe{
+    background: #f80000;
+}
+
+.ForgetMe:hover {
+    background: #cc0202;
+}

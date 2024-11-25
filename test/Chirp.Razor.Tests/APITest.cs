@@ -1,3 +1,5 @@
+using Xunit.Abstractions;
+
 namespace Chirp.Razor.Tests;
 using System.Threading.Tasks;
 using Xunit;
@@ -5,10 +7,12 @@ using Xunit;
 public class APITest : IClassFixture<WebApplicationFactory<Program>>
 {
     private readonly WebApplicationFactory<Program> _fixture;
+    private readonly ITestOutputHelper _testOutputHelper;
     private readonly HttpClient _client;
-    public APITest(WebApplicationFactory<Program> fixture)
+    public APITest(WebApplicationFactory<Program> fixture, ITestOutputHelper testOutputHelper)
     {
         _fixture = fixture;
+        _testOutputHelper = testOutputHelper;
         _client = fixture.CreateClient(new WebApplicationFactoryClientOptions
         {
             AllowAutoRedirect = true,
@@ -19,13 +23,33 @@ public class APITest : IClassFixture<WebApplicationFactory<Program>>
     [Fact]
     public async Task CanSeePublicTimeline()
     {
-        var response = await _client.GetAsync("/");
-        response.EnsureSuccessStatusCode();
-        var content = await response.Content.ReadAsStringAsync();
+        string page = "1";
         
-        Assert.Contains("Public Timeline", content);
-        Assert.Contains("Jacqualine Gilcoine", content);
-        Assert.Contains("Starbuck now is what we hear the worst.", content);
+        while(true)
+        {
+            var response = await _client.GetAsync($"/?page={page}");
+            response.EnsureSuccessStatusCode();
+            var content = await response.Content.ReadAsStringAsync();
+            
+            if (content.Contains("Starbuck now is what we hear the worst."))
+            {
+                break;
+            } else if (content.Contains("There are no cheeps so far."))
+            {
+                break;
+            }
+
+            int _page = int.Parse(page);
+            _page += 1;
+            page = _page.ToString();
+        }
+        var _response = await _client.GetAsync($"/?page={page}");
+        _response.EnsureSuccessStatusCode();
+        var _content = await _response.Content.ReadAsStringAsync();
+        
+        Assert.Contains("Public Timeline", _content);
+        Assert.Contains("Jacqualine Gilcoine", _content);
+        Assert.Contains("Starbuck now is what we hear the worst.", _content);
     }
     
     [Theory]

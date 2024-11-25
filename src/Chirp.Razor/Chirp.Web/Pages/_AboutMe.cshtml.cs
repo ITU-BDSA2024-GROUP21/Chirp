@@ -25,7 +25,8 @@ public class AboutMeModel : PageModel
 
     public async Task<IActionResult> OnPostForgetMe()
     {
-        if (string.IsNullOrEmpty(Author.AuthorId.ToString()))
+        Console.WriteLine("knap");
+        if (!string.IsNullOrEmpty(Author.ToString()))
         {
             Console.WriteLine("Lort");
             await _cheepRepository.DeleteAuthorAndCheeps(Author);

@@ -107,18 +107,20 @@ public class UnitTest
             Name = "Tom Holland",
             Email = "Tom.Holland@gmail.com"
         };
+        var createdAuthor = await repository5.GetAuthorByName(testAuthorDTO1.Name);
+
 
         var testCheepDTO = new CheepDTO
         {
             Text = "This is a test",
             Author = testAuthorDTO1.ToString()!,
             TimeStamp = "2023-07-21 10:30:45",
-            CheepId = 2147483647
+            CheepId = 2147483647,
+            AuthorId = createdAuthor.AuthorId
         };
 
         await repository5.ConvertCheeps(testCheepDTO, testAuthorDTO1);
 
-        var createdAuthor = await repository5.GetAuthorByName(testAuthorDTO1.Name);
         var cheepsByAuthor = await repository5.GetCheepsFromAuthor(createdAuthor.Name, 0);
 
         Assert.NotNull(createdAuthor);

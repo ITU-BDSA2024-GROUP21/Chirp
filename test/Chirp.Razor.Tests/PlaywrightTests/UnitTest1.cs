@@ -2,10 +2,13 @@ using System.Diagnostics;
 using Microsoft.Playwright;
 using Microsoft.Playwright.NUnit;
 using Assert = Xunit.Assert;
+using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
 using Chirp.Infrastructure;
 
+
 using Chirp.Razor.Tests.PlaywrightTests;
+using Microsoft.Data.Sqlite;
 
 [Parallelizable(ParallelScope.None)]
 [TestFixture]
@@ -13,7 +16,7 @@ public class UnitTest1 : PageTest
 {
     private Process _serverProcess;
     protected IBrowser _browser;
-    private readonly ICheepRepository _cheepRepository;
+    private ICheepRepository _cheepRepository;
     
     public override BrowserNewContextOptions ContextOptions()
     {
@@ -22,7 +25,7 @@ public class UnitTest1 : PageTest
             IgnoreHTTPSErrors = true
         };
     }
-    
+
     [SetUp]
     public async Task Setup()
     {
@@ -30,7 +33,8 @@ public class UnitTest1 : PageTest
         Thread.Sleep(5000); // Increase this if needed
 
         _browser = await Playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions {Headless = true});
-
+        
+        
     }
     
     [TearDown]
@@ -221,9 +225,9 @@ public class UnitTest1 : PageTest
         await Page.GetByRole(AriaRole.Link, new() { Name = "Register" }).ClickAsync();
     
         await Page.GetByPlaceholder("username").ClickAsync();
-        await Page.GetByPlaceholder("username").FillAsync("Carla69");
+        await Page.GetByPlaceholder("username").FillAsync("Carla49");
         await Page.GetByPlaceholder("name@example.com").ClickAsync();
-        await Page.GetByPlaceholder("name@example.com").FillAsync("carla69@mail.dk");
+        await Page.GetByPlaceholder("name@example.com").FillAsync("carla49@mail.dk");
         await Page.GetByLabel("Password", new() { Exact = true }).ClickAsync();
         await Page.GetByLabel("Password", new() { Exact = true }).FillAsync("Halløj691!");
         await Page.GetByLabel("Confirm Password").ClickAsync();
@@ -238,8 +242,8 @@ public class UnitTest1 : PageTest
         await Expect(Page.GetByRole(AriaRole.Link, new() { Name = "Click here to confirm your" })).ToBeVisibleAsync();
         await Page.GetByRole(AriaRole.Link, new() { Name = "Click here to confirm your" }).ClickAsync();
 
-        var author = await _cheepRepository.GetAuthorByEmail("carla69@mail.dk");
-        await _cheepRepository.DeleteAuthorAndCheeps(author);
+        
+        await _cheepRepository.DeleteAuthorByEmail("carla49@mail.dk");
     
     }
     

@@ -1,13 +1,14 @@
 @page "/{author}/AboutMe"
 
 
-@model Chirp.Web.Pages.PublicModel
+@model Chirp.Web.Pages.AboutMeModel
 @{
     ViewData["Title"] = "Twitter";
     Layout = "Shared/_Layout";
 }
 <div>
-    <form method="post" asp-page-handler="ForgetMe">
+    <form method="post" asp-page-handler="Forgetme">
+        <input type="hidden" name="author" value="@User.Identity.Name">
         <button type="submit" class="ForgetMe">Forget Me!</button>
     </form>
 </div>

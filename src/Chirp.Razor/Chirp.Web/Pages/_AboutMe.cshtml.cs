@@ -14,26 +14,28 @@ public class AboutMeModel : PageModel
     [BindProperty]
     public Author Author { get; set; }
 
-    public AboutMeModel(ICheepRepository cheepRepository, SignInManager<ApplicationUser> signInManager, Author author)
+    public AboutMeModel(ICheepRepository cheepRepository, SignInManager<ApplicationUser> signInManager)
     {
         _cheepRepository = cheepRepository;
         _signInManager = signInManager;
-        Author = author;
     }
     
     
 
-    public async Task<IActionResult> OnPostForgetMe()
+    public async Task<IActionResult> OnPostForgetme(Author author)
     {
         Console.WriteLine("knap");
-        if (!string.IsNullOrEmpty(Author.ToString()))
+        if (string.IsNullOrEmpty(author.ToString()))
         {
-            Console.WriteLine("Lort");
-            await _cheepRepository.DeleteAuthorAndCheeps(Author);
-            
-            await _signInManager.SignOutAsync();
+            Console.WriteLine("Has to have an author");
+            return RedirectToPage();
         }
         
-        return RedirectToPage("/?page=1");
+        Console.WriteLine("Lort");
+        await _cheepRepository.DeleteAuthorAndCheeps(author);
+            
+        await _signInManager.SignOutAsync();
+        
+        return RedirectToPage();
     }
 }

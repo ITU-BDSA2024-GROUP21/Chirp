@@ -3,9 +3,8 @@
 public class PersonalProjectPath
 {
     // Personal absolute path to web app. Done this way to be able to include in gitignore
-    public static string path = @"C:\Users\andre\dev\Chirp\src\Chirp.Razor\Chirp.Web";
+    public static string path = @"C:\Users\krist\Chirp\src\Chirp.Razor\Chirp.Web\Chirp.Web.csproj";
     
-    // Skippidy toilet
 
     public static string getPath()
     {

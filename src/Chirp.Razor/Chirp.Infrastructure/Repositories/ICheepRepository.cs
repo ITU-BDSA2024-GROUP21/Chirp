@@ -11,5 +11,5 @@ public interface ICheepRepository
     public Task<Author> ConvertAuthors(AuthorDTO author);
     public Task<Cheep> ConvertCheeps(CheepDTO cheep, AuthorDTO author);
     public Task DeleteCheep(int id);
-
+    public Task DeleteAuthorAndCheeps(Author author);
 }

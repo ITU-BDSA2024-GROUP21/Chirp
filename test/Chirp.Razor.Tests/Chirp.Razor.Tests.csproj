@@ -24,6 +24,7 @@
     </PackageReference>
     <ProjectReference Include="../../src/Chirp.Razor/Chirp.Web/Chirp.Web.csproj" />
     <ProjectReference Include="../../src/Chirp.Razor/Chirp.Infrastructure/Chirp.Infrastructure.csproj" />
+    <ProjectReference Include="../../src/Chirp.Razor/Chirp.Core/Chirp.Core.csproj" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="8.0.8" />
     
   </ItemGroup>

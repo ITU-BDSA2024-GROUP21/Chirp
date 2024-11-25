@@ -3,6 +3,7 @@ using Microsoft.Playwright;
 using Microsoft.Playwright.NUnit;
 using Assert = Xunit.Assert;
 using NUnit.Framework;
+using Chirp.Infrastructure;
 
 using Chirp.Razor.Tests.PlaywrightTests;
 
@@ -12,6 +13,7 @@ public class UnitTest1 : PageTest
 {
     private Process _serverProcess;
     protected IBrowser _browser;
+    private readonly ICheepRepository _cheepRepository;
     
     public override BrowserNewContextOptions ContextOptions()
     {
@@ -235,6 +237,9 @@ public class UnitTest1 : PageTest
         
         await Expect(Page.GetByRole(AriaRole.Link, new() { Name = "Click here to confirm your" })).ToBeVisibleAsync();
         await Page.GetByRole(AriaRole.Link, new() { Name = "Click here to confirm your" }).ClickAsync();
+
+        var author = await _cheepRepository.GetAuthorByEmail("carla69@mail.dk");
+        await _cheepRepository.DeleteAuthorAndCheeps(author);
     
     }
     

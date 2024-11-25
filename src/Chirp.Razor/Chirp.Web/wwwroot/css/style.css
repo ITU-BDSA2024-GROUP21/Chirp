@@ -266,8 +266,27 @@ button {
     cursor: pointer;
 }
 
+.DeleteButton{
+    background-color: transparent !important;
+    padding: 0 !important;
+    border: none !important;
+    
+}
+
+.binphoto{
+    width: 20px;
+    height: 20px;
+}
+
+.Noot{
+    display: flex;
+    justify-content: space-between; /* Skubber indhold til venstre og højre */
+   
+}
+
+
 button:hover {
-    background-color: #8b4949;
+    background-color: #657ba3;
 }
 
 ul.nav {
@@ -291,5 +310,5 @@ ul.nav li a {
 }
 
 ul.nav li a:hover {
-    background-color: #8b4949;
+    background-color: #657ba3;
 }

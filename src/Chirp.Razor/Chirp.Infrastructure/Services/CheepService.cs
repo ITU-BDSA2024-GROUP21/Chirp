@@ -18,18 +18,7 @@ public class CheepService : ICheepService
         dateTime = dateTime.AddSeconds(unixTimeStamp);
         return dateTime.ToString("MM/dd/yy H:mm:ss");
     }
-
-    public async void CreateAuthor(string username, string email)
-    {
-        AuthorDTO newAuthor = new AuthorDTO
-        {
-            Name = username,
-            Email = email
-        };
-        await _cheepRepository.ConvertAuthors(newAuthor);
-    }
-
-
+    
     public async Task<Cheep> CreateCheep(string username,  string email, string message, string timestamp, int id)
     {
         AuthorDTO newAuthor = new AuthorDTO
@@ -37,12 +26,16 @@ public class CheepService : ICheepService
             Name = username,
             Email = email,
         };
+        var author = await _cheepRepository.ConvertAuthors(newAuthor);
+        
         CheepDTO newCheep = new CheepDTO
         {
             Author = username,
             Text = message,
             TimeStamp = timestamp,
-            CheepId = id
+            CheepId = id,
+            AuthorId = author.AuthorId
+            
         };
         var cheep = await _cheepRepository.ConvertCheeps(newCheep, newAuthor);
         return cheep;
@@ -62,7 +55,10 @@ public class CheepService : ICheepService
         return cheeps;
     }
 
-   
+    public async Task<Author> GetAuthorByName(string name)
+    {
+        return await _cheepRepository.GetAuthorByName(name);
+    }
 
 
     private static List<CheepDTO> DTOConversion(List<Cheep> cheeps)
@@ -75,10 +71,36 @@ public class CheepService : ICheepService
                 Author = cheep.Author.Name,
                 Text = cheep.Text,
                 TimeStamp = cheep.TimeStamp.ToString(),
-                CheepId = cheep.CheepId
+                CheepId = cheep.CheepId,
+                AuthorId = cheep.Author.AuthorId
             });
         }
         return list;
+    }
+
+    public async Task Follow(int followingAuthorId, int followedAuthorId)
+    {
+        await _cheepRepository.FollowAuthor(followingAuthorId, followedAuthorId);
+    }
+
+    public async Task<List<string>> GetFollowedAuthors(int authorId)
+    {
+        return await _cheepRepository.GetFollowedAuthorsAsync(authorId);
+    }
+
+    public async Task<List<CheepDTO>> GetCheepsFromFollowedAuthor(IEnumerable<string> followedAuthors, int authorId)
+    {
+        return await _cheepRepository.GetCheepsFromFollowedAuthorsAsync(followedAuthors, authorId);
+    }
+
+    public async Task<bool> IsFollowing(int followingAuthorId, int followedAuthorId)
+    {
+        return await _cheepRepository.IsFollowing(followingAuthorId, followedAuthorId);
+    }
+
+    public async Task Unfollow(int followingAuthorId, int followedAuthorId)
+    {
+        await _cheepRepository.Unfollow(followingAuthorId, followedAuthorId);
     }
     
 

@@ -169,8 +169,58 @@ public class CheepRepository : ICheepRepository
 
         return doesAuthorExist;
     }
-    
-    
 
+    public async Task FollowAuthor(int followingAuthorId, int followedAuthorId)
+    {
+        var followRelation = new AuthorFollow
+        {
+            FollowerId = followingAuthorId,
+            FollowingId = followedAuthorId
+        };
+        _chirpDbContext.AuthorFollows.Add(followRelation);
+
+        await _chirpDbContext.SaveChangesAsync();
+    }
+    
+    public async Task<List<String>> GetFollowedAuthorsAsync(int authorId)
+    {
+        return await _chirpDbContext.AuthorFollows
+            .Where(f => f.FollowerId == authorId)
+            .Select(f => f.following.Name)
+            .ToListAsync();
+    }
+
+    public async Task<List<CheepDTO>> GetCheepsFromFollowedAuthorsAsync(IEnumerable<string> followedAuthors, int page)
+    {
+        return await _chirpDbContext.Cheeps
+            .Where(c => followedAuthors.Contains(c.Author.Name))
+            .OrderByDescending(c => c.TimeStamp)
+            .Skip(page * 32)
+            .Take(32)
+            .Select(c => new CheepDTO
+            {
+                Author = c.Author.Name,
+                Text = c.Text,
+                TimeStamp = c.TimeStamp.ToString(),
+                CheepId = c.CheepId,
+                AuthorId = c.Author.AuthorId
+            })
+            .ToListAsync();
+    }
+    public async Task<bool> IsFollowing(int followingAuthorId, int followedAuthorId)
+    {
+        return await _chirpDbContext.AuthorFollows
+            .AnyAsync(f => f.FollowerId == followingAuthorId && f.FollowingId == followedAuthorId);
+    }
+
+    public async Task Unfollow(int followingAuthorId, int followedAuthorId)
+    {
+        
+        var followRelation = await _chirpDbContext.AuthorFollows
+            .FirstOrDefaultAsync(f => f.FollowerId == followingAuthorId && f.FollowingId == followedAuthorId);
+        _chirpDbContext.AuthorFollows.Remove(followRelation!);
+        await _chirpDbContext.SaveChangesAsync();
+    }
+    
 
 }

@@ -12,20 +12,17 @@
         currPage = 1; // Default to 1 if parsing fails
     }
 
-    bool followed;
 
     int nextPage = currPage + 1; // Calculate the next page
     int prevPage = currPage > 1 ? currPage - 1 : 1; // This is to ensure that the previous page doesn't go below 1
+    var followerMap = ViewData["followerMap"] as Dictionary<string, bool> ?? new Dictionary<string, bool>();
+
 }
 
 <div>
     <partial name ="Shared/_NootBoxPartial" model="Model.CheepInput"/>
     <h2> @routeName's Timeline 
         
-        @if (User.Identity.IsAuthenticated && User.Identity.Name != @routeName.ToString())
-        {
-            <button onclick="toggleLabel()" >Follow</button>
-        }
     </h2> 
     @if (Model.Cheeps.Any())
     {
@@ -47,7 +44,28 @@
                             <input type="hidden" name="cheepId" value="@cheep.CheepId.ToString()" />
                             <button type="submit" class="btn btn-danger">Delete</button>
                         </form>
+                        
                     }
+                    @if (User.Identity!.IsAuthenticated && User.Identity.Name != cheep.Author)
+                        @if (followerMap.ContainsKey(cheep.Author) && !followerMap[cheep.Author])
+                        {
+                            <form method="post" asp-page-handler="Follow">
+                                <input type="hidden" name="followingAuthorId" value="@cheep.AuthorId"/>
+                                <input type="hidden" name="followerAuthor" value="@User.Identity.Name"/>
+                                <input type="hidden" name="page" value="@currPage"/>
+                                <button class="FollowButtonPublic" type="submit">Follow</button>
+                            </form>
+                        }
+                        else
+                        {
+                            <form method="post" asp-page-handler="Unfollow">
+                                <input type="hidden" name="followingAuthorId" value="@cheep.AuthorId"/>
+                                <input type="hidden" name="followerAuthor" value="@User.Identity.Name"/>
+                                <input type="hidden" name="page" value="@currPage"/>
+                                <button class="UnfollowButtonPublic" type="submit">Unfollow</button>
+                            </form>
+                            
+                        }
                 </li>
             }
         </ul>
@@ -62,14 +80,3 @@
     
     <button onclick="document.location='/@routeName/?page=@nextPage'" style="float: right;" class="PageButton">Next Page</button>
 </div>
-<script> 
-    function toggleLabel() {
-    console.log("FUCK")
-    const btn =
-        document.querySelector('button');
-    if (btn.innerText === 'Follow') {
-        btn.innerText = 'Unfollow';
-    } else {
-        btn.innerText = 'Follow';
-    }
-}</script>

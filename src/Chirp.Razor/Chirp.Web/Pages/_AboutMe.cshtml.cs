@@ -11,16 +11,34 @@ public class AboutMeModel : PageModel
 {
     private readonly ICheepRepository _cheepRepository;
     private readonly SignInManager<ApplicationUser> _signInManager;
+    private readonly UserManager<ApplicationUser> _userManager;
+
     [BindProperty]
     public Author Author { get; set; }
+    public string? Email { get; set; }
 
-    public AboutMeModel(ICheepRepository cheepRepository, SignInManager<ApplicationUser> signInManager)
+    public AboutMeModel(ICheepRepository cheepRepository, SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager)
     {
         _cheepRepository = cheepRepository;
         _signInManager = signInManager;
+        _userManager = userManager;
     }
+
+   
     
-    
+    public async Task<IActionResult> OnGet()
+    {
+        var user = await _userManager.GetUserAsync(User);
+
+        if (user == null)
+        {
+            return RedirectToPage("/Account/Login");
+        }
+
+        Email = user.Email;
+
+        return Page();
+    }
 
     public async Task<IActionResult> OnPostForgetme(Author author)
     {
@@ -38,4 +56,6 @@ public class AboutMeModel : PageModel
         
         return RedirectToPage();
     }
+    
+    
 }

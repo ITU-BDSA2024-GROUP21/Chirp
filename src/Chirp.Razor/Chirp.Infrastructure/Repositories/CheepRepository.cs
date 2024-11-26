@@ -55,11 +55,15 @@ public class CheepRepository : ICheepRepository
         await _chirpDbContext.SaveChangesAsync();
     }
     
+    
+    
     public async Task DeleteAuthorAndCheeps(Author author)
     {
         if (author == null) throw new ArgumentNullException(nameof(author));
         
         var auth = await _chirpDbContext.Authors.FindAsync(author.AuthorId);
+        
+        Console.WriteLine($"AuthorId: {author.AuthorId}");
         if (auth != null)
         {
             //This remoces all the cheeps from the author from the database
@@ -102,6 +106,14 @@ public class CheepRepository : ICheepRepository
         
         var result = await sqlQuery.FirstOrDefaultAsync();
         return result ?? throw new InvalidOperationException();
+    }
+    
+    public async Task<string?> GetEmailByAuthorIdAsync(int authorId)
+    {
+        var author = await _chirpDbContext.Authors
+            .FirstOrDefaultAsync(a => a.AuthorId == authorId);
+
+        return author?.Email;
     }
     
     public async Task<Author> GetAuthorByEmail(string Email)
@@ -157,4 +169,8 @@ public class CheepRepository : ICheepRepository
 
         return doesAuthorExist;
     }
+    
+    
+
+
 }

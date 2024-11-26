@@ -40,7 +40,9 @@ public class UserTimelineModel : PageModel
         
         if (User.Identity.IsAuthenticated)
         {
-            
+            var user = await _userManager.GetUserAsync(User);
+            _cheepService.CheckFollowerExistElseCreate(user);
+            Cheeps = await GetCheepsWhenLoggedIn(author);
         }
         else
         {
@@ -119,14 +121,15 @@ public class UserTimelineModel : PageModel
         var user = await _userManager.GetUserAsync(User);
         Author _author = await _cheepService.GetAuthorByName(User.Identity.Name);
         int id = _author.AuthorId;
-        foreach (var cheep in Cheeps)
-        {
-            FollowerMap[cheep.Author] = await _cheepService.IsFollowing(id, cheep.AuthorId);
-        }
         if (user.UserName != author)
         {
-            return Cheeps = await _cheepService.GetCheepsFromAuthor(author, _page);
-            
+            Cheeps = await _cheepService.GetCheepsFromAuthor(author, _page);
+            foreach (var cheep in Cheeps)
+            {
+                FollowerMap[cheep.Author] = await _cheepService.IsFollowing(id, cheep.AuthorId);
+            }
+
+            return Cheeps;
         }
         else
         {
@@ -134,7 +137,13 @@ public class UserTimelineModel : PageModel
             var followedAuthors = await _cheepService.GetFollowedAuthors(currentAuthor.AuthorId);
             followedAuthors.Add(user.UserName);
         
-            return Cheeps = await _cheepService.GetCheepsFromFollowedAuthor(followedAuthors, _page);
+            Cheeps = await _cheepService.GetCheepsFromFollowedAuthor(followedAuthors, _page);
+            foreach (var cheep in Cheeps)
+            {
+                FollowerMap[cheep.Author] = await _cheepService.IsFollowing(id, cheep.AuthorId);
+            }
+
+            return Cheeps;
         }
     }
     

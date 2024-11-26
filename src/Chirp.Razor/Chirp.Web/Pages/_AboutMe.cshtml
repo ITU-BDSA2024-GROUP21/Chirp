@@ -17,6 +17,9 @@
     <p><strong>Name:</strong> @routeName</p>
     <p><strong>Email:</strong> @Model.Email</p> 
     
+    <p><strong>Following:</strong></p>
+    <p>@Model.Followers</p>
+    
     
     <form method="post" asp-page-handler="Forgetme">
         <input type="hidden" name="author" value="@User.Identity.Name">

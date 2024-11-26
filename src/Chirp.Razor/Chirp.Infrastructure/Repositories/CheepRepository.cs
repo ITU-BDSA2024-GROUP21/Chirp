@@ -182,6 +182,7 @@ public class CheepRepository : ICheepRepository
         await _chirpDbContext.SaveChangesAsync();
     }
     
+    //Denne Metode skal du bruge
     public async Task<List<String>> GetFollowedAuthorsAsync(int authorId)
     {
         return await _chirpDbContext.AuthorFollows

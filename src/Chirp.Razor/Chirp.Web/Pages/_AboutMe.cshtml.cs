@@ -17,6 +17,8 @@ public class AboutMeModel : PageModel
     [BindProperty]
     public Author Author { get; set; }
     public string? Email { get; set; }
+    List<String> FollowersList { get; set; }
+    public string Followers { get; set; }
 
     public AboutMeModel(ICheepRepository cheepRepository, SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager, ICheepService cheepService)
     {
@@ -39,8 +41,15 @@ public class AboutMeModel : PageModel
         Author author = await _cheepService.GetAuthorByName(User.Identity.Name);
         Email = author.Email;
 
+        int Authorid = author.AuthorId;
+
+        FollowersList = await _cheepRepository.GetFollowedAuthorsAsync(Authorid);
+        Followers = string.Join( ", ", FollowersList.ToArray() );;
+
         return Page();
     }
+    
+    
 
     public async Task<IActionResult> OnPostForgetme(Author author)
     {

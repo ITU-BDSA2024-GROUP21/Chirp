@@ -41,7 +41,7 @@ public class CheepRepository : ICheepRepository
         
     }
 
-    public async Task DeleteAuthorByEmail(string email)
+    public async Task DeleteAuthorAndCheepsByEmail(string email)
     {
         var author = await _chirpDbContext.Authors.FirstOrDefaultAsync(a => a.Email == email);
         if (author == null)

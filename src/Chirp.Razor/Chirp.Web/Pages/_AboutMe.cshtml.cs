@@ -9,7 +9,6 @@ namespace Chirp.Web.Pages;
 
 public class AboutMeModel : PageModel
 {
-    private readonly ICheepRepository _cheepRepository;
     private readonly SignInManager<ApplicationUser> _signInManager;
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly ICheepService _cheepService;
@@ -20,7 +19,6 @@ public class AboutMeModel : PageModel
 
     public AboutMeModel(ICheepRepository cheepRepository, SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager, ICheepService cheepService)
     {
-        _cheepRepository = cheepRepository;
         _signInManager = signInManager;
         _userManager = userManager;
         _cheepService = cheepService;
@@ -53,7 +51,7 @@ public class AboutMeModel : PageModel
             return RedirectToPage();
         }
         
-        await _cheepRepository.DeleteAuthorByEmail(author.Email);
+        await _cheepService.DeleteAuthorAndCheepsByEmail(author.Email);
             
         await _signInManager.SignOutAsync();
         

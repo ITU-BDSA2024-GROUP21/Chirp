@@ -50,6 +50,12 @@ public class CheepRepository : ICheepRepository
             return;
         }
 
+        var user = await _userManager.FindByEmailAsync(email);
+        if (user != null)
+        {
+            await _userManager.DeleteAsync(user);
+        }
+
         _chirpDbContext.Authors.Remove(author);
 
         await _chirpDbContext.SaveChangesAsync();

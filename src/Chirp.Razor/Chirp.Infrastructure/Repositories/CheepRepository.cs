@@ -60,8 +60,18 @@ public class CheepRepository : ICheepRepository
         
         var cheeps = _chirpDbContext.Cheeps.Where(c => c.Author == author);
         _chirpDbContext.Cheeps.RemoveRange(cheeps);
+        
+        Console.WriteLine(author.AuthorId);
+        var follows = await GetFollowedAuthorsAsync(author.AuthorId);
 
-
+        foreach (var follow in follows)
+        {
+            var followingAuthor = await GetAuthorByName(follow);
+            var followingId = followingAuthor.AuthorId;
+            var authorfollow = new AuthorFollow { FollowerId = author.AuthorId, FollowingId = followingId };
+            _chirpDbContext.AuthorFollows.Remove(authorfollow);
+        }
+        
         await _chirpDbContext.SaveChangesAsync();
     }
     

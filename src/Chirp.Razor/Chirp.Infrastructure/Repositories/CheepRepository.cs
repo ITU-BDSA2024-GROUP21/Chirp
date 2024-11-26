@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 
 namespace Chirp.Infrastructure;
 
@@ -6,10 +7,13 @@ namespace Chirp.Infrastructure;
 public class CheepRepository : ICheepRepository
 {
     private readonly ChirpDBContext _chirpDbContext;
+    private readonly UserManager<ApplicationUser> _userManager;
     
-    public CheepRepository(ChirpDBContext chirpDbContext)
+    
+    public CheepRepository(ChirpDBContext chirpDbContext, UserManager<ApplicationUser> userManager)
     {
         _chirpDbContext = chirpDbContext;
+        _userManager = userManager;
     }
     
     public async Task<List<Cheep>> GetCheeps(int page)
@@ -36,6 +40,49 @@ public class CheepRepository : ICheepRepository
         await _chirpDbContext.SaveChangesAsync();
         
     }
+
+    public async Task DeleteAuthorByEmail(string email)
+    {
+        var author = await _chirpDbContext.Authors.FirstOrDefaultAsync(a => a.Email == email);
+        if (author == null)
+        {
+            Console.WriteLine($"Author with email {email} not found.");
+            return;
+        }
+
+        _chirpDbContext.Authors.Remove(author);
+
+        await _chirpDbContext.SaveChangesAsync();
+    }
+    
+    
+    
+    public async Task DeleteAuthorAndCheeps(Author author)
+    {
+        if (author == null) throw new ArgumentNullException(nameof(author));
+        
+        var auth = await _chirpDbContext.Authors.FindAsync(author.AuthorId);
+        
+        Console.WriteLine($"AuthorId: {author.AuthorId}");
+        if (auth != null)
+        {
+            //This remoces all the cheeps from the author from the database
+            var cheeps = _chirpDbContext.Cheeps.Where(c => c.Author == auth);
+            _chirpDbContext.Cheeps.RemoveRange(cheeps);
+            
+            //This removes the author from the database
+            _chirpDbContext.Authors.Remove(auth);
+            
+            var user = await _userManager.FindByIdAsync(auth.AuthorId.ToString());
+            if (user != null)
+            {
+                await _userManager.DeleteAsync(user);
+            }
+
+        }
+
+        await _chirpDbContext.SaveChangesAsync();
+    }
     
     public async Task<List<Cheep>> GetCheepsFromAuthor(string author, int page)
     {
@@ -59,6 +106,14 @@ public class CheepRepository : ICheepRepository
         
         var result = await sqlQuery.FirstOrDefaultAsync();
         return result ?? throw new InvalidOperationException();
+    }
+    
+    public async Task<string?> GetEmailByAuthorIdAsync(int authorId)
+    {
+        var author = await _chirpDbContext.Authors
+            .FirstOrDefaultAsync(a => a.AuthorId == authorId);
+
+        return author?.Email;
     }
     
     public async Task<Author> GetAuthorByEmail(string Email)
@@ -167,4 +222,5 @@ public class CheepRepository : ICheepRepository
         await _chirpDbContext.SaveChangesAsync();
     }
     
+
 }

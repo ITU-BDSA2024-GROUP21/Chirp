@@ -16,5 +16,7 @@ public interface ICheepRepository
     public Task<List<CheepDTO>> GetCheepsFromFollowedAuthorsAsync(IEnumerable<string> authors, int page);
     public Task<bool> IsFollowing(int followerId, int followedId);
     public Task Unfollow(int followingAuthorId, int followedAuthorId);
+    public Task DeleteAuthorAndCheeps(Author author);
+    public Task DeleteAuthorByEmail(string email);
 
 }

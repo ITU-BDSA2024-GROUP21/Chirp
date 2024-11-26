@@ -12,16 +12,18 @@ public class AboutMeModel : PageModel
     private readonly ICheepRepository _cheepRepository;
     private readonly SignInManager<ApplicationUser> _signInManager;
     private readonly UserManager<ApplicationUser> _userManager;
+    private readonly ICheepService _cheepService;
 
     [BindProperty]
     public Author Author { get; set; }
     public string? Email { get; set; }
 
-    public AboutMeModel(ICheepRepository cheepRepository, SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager)
+    public AboutMeModel(ICheepRepository cheepRepository, SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager, ICheepService cheepService)
     {
         _cheepRepository = cheepRepository;
         _signInManager = signInManager;
         _userManager = userManager;
+        _cheepService = cheepService;
     }
 
    
@@ -34,8 +36,8 @@ public class AboutMeModel : PageModel
         {
             return RedirectToPage("/Account/Login");
         }
-
-        Email = user.Email;
+        Author author = await _cheepService.GetAuthorByName(User.Identity.Name);
+        Email = author.Email;
 
         return Page();
     }

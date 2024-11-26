@@ -42,11 +42,12 @@ public class PublicModel : PageModel
         }
         
         Cheeps = await _cheepService.GetCheeps(_page);
-        Author author = await _cheepService.GetAuthorByName(User.Identity.Name);
-        int id = author.AuthorId;
+        
 
         if (User.Identity.IsAuthenticated)
         {
+            Author author = await _cheepService.GetAuthorByName(User.Identity.Name);
+            int id = author.AuthorId;
             foreach (var cheep in Cheeps)
             {
                 FollowerMap[cheep.Author] = await _cheepService.IsFollowing(id, cheep.AuthorId);

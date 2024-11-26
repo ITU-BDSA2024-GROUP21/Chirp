@@ -9,4 +9,9 @@ public class Author
     
     [Required]
     public ICollection<Cheep> Cheeps { get; set; } = null!;
+
+    [Required]
+    public ICollection<AuthorFollow> Followers { get; set; } 
+    [Required]
+    public ICollection<AuthorFollow> Following { get; set; } 
 }

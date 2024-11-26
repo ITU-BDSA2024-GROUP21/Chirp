@@ -11,12 +11,15 @@ public class UserTimelineModel : PageModel
     private int _page;
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly ICheepRepository _cheepRepository;
+    private Dictionary<string, bool> FollowerMap;
+
 
     public UserTimelineModel(ICheepService cheepService, UserManager<ApplicationUser> userManager,ICheepRepository cheepRepository )
     {
         _cheepService = cheepService;
         _userManager = userManager;
         _cheepRepository = cheepRepository;
+        FollowerMap = new Dictionary<string, bool>();
     }
     
     public async Task<IActionResult> OnPostDeleteCheepAsync(int cheepId)
@@ -34,14 +37,24 @@ public class UserTimelineModel : PageModel
         {
             _page = int.Parse(Request.Query["page"]!) -1;
         }
-        Cheeps = await _cheepService.GetCheepsFromAuthor(author, _page);
+        
+        if (User.Identity.IsAuthenticated)
+        {
+            var user = await _userManager.GetUserAsync(User);
+            _cheepService.CheckFollowerExistElseCreate(user);
+            Cheeps = await GetCheepsWhenLoggedIn(author);
+        }
+        else
+        {
+            Cheeps = await _cheepService.GetCheepsFromAuthor(author, _page);
+        }
+        ViewData["FollowerMap"] = FollowerMap;
+        
 
         return Page();
     }
     public async Task<IActionResult> OnPost()
     {
-        
-        Console.WriteLine("HEJSA");
         if (string.IsNullOrWhiteSpace(CheepInput.Text))
         {
             ModelState.AddModelError("CheepInput.Text", "The message can't be empty.");
@@ -70,6 +83,68 @@ public class UserTimelineModel : PageModel
     public static int ConvertGuidToInt(Guid guid)
     {
         return BitConverter.ToInt32(guid.ToByteArray(), 0);
+    }
+    public async Task<IActionResult> OnPostFollow(int followingAuthorId, string followerAuthor, int page)
+    {
+        Author author = await _cheepService.GetAuthorByName(followerAuthor);
+        int id = author.AuthorId;
+        
+        if (string.IsNullOrEmpty(followerAuthor))
+        {
+            ModelState.AddModelError("", "User identity is not valid.");
+            return Redirect($"/{author.Name}");
+        }
+        
+        await _cheepRepository.FollowAuthor(id,followingAuthorId);
+        FollowerMap[author.Name] = true;
+        return Redirect($"/{author.Name}");
+    }
+    public async Task<IActionResult> OnPostUnfollow(int followingAuthorId, string followerAuthor, int page)
+    {
+        Author author = await _cheepService.GetAuthorByName(followerAuthor);
+        int id = author.AuthorId;
+        
+        if (string.IsNullOrEmpty(followerAuthor))
+        {
+            ModelState.AddModelError("", "User identity is not valid.");
+            return Redirect($"/{author.Name}");
+        }
+        
+        Console.WriteLine(followingAuthorId);
+        await _cheepRepository.Unfollow(id,followingAuthorId);
+        FollowerMap[author.Name] = false;
+        return Redirect($"/{author.Name}");
+    }
+
+    public async Task<List<CheepDTO>> GetCheepsWhenLoggedIn(string author)
+    {
+        var user = await _userManager.GetUserAsync(User);
+        Author _author = await _cheepService.GetAuthorByName(User.Identity.Name);
+        int id = _author.AuthorId;
+        if (user.UserName != author)
+        {
+            Cheeps = await _cheepService.GetCheepsFromAuthor(author, _page);
+            foreach (var cheep in Cheeps)
+            {
+                FollowerMap[cheep.Author] = await _cheepService.IsFollowing(id, cheep.AuthorId);
+            }
+
+            return Cheeps;
+        }
+        else
+        {
+            var currentAuthor = await _cheepService.GetAuthorByName(user.UserName);
+            var followedAuthors = await _cheepService.GetFollowedAuthors(currentAuthor.AuthorId);
+            followedAuthors.Add(user.UserName);
+        
+            Cheeps = await _cheepService.GetCheepsFromFollowedAuthor(followedAuthors, _page);
+            foreach (var cheep in Cheeps)
+            {
+                FollowerMap[cheep.Author] = await _cheepService.IsFollowing(id, cheep.AuthorId);
+            }
+
+            return Cheeps;
+        }
     }
     
     

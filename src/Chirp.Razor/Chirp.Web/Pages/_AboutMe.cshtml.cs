@@ -34,7 +34,7 @@ public class AboutMeModel : PageModel
 
         if (user == null)
         {
-            return RedirectToPage("/Account/Login");
+            return Redirect("/Identity/Account/Login");
         }
         Author author = await _cheepService.GetAuthorByName(User.Identity.Name);
         Email = author.Email;

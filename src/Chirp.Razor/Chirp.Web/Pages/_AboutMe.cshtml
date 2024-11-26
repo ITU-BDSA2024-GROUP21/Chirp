@@ -6,10 +6,23 @@
     var routeName = HttpContext.GetRouteValue("author");
 }
 <div>
-    <h2> @routeName's Profile </h2>
+        @if( routeName.ToString().EndsWith("s"))
+        {
+            <h2> @routeName' Profile </h2> 
+        }
+        else
+        {
+            <h2> @routeName's Profile </h2>  
+        }
+        
     <ul id="messagelist" class="cheeps">
         <li>
-            <h3>Personal Information</h3>
+            <div class="Aboutme">
+                <h3>Personal Information</h3>
+                <form method="post" asp-page-handler="Download">
+                <button class="information" type="submit"> Download My <br/> Information </button>
+                </form>
+            </div>
             <p><strong>Name:</strong> @routeName</p>
             <br>
             <p><strong>Email:</strong> @Model.Email</p>
@@ -17,7 +30,7 @@
             <p><strong>Following:</strong></p>
             <p>@Model.Followers</p>
             <br>
-            <p><strong>Cheeps:</strong></p>
+            <p><strong>Noots:</strong></p>
             <p>@Model.Cheeps</p>
             <br>
             <br>

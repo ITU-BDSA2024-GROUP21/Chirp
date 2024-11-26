@@ -21,9 +21,14 @@
 
 <div>
     <partial name ="Shared/_NootBoxPartial" model="Model.CheepInput"/>
-    <h2> @routeName's Timeline 
-        
-    </h2> 
+    @if( routeName.ToString().EndsWith("s"))
+    {
+        <h2> @routeName' Timeline </h2> 
+    }
+    else
+    {
+        <h2> @routeName's Timeline </h2>  
+    }
     @if (Model.Cheeps.Any())
     {
         <ul id="messagelist" class="cheeps">

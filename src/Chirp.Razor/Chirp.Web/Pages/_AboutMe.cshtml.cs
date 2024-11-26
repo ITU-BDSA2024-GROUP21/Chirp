@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
+using System.Text.Json;
 
 
 namespace Chirp.Web.Pages;
@@ -69,6 +70,43 @@ public class AboutMeModel : PageModel
 
         return Page();
     }
+
+    public async Task<IActionResult> OnPostDownload()
+    {
+        var user = await _userManager.GetUserAsync(User);
+
+        if (user == null)
+        {
+            return NotFound("User not found.");
+        }
+
+        var personalData = new Dictionary<string, object>();
+
+        
+        var author = await _cheepService.GetAuthorByName(User.Identity.Name);
+        if (author != null)
+        {
+            personalData.Add("Name", author.Name);
+            personalData.Add("Email", author.Email);
+            
+
+            // Følgere
+            var followersList = await _cheepRepository.GetFollowedAuthorsAsync(author.AuthorId);
+            personalData.Add("Followers", followersList);
+
+            // Cheeps
+            var cheepsList = await _cheepRepository.GetCheepsFromAuthor1(author.Name);
+            personalData.Add("Noots", cheepsList.Select(c => c.Text)); // Kun tekst
+        }
+
+        // Returner som JSON-fil
+        Response.Headers.TryAdd("Content-Disposition", "attachment; filename=PersonalData.json");
+        return new FileContentResult(JsonSerializer.SerializeToUtf8Bytes(personalData, new JsonSerializerOptions
+        {
+            WriteIndented = true // For læsbarhed
+        }), "application/json");
+    }
+
     
 
     public async Task<IActionResult> OnPostForgetme(Author author)

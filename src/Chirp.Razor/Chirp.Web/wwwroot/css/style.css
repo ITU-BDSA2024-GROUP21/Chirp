@@ -282,7 +282,7 @@ button {
 }
 
 button:hover {
-    background-color: #8b4949;
+    background-color: #657ba3;
 }
 
 ul.nav {
@@ -316,4 +316,13 @@ ul.nav li a:hover {
 
 .ForgetMe:hover {
     background: #cc0202;
+}
+
+.Aboutme{
+    display: flex;
+    justify-content: space-between;
+}
+
+.information{
+    border-radius: 4px;
 }

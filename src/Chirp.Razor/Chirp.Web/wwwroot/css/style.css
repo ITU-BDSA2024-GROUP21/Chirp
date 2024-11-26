@@ -311,6 +311,7 @@ ul.nav li a:hover {
 
 .ForgetMe{
     background: #f80000;
+    border-radius: 4px;
 }
 
 .ForgetMe:hover {

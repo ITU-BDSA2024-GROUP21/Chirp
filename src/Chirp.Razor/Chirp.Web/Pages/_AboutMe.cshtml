@@ -7,20 +7,29 @@
 }
 <div>
     <h2> @routeName's Profile </h2>
+    <ul id="messagelist" class="cheeps">
+        <li>
+            <h3>Personal Information</h3>
+            <p><strong>Name:</strong> @routeName</p>
+            <br>
+            <p><strong>Email:</strong> @Model.Email</p>
+            <br>
+            <p><strong>Following:</strong></p>
+            <p>@Model.Followers</p>
+            <br>
+            <p><strong>Cheeps:</strong></p>
+            <p>@Model.Cheeps</p>
+            <br>
+            <br>
+            <form method="post" asp-page-handler="Forgetme">
+                <input type="hidden" name="author" value="@User.Identity.Name">
+                <button type="submit" class="ForgetMe">Forget Me!</button>
+            </form>
+        </li>
+
+    </ul>
     
-    <h3>Personal info</h3>
+   
     
-    <p><strong>Name:</strong> @routeName</p>
-    <p><strong>Email:</strong> @Model.Email</p> 
     
-    <p><strong>Following:</strong></p>
-    <p>@Model.Followers</p>
-    
-    <p><strong>Cheeps:</strong></p>
-    <p>@Model.Cheeps</p>
-    
-    <form method="post" asp-page-handler="Forgetme">
-        <input type="hidden" name="author" value="@User.Identity.Name">
-        <button type="submit" class="ForgetMe">Forget Me!</button>
-    </form>
 </div>

@@ -19,6 +19,10 @@ public class AboutMeModel : PageModel
     public string? Email { get; set; }
     List<String> FollowersList { get; set; }
     public string Followers { get; set; }
+    
+    public List<Cheep> CheepsList { get; set; }
+    public  List<string> CheepsListString;
+    public string Cheeps { get; set; }
 
     public AboutMeModel(ICheepRepository cheepRepository, SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager, ICheepService cheepService)
     {
@@ -26,6 +30,7 @@ public class AboutMeModel : PageModel
         _signInManager = signInManager;
         _userManager = userManager;
         _cheepService = cheepService;
+        CheepsListString = new List<string>();
     }
 
    
@@ -36,19 +41,34 @@ public class AboutMeModel : PageModel
 
         if (user == null)
         {
-            return RedirectToPage("/Account/Login");
+            return Redirect("/Identity/Account/Login");
         }
+        
+        //Loading The users email adress
         Author author = await _cheepService.GetAuthorByName(User.Identity.Name);
         Email = author.Email;
 
         int Authorid = author.AuthorId;
-
+        
+        //loading who our uses is following
         FollowersList = await _cheepRepository.GetFollowedAuthorsAsync(Authorid);
-        Followers = string.Join( ", ", FollowersList.ToArray() );;
+        Followers = string.Join( ", ", FollowersList.ToArray() );
+        
+        //loading all the cheeps
+        CheepsList = await _cheepRepository.GetCheepsFromAuthor1(author.Name);
+
+        foreach (Cheep cheep in CheepsList)
+        {
+            string cheepo = cheep.Text;
+            Console.WriteLine("Hello " + cheepo);
+            CheepsListString.Add(cheepo);
+            
+        }
+        
+        Cheeps = string.Join(", ", CheepsListString.ToArray() );
 
         return Page();
     }
-    
     
 
     public async Task<IActionResult> OnPostForgetme(Author author)
@@ -57,7 +77,7 @@ public class AboutMeModel : PageModel
         if (string.IsNullOrEmpty(author.ToString()))
         {
             Console.WriteLine("Has to have an author");
-            return RedirectToPage();
+            return Redirect("/Identity/Account/Login");
         }
         
         Console.WriteLine("Lort");

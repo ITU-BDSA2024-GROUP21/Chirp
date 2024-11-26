@@ -97,6 +97,19 @@ public class CheepRepository : ICheepRepository
         var result = await sqlQuery.ToListAsync();
         return result;
     }
+    
+    public async Task<List<Cheep>> GetCheepsFromAuthor1(string author)
+    {
+        var sqlQuery = _chirpDbContext.Cheeps
+            .Where(cheep => cheep.Author.Name == author)
+            .Select(cheep => cheep)
+            .Include(cheep => cheep.Author)
+            .OrderByDescending(cheep => cheep.TimeStamp);
+
+        var result = await sqlQuery.ToListAsync();
+        return result;
+    }
+
 
     public async Task<Author> GetAuthorByName(string Name)
     {

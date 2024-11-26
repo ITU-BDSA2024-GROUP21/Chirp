@@ -18,5 +18,6 @@ public interface ICheepRepository
     public Task Unfollow(int followingAuthorId, int followedAuthorId);
     public Task DeleteAuthorAndCheeps(Author author);
     public Task DeleteAuthorByEmail(string email);
+    public Task<List<Cheep>> GetCheepsFromAuthor1(string author);
 
 }

@@ -4,10 +4,6 @@
     ViewData["Title"] = "Twitter";
     Layout = "Shared/_Layout";
     var routeName = HttpContext.GetRouteValue("author");
-    
-
-    
-    
 }
 <div>
     <h2> @routeName's Profile </h2>
@@ -20,6 +16,8 @@
     <p><strong>Following:</strong></p>
     <p>@Model.Followers</p>
     
+    <p><strong>Cheeps:</strong></p>
+    <p>@Model.Cheeps</p>
     
     <form method="post" asp-page-handler="Forgetme">
         <input type="hidden" name="author" value="@User.Identity.Name">

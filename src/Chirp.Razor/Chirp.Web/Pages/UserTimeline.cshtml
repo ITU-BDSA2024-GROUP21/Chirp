@@ -19,7 +19,7 @@
 
 }
 
-<div>
+
     <partial name ="Shared/_NootBoxPartial" model="Model.CheepInput"/>
     <h2> @routeName's Timeline 
         
@@ -29,20 +29,23 @@
         <ul id="messagelist" class="cheeps">
             @foreach (var cheep in Model.Cheeps)
             {
-                <li>
+                <li class="Noot">
                     <p>
                         <strong>
                             <a href="/@cheep.Author">@cheep.Author</a>
                         </strong>
                         @cheep.Text
                         <small>&mdash; @cheep.TimeStamp</small>
+                        
                     </p>
-
+                    
                     @if (User.Identity.IsAuthenticated && User.Identity.Name == cheep.Author)
                     {
                         <form method="post" asp-page-handler="DeleteCheep">
                             <input type="hidden" name="cheepId" value="@cheep.CheepId.ToString()" />
-                            <button type="submit" class="btn btn-danger">Delete</button>
+                            <button type="submit" class="DeleteButton">
+                                <img class="binphoto" src="/images/bin.png"/>
+                            </button>
                         </form>
                         
                     }
@@ -74,6 +77,9 @@
     {
         <em>There are no cheeps so far.</em>
     }
+    
+    
+    
     @if (currPage > 1) {
         <button onclick="document.location='/@routeName?page=@prevPage'" @if (currPage <= 1) { <text>disabled</text> } class="PageButton" >Previous Page</button>
     }

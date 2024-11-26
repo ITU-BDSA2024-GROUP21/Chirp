@@ -57,38 +57,15 @@ public class CheepRepository : ICheepRepository
         }
 
         _chirpDbContext.Authors.Remove(author);
+        
+        var cheeps = _chirpDbContext.Cheeps.Where(c => c.Author == author);
+        _chirpDbContext.Cheeps.RemoveRange(cheeps);
+
 
         await _chirpDbContext.SaveChangesAsync();
     }
     
     
-    
-    public async Task DeleteAuthorAndCheeps(Author author)
-    {
-        if (author == null) throw new ArgumentNullException(nameof(author));
-        
-        var auth = await _chirpDbContext.Authors.FindAsync(author.AuthorId);
-        
-        Console.WriteLine($"AuthorId: {author.AuthorId}");
-        if (auth != null)
-        {
-            //This remoces all the cheeps from the author from the database
-            var cheeps = _chirpDbContext.Cheeps.Where(c => c.Author == auth);
-            _chirpDbContext.Cheeps.RemoveRange(cheeps);
-            
-            //This removes the author from the database
-            _chirpDbContext.Authors.Remove(auth);
-            
-            var user = await _userManager.FindByIdAsync(auth.AuthorId.ToString());
-            if (user != null)
-            {
-                await _userManager.DeleteAsync(user);
-            }
-
-        }
-
-        await _chirpDbContext.SaveChangesAsync();
-    }
     
     public async Task<List<Cheep>> GetCheepsFromAuthor(string author, int page)
     {

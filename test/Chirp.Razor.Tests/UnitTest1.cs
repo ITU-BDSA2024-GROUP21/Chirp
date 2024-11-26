@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Identity;
+
 namespace Chirp.Razor.Tests;
 using Microsoft.Data.Sqlite;
 using Xunit;
@@ -6,6 +8,7 @@ public class UnitTest
 {
     public async Task<ICheepRepository> RepositorySetUp()
     {
+        UserManager<ApplicationUser> userManager = null;
         // This is to create an in-memory SQLite connection
         var connection = new SqliteConnection("Filename=:memory:");
         await connection.OpenAsync();
@@ -19,7 +22,7 @@ public class UnitTest
         await context.Database.EnsureCreatedAsync();
 
         // In the end we return the CheepRepository instance for testing
-        return new CheepRepository(context);
+        return new CheepRepository(context, userManager);
     }
     
     [Fact]

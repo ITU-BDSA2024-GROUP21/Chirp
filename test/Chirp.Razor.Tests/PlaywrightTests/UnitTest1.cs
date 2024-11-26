@@ -16,7 +16,6 @@ public class UnitTest1 : PageTest
 {
     private Process _serverProcess;
     protected IBrowser _browser;
-    private ICheepRepository _cheepRepository;
     
     public override BrowserNewContextOptions ContextOptions()
     {
@@ -241,9 +240,7 @@ public class UnitTest1 : PageTest
 
         await Expect(Page.GetByRole(AriaRole.Link, new() { Name = "Click here to confirm your" })).ToBeVisibleAsync();
         await Page.GetByRole(AriaRole.Link, new() { Name = "Click here to confirm your" }).ClickAsync();
-
         
-        await _cheepRepository.DeleteAuthorByEmail("carla49@mail.dk");
     
     }
     

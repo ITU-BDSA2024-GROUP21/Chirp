@@ -19,8 +19,8 @@ public partial class Program
         builder.Services.AddRazorPages();
         builder.Services.AddDbContext<ChirpDBContext>(options =>
             options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
-
-        builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
+        
+        builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = false)
             .AddEntityFrameworkStores<ChirpDBContext>();
         
         builder.Services.AddScoped<ICheepRepository, CheepRepository>();
@@ -32,6 +32,8 @@ public partial class Program
             {
                 o.ClientId = builder.Configuration["authentication_github_clientId"] ?? throw new InvalidOperationException("Client ID is null");
                 o.ClientSecret = builder.Configuration["authentication_github_clientSecret"] ?? throw new InvalidOperationException("Client Secret is null");
+                o.Scope.Add("user:email"); // Makes sure Github sends email & username
+                o.Scope.Add("read:user");
                 o.CallbackPath = "/signin-github";
             });
         

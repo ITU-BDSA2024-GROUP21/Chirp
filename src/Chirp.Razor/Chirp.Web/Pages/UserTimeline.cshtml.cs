@@ -11,7 +11,7 @@ public class UserTimelineModel : PageModel
     private int _page;
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly ICheepRepository _cheepRepository;
-    private Dictionary<string, bool> FollowerMap;
+    private Dictionary<string, bool> _followerMap;
 
 
     public UserTimelineModel(ICheepService cheepService, UserManager<ApplicationUser> userManager,ICheepRepository cheepRepository )
@@ -19,7 +19,7 @@ public class UserTimelineModel : PageModel
         _cheepService = cheepService;
         _userManager = userManager;
         _cheepRepository = cheepRepository;
-        FollowerMap = new Dictionary<string, bool>();
+        _followerMap = new Dictionary<string, bool>();
     }
     
     public async Task<IActionResult> OnPostDeleteCheepAsync(int cheepId)
@@ -38,17 +38,17 @@ public class UserTimelineModel : PageModel
             _page = int.Parse(Request.Query["page"]!) -1;
         }
         
-        if (User.Identity.IsAuthenticated)
+        if (User.Identity!.IsAuthenticated)
         {
             var user = await _userManager.GetUserAsync(User);
-            _cheepService.CheckFollowerExistElseCreate(user);
+            await _cheepService.CheckFollowerExistElseCreate(user!);
             Cheeps = await GetCheepsWhenLoggedIn(author);
         }
         else
         {
             Cheeps = await _cheepService.GetCheepsFromAuthor(author, _page);
         }
-        ViewData["FollowerMap"] = FollowerMap;
+        ViewData["FollowerMap"] = _followerMap;
         
 
         return Page();
@@ -76,7 +76,7 @@ public class UserTimelineModel : PageModel
         var guid = Guid.NewGuid();
         var cheepId = BitConverter.ToInt32(guid.ToByteArray(), 0);
 
-        await _cheepService.CreateCheep(User.Identity.Name.ToString(), email.ToString(),CheepInput.Text, DateTimeKind.Local.ToString(), cheepId);
+        await _cheepService.CreateCheep(User.Identity?.Name!, email!,CheepInput.Text, DateTimeKind.Local.ToString(), cheepId);
         return RedirectToPage("Public");
     }
 
@@ -96,7 +96,7 @@ public class UserTimelineModel : PageModel
         }
         
         await _cheepRepository.FollowAuthor(id,followingAuthorId);
-        FollowerMap[author.Name] = true;
+        _followerMap[author.Name] = true;
         return Redirect($"/{author.Name}");
     }
     public async Task<IActionResult> OnPostUnfollow(int followingAuthorId, string followerAuthor, int page)
@@ -112,7 +112,7 @@ public class UserTimelineModel : PageModel
         
         Console.WriteLine(followingAuthorId);
         await _cheepRepository.Unfollow(id,followingAuthorId);
-        FollowerMap[author.Name] = false;
+        _followerMap[author.Name] = false;
         return Redirect($"/{author.Name}");
     }
 
@@ -126,7 +126,7 @@ public class UserTimelineModel : PageModel
             Cheeps = await _cheepService.GetCheepsFromAuthor(author, _page);
             foreach (var cheep in Cheeps)
             {
-                FollowerMap[cheep.Author] = await _cheepService.IsFollowing(id, cheep.AuthorId);
+                _followerMap[cheep.Author] = await _cheepService.IsFollowing(id, cheep.AuthorId);
             }
 
             return Cheeps;
@@ -140,7 +140,7 @@ public class UserTimelineModel : PageModel
             Cheeps = await _cheepService.GetCheepsFromFollowedAuthor(followedAuthors, _page);
             foreach (var cheep in Cheeps)
             {
-                FollowerMap[cheep.Author] = await _cheepService.IsFollowing(id, cheep.AuthorId);
+                _followerMap[cheep.Author] = await _cheepService.IsFollowing(id, cheep.AuthorId);
             }
 
             return Cheeps;

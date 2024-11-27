@@ -7,8 +7,6 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
 using Chirp.Web.Pages;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Chirp.Web.Pages;
 
@@ -22,7 +20,7 @@ public class PublicModel : PageModel
     private Dictionary<string, bool> FollowerMap;
 
     [BindProperty]
-    public NootBoxModel CheepInput { get; set; }
+    public required NootBoxModel CheepInput { get; set; }
     
 
     public PublicModel(ICheepService cheepService, UserManager<ApplicationUser> userManager, ICheepRepository cheepRepository)
@@ -43,19 +41,19 @@ public class PublicModel : PageModel
         
         Cheeps = await _cheepService.GetCheeps(_page);
 
-        if (User.Identity.Name == null)
+        if (User.Identity?.Name == null)
         {
             ModelState.AddModelError("", "User identity is not valid.");
         }
         
 
-        if (User.Identity.IsAuthenticated)
+        if (User.Identity!.IsAuthenticated)
         {
             var user = await _userManager.GetUserAsync(User);
-            _cheepService.CheckFollowerExistElseCreate(user);
+            await _cheepService.CheckFollowerExistElseCreate(user!);
             
 
-            Author author = await _cheepService.GetAuthorByName(User.Identity.Name);
+            Author author = await _cheepService.GetAuthorByName(User.Identity.Name!);
             int id = author.AuthorId;
             foreach (var cheep in Cheeps)
             {
@@ -86,12 +84,12 @@ public class PublicModel : PageModel
         }
         
         var user = await _userManager.GetUserAsync(User);
-        var email = user.Email;
+        var email = user!.Email;
         
         var guid = Guid.NewGuid();
         var cheepId = BitConverter.ToInt32(guid.ToByteArray(), 0);
 
-        await _cheepService.CreateCheep(User.Identity.Name.ToString(),email.ToString() ,CheepInput.Text, DateTime.Now.AddHours(1).ToString(), cheepId);
+        await _cheepService.CreateCheep(User.Identity?.Name!,email! ,CheepInput.Text, DateTime.Now.AddHours(1).ToString("yyyy-MM-dd HH:mm:ss"), cheepId);
         return RedirectToPage("Public");
     }
 

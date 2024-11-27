@@ -9,7 +9,6 @@ public class NootBoxModel {
     [Microsoft.Build.Framework.Required]
     [StringLength(160, ErrorMessage = "Maximum length is {1}")]
     [Display(Name = "Message Text")]
-
-    public string Text { get; set; }
+    public required string Text { get; set; }
 
 }

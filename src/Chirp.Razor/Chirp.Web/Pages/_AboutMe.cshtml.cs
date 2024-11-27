@@ -4,8 +4,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using System.Text.Json;
-
-
+using Microsoft.Build.Framework;
 namespace Chirp.Web.Pages;
 
 public class AboutMeModel : PageModel
@@ -16,14 +15,12 @@ public class AboutMeModel : PageModel
     private readonly ICheepRepository _cheepRepository;
 
     [BindProperty]
-    public Author Author { get; set; }
-    public string? Email { get; set; }
-    List<String> FollowersList { get; set; }
-    public string Followers { get; set; }
-    
-    public List<Cheep> CheepsList { get; set; }
-    public  List<string> CheepsListString;
-    public string Cheeps { get; set; }
+    public required string? Email { get; set; }
+    public required List<String> FollowersList { get; set; }
+    public required string Followers { get; set; }
+    public required List<Cheep> CheepsList { get; set; }
+    public  required List<string> CheepsListString;
+    public required string Cheeps { get; set; }
 
     public AboutMeModel(ICheepRepository cheepRepository, SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager, ICheepService cheepService)
     {
@@ -46,13 +43,13 @@ public class AboutMeModel : PageModel
         }
         
         //Loading The users email adress
-        Author author = await _cheepService.GetAuthorByName(User.Identity.Name);
+        Author author = await _cheepService.GetAuthorByName(User.Identity?.Name!);
         Email = author.Email;
 
-        int Authorid = author.AuthorId;
+        int authorid = author.AuthorId;
         
         //loading who our uses is following
-        FollowersList = await _cheepRepository.GetFollowedAuthorsAsync(Authorid);
+        FollowersList = await _cheepRepository.GetFollowedAuthorsAsync(authorid);
         Followers = string.Join( ", ", FollowersList.ToArray() );
         
         //loading all the cheeps
@@ -82,8 +79,8 @@ public class AboutMeModel : PageModel
         var personalData = new Dictionary<string, object>();
 
         
-        var author = await _cheepService.GetAuthorByName(User.Identity.Name);
-        if (author != null)
+        var author = await _cheepService.GetAuthorByName(User.Identity?.Name!);
+        if (author != null!)
         {
             personalData.Add("Name", author.Name);
             personalData.Add("Email", author.Email);
@@ -108,11 +105,11 @@ public class AboutMeModel : PageModel
 
     
 
-    public async Task<IActionResult> OnPostForgetme(Author _author)
+    public async Task<IActionResult> OnPostForgetme(Author author)
 
     {
         var user = await _userManager.GetUserAsync(User);
-        Author author1 = await _cheepService.GetAuthorByName(User.Identity.Name);
+        Author author1 = await _cheepService.GetAuthorByName(User.Identity?.Name!);
         
         if (string.IsNullOrEmpty(author1.ToString()))
         {

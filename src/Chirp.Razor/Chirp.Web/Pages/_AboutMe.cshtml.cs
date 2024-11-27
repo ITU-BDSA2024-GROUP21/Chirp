@@ -9,7 +9,6 @@ namespace Chirp.Web.Pages;
 
 public class AboutMeModel : PageModel
 {
-    private readonly ICheepRepository _cheepRepository;
     private readonly SignInManager<ApplicationUser> _signInManager;
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly ICheepService _cheepService;
@@ -20,7 +19,6 @@ public class AboutMeModel : PageModel
 
     public AboutMeModel(ICheepRepository cheepRepository, SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager, ICheepService cheepService)
     {
-        _cheepRepository = cheepRepository;
         _signInManager = signInManager;
         _userManager = userManager;
         _cheepService = cheepService;
@@ -42,17 +40,18 @@ public class AboutMeModel : PageModel
         return Page();
     }
 
-    public async Task<IActionResult> OnPostForgetme(Author author)
+    public async Task<IActionResult> OnPostForgetme()
     {
-        Console.WriteLine("knap");
+        var user = await _userManager.GetUserAsync(User);
+        Author author = await _cheepService.GetAuthorByName(User.Identity.Name);
+        
         if (string.IsNullOrEmpty(author.ToString()))
         {
             Console.WriteLine("Has to have an author");
             return RedirectToPage();
         }
         
-        Console.WriteLine("Lort");
-        await _cheepRepository.DeleteAuthorAndCheeps(author);
+        await _cheepService.DeleteAuthorAndCheepsByEmail(author.Email);
             
         await _signInManager.SignOutAsync();
         

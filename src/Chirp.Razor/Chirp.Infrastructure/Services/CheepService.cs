@@ -87,7 +87,7 @@ public class CheepService : ICheepService
     {
         return await _cheepRepository.GetFollowedAuthorsAsync(authorId);
     }
-
+    
     public async Task<List<CheepDTO>> GetCheepsFromFollowedAuthor(IEnumerable<string> followedAuthors, int authorId)
     {
         return await _cheepRepository.GetCheepsFromFollowedAuthorsAsync(followedAuthors, authorId);
@@ -111,6 +111,11 @@ public class CheepService : ICheepService
             Email = user.Email,
         };
          _cheepRepository.ConvertAuthors(newAuthor).Wait();
+    }
+
+    public async Task DeleteAuthorAndCheepsByEmail(string email)
+    {
+        await _cheepRepository.DeleteAuthorAndCheepsByEmail(email);
     }
     
 

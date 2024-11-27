@@ -8,6 +8,7 @@ public class UnitTest
 {
     public async Task<ICheepRepository> RepositorySetUp()
     {
+        
         UserManager<ApplicationUser> userManager = null;
         // This is to create an in-memory SQLite connection
         var connection = new SqliteConnection("Filename=:memory:");
@@ -85,6 +86,7 @@ public class UnitTest
     [Fact]
     public async Task CreateNewAuthorTest()
     {
+        
         var repository4 = await RepositorySetUp();
 
         var testAuthorDTO = new AuthorDTO
@@ -137,5 +139,71 @@ public class UnitTest
         Assert.NotNull(testAuthor1);
         Assert.Equal(testCheepDTO.Text, cheepsByAuthor.First().Text);
     }
-    
+
+    [Fact]
+    public async Task FollowTest()
+    {
+        var repository6 = await RepositorySetUp();
+        var testAuthor1 = new Author
+        {
+            Name = "John10",
+            Email = "John10@gmail.com",
+            AuthorId = 6001,
+            Cheeps = null!,
+            Followers = null!,
+            Following = null!
+        };
+        await repository6.AddAuthorAsync(testAuthor1);
+        var testAuthor2 = new Author
+        {
+            Name = "John11",
+            Email = "John11@gmail.com",
+            AuthorId = 6002,
+            Cheeps = null!,
+            Followers = null!,
+            Following = null!
+        };
+        await repository6.AddAuthorAsync(testAuthor2);
+        await repository6.FollowAuthor(testAuthor1.AuthorId, testAuthor2.AuthorId);
+
+        var follows = await repository6.GetFollowedAuthorsAsync(testAuthor1.AuthorId);
+        Assert.Contains(testAuthor2.Name, follows);
+        
+    }
+    [Fact]
+    public async Task UnfollowTest()
+    {
+        var repository7 = await RepositorySetUp();
+        var testAuthor1 = new Author
+        {
+            Name = "John10",
+            Email = "John10@gmail.com",
+            AuthorId = 6001,
+            Cheeps = null!,
+            Followers = null!,
+            Following = null!
+        };
+        await repository7.AddAuthorAsync(testAuthor1);
+        var testAuthor2 = new Author
+        {
+            Name = "John11",
+            Email = "John11@gmail.com",
+            AuthorId = 6002,
+            Cheeps = null!,
+            Followers = null!,
+            Following = null!
+        };
+        await repository7.AddAuthorAsync(testAuthor2);
+        await repository7.FollowAuthor(testAuthor1.AuthorId, testAuthor2.AuthorId);
+
+        var follows = await repository7.GetFollowedAuthorsAsync(testAuthor1.AuthorId);
+        Assert.Contains(testAuthor2.Name, follows);
+        
+        await repository7.Unfollow(testAuthor1.AuthorId, testAuthor2.AuthorId);
+        var follows2 = await repository7.GetFollowedAuthorsAsync(testAuthor1.AuthorId);
+
+        Assert.DoesNotContain(testAuthor2.Name, follows2);
+        
+    }
 }
+    

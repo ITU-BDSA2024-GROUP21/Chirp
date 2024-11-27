@@ -82,11 +82,18 @@
     {
         <em>There are no cheeps so far.</em>
     }
-    
-    
-    
-    @if (currPage > 1) {
-        <button onclick="document.location='/@routeName?page=@prevPage'" @if (currPage <= 1) { <text>disabled</text> } class="PageButton" >Previous Page</button>
+    @if (currPage > 1 && Model.Cheeps.Count < 32)
+    {
+    <button onclick="document.location='/?page=@prevPage'" @if (currPage <= 1) { <text>disabled</text> } class="PageButton" >Previous Page</button>
     }
-    
-    <button onclick="document.location='/@routeName/?page=@nextPage'" style="float: right;" class="PageButton">Next Page</button>
+    @if (currPage > 1 && Model.Cheeps.Count >= 32) 
+    { 
+        <button onclick="document.location='/?page=@prevPage'" @if (currPage <= 1) { <text>disabled</text> } class="PageButton" >Previous Page</button> 
+        <button onclick="document.location='/?page=@nextPage'" style="float: right;" class="PageButton">Next Page</button> 
+    }
+    @if (Model.Cheeps.Count >= 32 && currPage == 1) 
+    { 
+        <div class="PButton">
+            <button onclick="document.location='/?page=@nextPage'" style="float: right;" class="PageButton">Next Page</button>
+        </div> 
+    }

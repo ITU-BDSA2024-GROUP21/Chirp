@@ -54,8 +54,7 @@ public class PublicModel : PageModel
             var user = await _userManager.GetUserAsync(User);
             _cheepService.CheckFollowerExistElseCreate(user);
             
-            
-            Console.WriteLine(User.Identity.Name);
+
             Author author = await _cheepService.GetAuthorByName(User.Identity.Name);
             int id = author.AuthorId;
             foreach (var cheep in Cheeps)

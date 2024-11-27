@@ -7,6 +7,7 @@ public interface ICheepRepository
     public Task<List<Cheep>> GetCheepsFromAuthor(string author, int page);
 
     public Task<Author> GetAuthorByName(string Name);
+    public Task<List<Cheep>> GetCheepsFromAuthor1(string author);
     public Task<Author> GetAuthorByEmail(string Email);
     public Task<Author> ConvertAuthors(AuthorDTO author);
     public Task<Cheep> ConvertCheeps(CheepDTO cheep, AuthorDTO author);
@@ -17,5 +18,6 @@ public interface ICheepRepository
     public Task<bool> IsFollowing(int followerId, int followedId);
     public Task Unfollow(int followingAuthorId, int followedAuthorId);
     public Task DeleteAuthorAndCheepsByEmail(string email);
+
 
 }

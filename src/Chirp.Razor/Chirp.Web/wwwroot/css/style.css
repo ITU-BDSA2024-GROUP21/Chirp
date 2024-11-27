@@ -330,8 +330,28 @@ ul.nav li a:hover {
 
 .ForgetMe{
     background: #f80000;
+    border-radius: 4px;
+    float: right;
 }
 
 .ForgetMe:hover {
     background: #cc0202;
 }
+
+.Aboutme{
+    display: flex;
+    justify-content: space-between;
+}
+
+.information{
+    border-radius: 4px;
+}
+
+.Informationandbutton{
+    display: flex;
+    justify-content: space-between;
+}
+
+
+
+

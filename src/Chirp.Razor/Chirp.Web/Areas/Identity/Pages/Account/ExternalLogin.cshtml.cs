@@ -145,6 +145,7 @@ namespace Chirp.Web.Areas.Identity.Pages.Account
                         Username = info.Principal.FindFirstValue(ClaimTypes.Name)
                     };
                 }
+                
                 if (Input.Complete())
                 {
                     return await OnPostConfirmationAsync("~/");

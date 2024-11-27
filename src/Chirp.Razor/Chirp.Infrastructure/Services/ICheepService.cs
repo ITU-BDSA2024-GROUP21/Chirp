@@ -13,4 +13,5 @@ public interface ICheepService
     public Task Unfollow(int followingAuthorId, int followerAuthorId);
     public Task CheckFollowerExistElseCreate(ApplicationUser user);
     public Task DeleteAuthorAndCheepsByEmail(string email);
+
 }

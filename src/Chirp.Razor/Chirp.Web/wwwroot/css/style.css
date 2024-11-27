@@ -119,6 +119,7 @@ div.page div.footer {
 .Noot{
     display: flex;
     justify-content: space-between;
+    align-items: flex-start;
 }
 
 .FollowButtonPublic{
@@ -285,6 +286,7 @@ button {
     background-color: transparent !important;
     padding: 0 !important;
     border: none !important;
+    padding-right: 25px !important;
     
 }
 
@@ -298,6 +300,22 @@ button {
     justify-content: space-between; /* Skubber indhold til venstre og højre */
    
 }
+
+
+
+.Followphoto{
+    width: 20px;
+    height: 20px;
+}
+
+
+
+
+.UnFollowphoto{
+    width: 20px;
+    height: 20px;
+}
+
 
 
 button:hover {
@@ -352,40 +370,5 @@ ul.nav li a:hover {
     justify-content: space-between;
 }
 
-.FollowButtonPublicButton{
-    background-color: transparent !important;
-    padding: 0 !important;
-    border: none !important;
-
-}
-
-.FollowButtonPublic:hover{
-    background-color: transparent !important;
-    padding: 0 !important;
-    border: none !important;
-}
-
-.Followphoto{
-    width: 20px;
-    height: 20px;
-}
-
-.UnfollowButtonPublicButton{
-    background-color: transparent !important;
-    padding: 0 !important;
-    border: none !important;
-
-}
-
-.UnfollowButtonPublic:hover{
-    background-color: transparent !important;
-    padding: 0 !important;
-    border: none !important;
-}
-
-.UnFollowphoto{
-    width: 20px;
-    height: 20px;
-}
 
 

@@ -16,7 +16,6 @@ public class UnitTest1 : PageTest
 {
     private Process _serverProcess;
     protected IBrowser _browser;
-    private ICheepRepository _cheepRepository;
     
     public override BrowserNewContextOptions ContextOptions()
     {
@@ -49,7 +48,7 @@ public class UnitTest1 : PageTest
     }
     
     //NOTE: PROGRAM SHOULD BE RUNNING BEFORE RUNNING THE UI TEST
-
+    
     
     //NootBoxIsVisibleWhenloggedIn is testing that a nootchat is visible
     //when a user is logged in.
@@ -179,18 +178,19 @@ public class UnitTest1 : PageTest
         await Page.GetByPlaceholder("password").FillAsync("Halløj1!");
         await Page.GetByRole(AriaRole.Button, new() { Name = "Log in" }).ClickAsync();
         
-        //Checks that the Noot-chat box is exiting
+        // Checks that the Noot-chat box is exiting
         await Expect(Page.Locator("#Text")).ToBeVisibleAsync();
         await Page.GetByRole(AriaRole.Link, new() { Name = "My timeline" }).ClickAsync();
-        //Checks that the Noot-chat box is exiting
+        // Checks that the Noot-chat box is exiting
         await Expect(Page.Locator("#Text")).ToBeVisibleAsync();
         await Page.Locator("#Text").ClickAsync();
-        //Makesure the test passes everytime by adding a unique identifier like timestamp
+        // Make sure the test passes everytime by adding a unique identifier like timestamp
         string uniqueMessage = $"Hello, I am feeling good!<script>alert('If you see this in a popup, you are in trouble!');</script>\n\n - {DateTime.Now:yyyy-MM-dd HH:mm:ss}";
         await Page.Locator("#Text").FillAsync(uniqueMessage);
         await Page.GetByRole(AriaRole.Button, new() { Name = "Share" }).ClickAsync();
         // Checks That the Noot is visible after posting
         await Expect(Page.Locator("li").Filter(new() { HasText = uniqueMessage })).ToBeVisibleAsync();
+        
         
     }
 
@@ -218,7 +218,7 @@ public class UnitTest1 : PageTest
     }
     
     [Test]
-    public async Task Registerworks()
+    public async Task RegisterTest()
     {
         await Page.GotoAsync("https://localhost:5273/");
     
@@ -234,18 +234,42 @@ public class UnitTest1 : PageTest
         await Page.GetByLabel("Confirm Password").FillAsync("Halløj691!");
     
         await Page.GetByRole(AriaRole.Button, new() { Name = "Register" }).ClickAsync();
-        var _content = await Page.ContentAsync();
-        Console.WriteLine(_content);
-        //await Page.WaitForURLAsync("**/RegisterConfirmation?email=*&returnUrl=*");
-
+        var content = await Page.ContentAsync();
         
+        Console.WriteLine(content);
+
         await Expect(Page.GetByRole(AriaRole.Link, new() { Name = "Click here to confirm your" })).ToBeVisibleAsync();
         await Page.GetByRole(AriaRole.Link, new() { Name = "Click here to confirm your" }).ClickAsync();
-
         
-        await _cheepRepository.DeleteAuthorByEmail("carla49@mail.dk");
     
     }
     
+    [Test]
+    public async Task DeleteTest()
+    {
+        await Page.GotoAsync("https://localhost:5273/");
+        
+        // Log in and navigate to users timeline
+        await Page.GetByRole(AriaRole.Link, new() { Name = "Login" }).ClickAsync();
+        await Page.GetByPlaceholder("name@example.com").ClickAsync();
+        await Page.GetByPlaceholder("name@example.com").FillAsync("marcus@mail.dk");
+        await Page.GetByPlaceholder("password").ClickAsync();
+        await Page.GetByPlaceholder("password").FillAsync("Halløj1!");
+        await Page.GetByRole(AriaRole.Button, new() { Name = "Log in" }).ClickAsync();
+        await Page.GetByRole(AriaRole.Link, new() { Name = "My timeline" }).ClickAsync();
+        
+        // Make Noot and check for existence
+        await Page.Locator("#Text").ClickAsync();
+        string uniqueMessage = $"hej med dig!! - {DateTime.Now:yyyy-MM-dd HH:mm:ss}";
+        await Page.Locator("#Text").FillAsync(uniqueMessage);
+        await Page.GetByRole(AriaRole.Button, new() { Name = "Share" }).ClickAsync();
+        await Page.GetByRole(AriaRole.Link, new() { Name = "My timeline" }).ClickAsync(); // Not sure why but it is necessary manually to navigate to personal timeline again
+        var specificCheep = Page.Locator("ul#messagelist li").Filter(new() { HasText = uniqueMessage });
+        await Expect(specificCheep).ToBeVisibleAsync();
+        
+        // Delete Noot and check that it no longer exists on users timeline
+        await specificCheep.GetByRole(AriaRole.Button, new() { Name = "Delete" }).ClickAsync();
+        await Expect(specificCheep).Not.ToBeVisibleAsync();
     
+    }
 }

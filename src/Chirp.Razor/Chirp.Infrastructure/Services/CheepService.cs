@@ -87,7 +87,7 @@ public class CheepService : ICheepService
     {
         return await _cheepRepository.GetFollowedAuthorsAsync(authorId);
     }
-
+    
     public async Task<List<CheepDTO>> GetCheepsFromFollowedAuthor(IEnumerable<string> followedAuthors, int authorId)
     {
         return await _cheepRepository.GetCheepsFromFollowedAuthorsAsync(followedAuthors, authorId);
@@ -101,6 +101,21 @@ public class CheepService : ICheepService
     public async Task Unfollow(int followingAuthorId, int followedAuthorId)
     {
         await _cheepRepository.Unfollow(followingAuthorId, followedAuthorId);
+    }
+
+    public async Task CheckFollowerExistElseCreate(ApplicationUser user)
+    {
+        AuthorDTO newAuthor = new AuthorDTO
+        {
+            Name = user.UserName,
+            Email = user.Email,
+        };
+         _cheepRepository.ConvertAuthors(newAuthor).Wait();
+    }
+
+    public async Task DeleteAuthorAndCheepsByEmail(string email)
+    {
+        await _cheepRepository.DeleteAuthorAndCheepsByEmail(email);
     }
     
     public async Task CheckFollowerExistElseCreate(ApplicationUser user)

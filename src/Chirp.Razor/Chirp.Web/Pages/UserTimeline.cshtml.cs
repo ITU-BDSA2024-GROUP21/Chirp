@@ -38,38 +38,15 @@ public class UserTimelineModel : PageModel
             _page = int.Parse(Request.Query["page"]!) -1;
         }
         
-        var user = await _userManager.GetUserAsync(User);
-        if (user == null)
+        if (User.Identity.IsAuthenticated)
         {
-            return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
-        }
-        
-        var currentAuthor = await _cheepService.GetAuthorByName(user.UserName);
-        if (currentAuthor == null)
-        {
-            return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
-        }
-
-        if (user.UserName != author)
-        {
-            Cheeps = await _cheepService.GetCheepsFromAuthor(author, _page);
-            
+            var user = await _userManager.GetUserAsync(User);
+            _cheepService.CheckFollowerExistElseCreate(user);
+            Cheeps = await GetCheepsWhenLoggedIn(author);
         }
         else
         {
-            var followedAuthors = await _cheepService.GetFollowedAuthors(currentAuthor.AuthorId);
-            followedAuthors.Add(user.UserName);
-        
-            Cheeps = await _cheepService.GetCheepsFromFollowedAuthor(followedAuthors, _page);
-        }
-        Author _author = await _cheepService.GetAuthorByName(User.Identity.Name);
-        int id = _author.AuthorId;
-        if (User.Identity.IsAuthenticated)
-        {
-            foreach (var cheep in Cheeps)
-            {
-                FollowerMap[cheep.Author] = await _cheepService.IsFollowing(id, cheep.AuthorId);
-            }
+            Cheeps = await _cheepService.GetCheepsFromAuthor(author, _page);
         }
         ViewData["FollowerMap"] = FollowerMap;
         
@@ -137,6 +114,37 @@ public class UserTimelineModel : PageModel
         await _cheepRepository.Unfollow(id,followingAuthorId);
         FollowerMap[author.Name] = false;
         return Redirect($"/{author.Name}");
+    }
+
+    public async Task<List<CheepDTO>> GetCheepsWhenLoggedIn(string author)
+    {
+        var user = await _userManager.GetUserAsync(User);
+        Author _author = await _cheepService.GetAuthorByName(User.Identity.Name);
+        int id = _author.AuthorId;
+        if (user.UserName != author)
+        {
+            Cheeps = await _cheepService.GetCheepsFromAuthor(author, _page);
+            foreach (var cheep in Cheeps)
+            {
+                FollowerMap[cheep.Author] = await _cheepService.IsFollowing(id, cheep.AuthorId);
+            }
+
+            return Cheeps;
+        }
+        else
+        {
+            var currentAuthor = await _cheepService.GetAuthorByName(user.UserName);
+            var followedAuthors = await _cheepService.GetFollowedAuthors(currentAuthor.AuthorId);
+            followedAuthors.Add(user.UserName);
+        
+            Cheeps = await _cheepService.GetCheepsFromFollowedAuthor(followedAuthors, _page);
+            foreach (var cheep in Cheeps)
+            {
+                FollowerMap[cheep.Author] = await _cheepService.IsFollowing(id, cheep.AuthorId);
+            }
+
+            return Cheeps;
+        }
     }
     
     

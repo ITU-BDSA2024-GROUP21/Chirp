@@ -20,4 +20,7 @@ public interface ICheepRepository
     public Task DeleteAuthorByEmail(string email);
     public Task<List<Cheep>> GetCheepsFromAuthor1(string author);
 
+    public Task DeleteAuthorAndCheepsByEmail(string email);
+
+
 }

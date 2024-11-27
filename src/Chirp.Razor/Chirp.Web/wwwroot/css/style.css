@@ -312,6 +312,7 @@ ul.nav li a:hover {
 .ForgetMe{
     background: #f80000;
     border-radius: 4px;
+    float: right;
 }
 
 .ForgetMe:hover {
@@ -326,3 +327,12 @@ ul.nav li a:hover {
 .information{
     border-radius: 4px;
 }
+
+.Informationandbutton{
+    display: flex;
+    justify-content: space-between;
+}
+
+
+
+

@@ -13,6 +13,7 @@ public class AboutMeModel : PageModel
     private readonly SignInManager<ApplicationUser> _signInManager;
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly ICheepService _cheepService;
+    private readonly ICheepRepository _cheepRepository;
 
     [BindProperty]
     public Author Author { get; set; }
@@ -30,6 +31,7 @@ public class AboutMeModel : PageModel
         _userManager = userManager;
         _cheepService = cheepService;
         CheepsListString = new List<string>();
+        _cheepRepository = cheepRepository;
     }
 
    
@@ -106,19 +108,19 @@ public class AboutMeModel : PageModel
 
     
 
-    public async Task<IActionResult> OnPostForgetme(Author author)
+    public async Task<IActionResult> OnPostForgetme(Author _author)
 
     {
         var user = await _userManager.GetUserAsync(User);
-        Author author = await _cheepService.GetAuthorByName(User.Identity.Name);
+        Author author1 = await _cheepService.GetAuthorByName(User.Identity.Name);
         
-        if (string.IsNullOrEmpty(author.ToString()))
+        if (string.IsNullOrEmpty(author1.ToString()))
         {
             Console.WriteLine("Has to have an author");
             return Redirect("/Identity/Account/Login");
         }
         
-        await _cheepService.DeleteAuthorAndCheepsByEmail(author.Email);
+        await _cheepService.DeleteAuthorAndCheepsByEmail(author1.Email);
             
         await _signInManager.SignOutAsync();
         

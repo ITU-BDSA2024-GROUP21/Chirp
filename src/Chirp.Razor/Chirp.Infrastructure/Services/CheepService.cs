@@ -103,16 +103,6 @@ public class CheepService : ICheepService
         await _cheepRepository.Unfollow(followingAuthorId, followedAuthorId);
     }
 
-    public async Task CheckFollowerExistElseCreate(ApplicationUser user)
-    {
-        AuthorDTO newAuthor = new AuthorDTO
-        {
-            Name = user.UserName,
-            Email = user.Email,
-        };
-         _cheepRepository.ConvertAuthors(newAuthor).Wait();
-    }
-
     public async Task DeleteAuthorAndCheepsByEmail(string email)
     {
         await _cheepRepository.DeleteAuthorAndCheepsByEmail(email);

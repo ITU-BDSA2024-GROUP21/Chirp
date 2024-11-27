@@ -35,6 +35,11 @@
     <_ContentIncludedByDefault Remove="PlaywrightTests\obj\Debug\net8.0\PlaywrightTests.sourcelink.json" />
     <_ContentIncludedByDefault Remove="PlaywrightTests\obj\PlaywrightTests.csproj.nuget.dgspec.json" />
     <_ContentIncludedByDefault Remove="PlaywrightTests\obj\project.assets.json" />
+    <_ContentIncludedByDefault Remove="PlaywrightTests\bin\Debug\net8.0\appsettings.Development.json" />
+    <_ContentIncludedByDefault Remove="PlaywrightTests\bin\Debug\net8.0\appsettings.json" />
+    <_ContentIncludedByDefault Remove="PlaywrightTests\bin\Debug\net8.0\Chirp.Web.deps.json" />
+    <_ContentIncludedByDefault Remove="PlaywrightTests\bin\Debug\net8.0\Chirp.Web.runtimeconfig.json" />
+    <_ContentIncludedByDefault Remove="PlaywrightTests\bin\Debug\net8.0\Chirp.Web.staticwebassets.runtime.json" />
   </ItemGroup>
 
 </Project>

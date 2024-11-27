@@ -90,7 +90,9 @@ public class CheepService : ICheepService
     
     public async Task<List<CheepDTO>> GetCheepsFromFollowedAuthor(IEnumerable<string> followedAuthors, int authorId)
     {
-        return await _cheepRepository.GetCheepsFromFollowedAuthorsAsync(followedAuthors, authorId);
+        var cheep = await _cheepRepository.GetCheepsFromFollowedAuthorsAsync(followedAuthors, authorId);
+        var cheeps = DTOConversion(cheep);
+        return cheeps;
     }
 
     public async Task<bool> IsFollowing(int followingAuthorId, int followedAuthorId)

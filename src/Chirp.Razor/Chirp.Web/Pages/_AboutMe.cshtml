@@ -6,7 +6,7 @@
     var routeName = HttpContext.GetRouteValue("author");
 }
 <div>
-        @if( routeName.ToString().EndsWith("s"))
+        @if( routeName!.ToString()!.EndsWith("s"))
         {
             <h2> @routeName' Profile </h2> 
         }
@@ -43,7 +43,7 @@
             </div>
             <div class="ForgetMeDiv">
                 <form method="post" asp-page-handler="Forgetme">
-                    <input type="hidden" name="author" value="@User.Identity.Name">
+                    <input type="hidden" name="author" value="@User.Identity?.Name">
                     <button type="submit" class="ForgetMe">Forget Me!</button>
                 </form>
             </div>

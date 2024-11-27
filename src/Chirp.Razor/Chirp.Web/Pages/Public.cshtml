@@ -43,7 +43,9 @@
                                 <input type="hidden" name="followingAuthorId" value="@cheep.AuthorId"/>
                                 <input type="hidden" name="followerAuthor" value="@User.Identity.Name"/>
                                 <input type="hidden" name="page" value="@currPage"/>
-                                <button class="FollowButtonPublic" type="submit">Follow</button>
+                                <button class="FollowButtonPublic" type="submit">
+                                    <img class="Followphoto" src="/images/Follow.png"/>
+                                </button>
                             </form>
                         }
                         else
@@ -52,7 +54,9 @@
                                 <input type="hidden" name="followingAuthorId" value="@cheep.AuthorId"/>
                                 <input type="hidden" name="followerAuthor" value="@User.Identity.Name"/>
                                 <input type="hidden" name="page" value="@currPage"/>
-                                <button class="UnfollowButtonPublic" type="submit">Unfollow</button>
+                                <button class="UnfollowButtonPublic" type="submit">
+                                    <img class="UnFollowphoto" src="/images/Unfollow.png"/>
+                                </button>
                             </form>
                             
                         }

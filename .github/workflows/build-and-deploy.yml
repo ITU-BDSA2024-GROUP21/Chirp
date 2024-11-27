@@ -32,7 +32,9 @@ jobs:
           name: .net-app
           path: ./myapp
       - name: Apply migrations
-        run: dotnet ef database update
+        run: |
+          dotnet tool run dotnet-ef
+          dotnet ef database update
 
   deploy:
     runs-on: ubuntu-latest

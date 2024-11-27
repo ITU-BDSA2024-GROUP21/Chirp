@@ -43,7 +43,6 @@ public partial class Program
         {
             var db = scope.ServiceProvider.GetRequiredService<ChirpDBContext>();
             db.Database.EnsureCreated();
-            db.Database.Migrate();
             DbInitializer.SeedDatabase(db);
         }
 

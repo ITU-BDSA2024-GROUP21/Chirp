@@ -12,6 +12,7 @@ public class UserTimelineModel : PageModel
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly ICheepRepository _cheepRepository;
     private Dictionary<string, bool> _followerMap;
+    public BioDTO Bio { get; set; }
 
 
     public UserTimelineModel(ICheepService cheepService, UserManager<ApplicationUser> userManager,ICheepRepository cheepRepository )
@@ -49,7 +50,12 @@ public class UserTimelineModel : PageModel
             Cheeps = await _cheepService.GetCheepsFromAuthor(author, _page);
         }
         ViewData["FollowerMap"] = _followerMap;
+        Author author1 = await _cheepService.GetAuthorByName(User.Identity?.Name!);
         
+        if (await _cheepRepository.AuthorHasBio(author1.Name))
+        {
+            Bio = await _cheepService.GetBio(User.Identity?.Name!);
+        }
 
         return Page();
     }

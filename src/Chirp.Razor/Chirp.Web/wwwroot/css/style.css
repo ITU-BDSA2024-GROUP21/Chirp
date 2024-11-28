@@ -386,3 +386,7 @@ ul.nav li a:hover {
     justify-content: left;
 }
 
+.BioDiv{
+    display: flex;
+}
+

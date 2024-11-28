@@ -7,7 +7,7 @@ public class BioBoxModel {
     
     [BindProperty]
     [Microsoft.Build.Framework.Required]
-    [StringLength(160, ErrorMessage = "Maximum length is {1}")]
+    [StringLength(300, ErrorMessage = "Maximum length is {1}")]
     [Display(Name = "Message Text")]
     public required string Text { get; set; }
 

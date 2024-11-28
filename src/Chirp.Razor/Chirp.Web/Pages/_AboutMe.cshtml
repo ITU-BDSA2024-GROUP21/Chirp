@@ -6,7 +6,7 @@
     var routeName = HttpContext.GetRouteValue("author");
     bool whichbutton;
 }
-<partial name ="Shared/_BioBoxPartial" model="Model.BioInput"/>
+
 <div>
         @if( routeName!.ToString()!.EndsWith("s"))
         {
@@ -52,30 +52,36 @@
             </div>
            
         </li>
+        <li>
         @if( routeName.ToString()!.EndsWith("s"))
         {
-            <h2> @routeName' BIO </h2>
+            <h3> @routeName' BIO </h3>
         }
         else
         {
-            <h2> @routeName's BIO </h2>
+            <h3> @routeName's BIO </h3>
         }
-        @if (Model.Bio != null)
-        {
-            <p>
-                <strong>
-                    <a href="/@Model.Bio.Author">@Model.Bio.Author</a>
-                </strong>
-                @Model.Bio.Text
-            </p>
-        } else
-        {
-            <em>There are no Bio so far.</em>
-        }
+        <div class="BioDiv">
+            <div>
+            @if (Model.Bio != null)
+            {
+                <p>
+                    @Model.Bio.Text
+                </p>
+            }
+            else
+            {
+                <em>There are no Bio so far.</em>
+            }
+            </div>
+            <partial name="Shared/_BioBoxPartial" model="Model.BioInput"/>
+            <br/>
+            <br/>
+        </div>
 
 
 
-
+        </li>
     </ul>
     
    

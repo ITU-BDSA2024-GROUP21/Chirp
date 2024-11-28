@@ -82,6 +82,11 @@ public class AboutMeModel : PageModel
         {
             return NotFound("User not found.");
         }
+        Author author1 = await _cheepService.GetAuthorByName(User.Identity?.Name!);
+        if (await _cheepRepository.AuthorHasBio(author1.Name))
+        {
+            Bio = await _cheepService.GetBio(User.Identity?.Name!);
+        }
 
         var personalData = new Dictionary<string, object>();
 
@@ -100,6 +105,8 @@ public class AboutMeModel : PageModel
             // Cheeps
             var cheepsList = await _cheepRepository.GetCheepsFromAuthor1(author.Name);
             personalData.Add("Noots", cheepsList.Select(c => c.Text)); // Kun tekst
+            
+            personalData.Add("Bio", Bio.Text);
         }
 
         // Returner som JSON-fil

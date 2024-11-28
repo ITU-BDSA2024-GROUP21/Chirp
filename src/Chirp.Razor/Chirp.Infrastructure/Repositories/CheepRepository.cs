@@ -221,5 +221,29 @@ public class CheepRepository : ICheepRepository
         await _chirpDbContext.SaveChangesAsync();
     }
     
+    public async Task<Bio> ConvertBio(BioDTO bio, AuthorDTO author)
+    {
+        var _author = await ConvertAuthors(author);
+        
+        Bio newBio = new Bio { Author = _author, Text = bio.Text };
+        
+        
+        await _chirpDbContext.Bios.AddAsync(newBio);
+        await _chirpDbContext.SaveChangesAsync();
+        return newBio;
+
+    }
+    
+    public async Task<List<Bio>> GetBio(int page)
+    {
+        var sqlQuery = _chirpDbContext.Bios
+            .Select(Bio => Bio)
+            .Include(Bio => Bio.Author)
+            .Skip(page * 32)
+            .Take(32);
+
+        var result = await sqlQuery.ToListAsync();
+        return result;
+    }
 
 }

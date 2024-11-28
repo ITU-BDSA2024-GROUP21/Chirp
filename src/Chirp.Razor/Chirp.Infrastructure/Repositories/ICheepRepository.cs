@@ -18,6 +18,7 @@ public interface ICheepRepository
     public Task<bool> IsFollowing(int followerId, int followedId);
     public Task Unfollow(int followingAuthorId, int followedAuthorId);
     public Task DeleteAuthorAndCheepsByEmail(string email);
-
-
+    
+    public Task<Bio> ConvertBio(BioDTO newBio, AuthorDTO newAuthor);
+    public Task<List<Bio>> GetBio(int page);
 }

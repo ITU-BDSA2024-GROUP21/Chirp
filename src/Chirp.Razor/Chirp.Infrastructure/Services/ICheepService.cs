@@ -13,5 +13,7 @@ public interface ICheepService
     public Task Unfollow(int followingAuthorId, int followerAuthorId);
     public Task CheckFollowerExistElseCreate(ApplicationUser user);
     public Task DeleteAuthorAndCheepsByEmail(string email);
+    public Task<Bio> CreateBIO(string username, string email, string message, int id);
+    public Task<List<BioDTO>> GetBio(int page);
 
 }

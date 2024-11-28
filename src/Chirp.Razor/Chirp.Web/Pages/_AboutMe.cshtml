@@ -4,7 +4,9 @@
     ViewData["Title"] = "Twitter";
     Layout = "Shared/_Layout";
     var routeName = HttpContext.GetRouteValue("author");
+    bool whichbutton;
 }
+<partial name ="Shared/_BioBoxPartial" model="Model.BioInput"/>
 <div>
         @if( routeName!.ToString()!.EndsWith("s"))
         {
@@ -27,29 +29,56 @@
                 
             </div>
             <div class="Informationandbutton">
-            <div>
-                <p><strong>Name:</strong> @routeName</p>
-                <br>
+                <div>
+                    <p><strong>Name:</strong> @routeName</p>
+                    <br>
             
-                <p><strong>Email:</strong> @Model.Email</p>
-                <br>
-                <p><strong>Following:</strong></p>
-                <p>@Model.Followers</p>
-                <br>
-                <p><strong>Noots:</strong></p>
-                <p>@Model.Cheeps</p>
-                <br>
-                <br>
-            </div>
-            <div class="ForgetMeDiv">
-                <form method="post" asp-page-handler="Forgetme">
-                    <input type="hidden" name="author" value="@User.Identity?.Name">
-                    <button type="submit" class="ForgetMe">Forget Me!</button>
-                </form>
-            </div>
+                    <p><strong>Email:</strong> @Model.Email</p>
+                    <br>
+                    <p><strong>Following:</strong></p>
+                    <p>@Model.Followers</p>
+                    <br>
+                    <p><strong>Noots:</strong></p>
+                    <p>@Model.Cheeps</p>
+                    <br>
+                    <br>
+                </div>
+                <div class="ForgetMeDiv">
+                    <form method="post" asp-page-handler="Forgetme">
+                        <input type="hidden" name="author" value="@User.Identity?.Name">
+                        <button type="submit" class="ForgetMe">Forget Me!</button>
+                    </form>
+                </div>
             </div>
            
         </li>
+        @if( routeName!.ToString()!.EndsWith("s"))
+        {
+            <h2> @routeName' BIO </h2>
+        }
+        else
+        {
+            <h2> @routeName's BIO </h2>
+        }
+        @if (Model.Bio.Any())
+        {
+            @foreach (var bio in Model.Bio)
+            {
+                <p>
+                    <strong>
+                        <a href="/@bio.Author">@bio.Author</a>
+                    </strong>
+                    @bio.Text
+
+                </p>
+            }
+        } else
+        {
+            <em>There are no Bio so far.</em>
+        }
+
+
+
 
     </ul>
     

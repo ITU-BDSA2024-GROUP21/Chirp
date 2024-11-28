@@ -1,0 +1,22 @@
+@using Chirp.Web
+@using Microsoft.AspNetCore.Identity
+
+@model NootBoxModel
+
+@if (User.Identity.IsAuthenticated)
+{
+    <head>
+        <link href="~/css/style.css" rel="stylesheet" type="text/css"/>
+    </head>
+    <body>
+    <div class="biobox">
+        <h3> @(User.Identity.Name)'s Bio</h3>
+        <form asp-page="post" method="post">
+            <div asp-validation-summary="All"></div>
+            <input style="float: left" type="text" asp-for="Text" class="form-control" >
+            <span asp-validation-for="Text"></span>
+            <input type="submit" value="Edit">
+        </form>
+    </div>
+    </body>
+}

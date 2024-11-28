@@ -21,6 +21,8 @@ public class AboutMeModel : PageModel
     public required List<Cheep> CheepsList { get; set; }
     public  required List<string> CheepsListString;
     public required string Cheeps { get; set; }
+    public bool whichButton = false;
+    public List<BioDTO> Bio { get; set; }
 
     public AboutMeModel(ICheepRepository cheepRepository, SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager, ICheepService cheepService)
     {
@@ -31,7 +33,8 @@ public class AboutMeModel : PageModel
         _cheepRepository = cheepRepository;
     }
 
-   
+    [BindProperty]
+    public BioBoxModel BioInput { get; set; }
     
     public async Task<IActionResult> OnGet()
     {
@@ -123,6 +126,44 @@ public class AboutMeModel : PageModel
         
         return RedirectToPage();
     }
+
+    public async Task<IActionResult> OnPostedit()
+    {
+        whichButton = true;
+        return Redirect(whichButton ? "/AboutMe" : "/AboutMe");
+    }
+
+    public async Task<IActionResult> OnPostsave()
+    {
+        whichButton = false;
+        return Redirect(whichButton ? "/AboutMe" : "/AboutMe");
+    }
     
+    public async Task<IActionResult> OnPost()
+    {
+        if (string.IsNullOrWhiteSpace(BioInput.Text))
+        {
+            ModelState.AddModelError("CheepInput.Text", "The message can't be empty.");
+        }
+        else if (BioInput.Text.Length > 160)
+        {
+            ModelState.AddModelError("CheepInput.Text", "The message can't be longer than 160 characters");
+        }
+
+        if (!ModelState.IsValid)
+        {
+            Bio = await _cheepService.GetBio(1);
+            return Page();
+        }
+        
+        var user = await _userManager.GetUserAsync(User);
+        var email = user.Email;
+        
+        var guid = Guid.NewGuid();
+        var bioId = BitConverter.ToInt32(guid.ToByteArray(), 0);
+
+        await _cheepService.CreateBIO(User.Identity?.Name!, email!,BioInput.Text, bioId);
+        return RedirectToPage("AboutMe");
+    }
     
 }

@@ -119,4 +119,48 @@ public class CheepService : ICheepService
         };
         _cheepRepository.ConvertAuthors(newAuthor).Wait();
     }
+    
+    public async Task<Bio> CreateBIO(string username,  string email, string message, int id)
+    {
+        AuthorDTO newAuthor = new AuthorDTO
+        {
+            Name = username,
+            Email = email,
+        };
+        var author = await _cheepRepository.ConvertAuthors(newAuthor);
+
+        BioDTO newBio = new BioDTO
+        {
+            Author = username,
+            Text = message,
+            BioId = id,
+            AuthorId = author.AuthorId
+        };
+        
+        
+        var bio = await _cheepRepository.ConvertBio(newBio, newAuthor);
+        return bio;
+    }
+    
+    private static List<BioDTO> DTOConversionBio(List<Bio> bios)
+    {
+        var list = new List<BioDTO>();
+        foreach (var bio in bios)
+        {
+            list.Add(new BioDTO
+            {
+                Author = bio.Author.Name,
+                Text = bio.Text,
+                BioId = bio.BioId,
+                AuthorId = bio.Author.AuthorId
+            });
+        }
+        return list;
+    }
+    public async Task<List<BioDTO>> GetBio(int page)
+    {
+        var result = await _cheepRepository.GetBio(page);
+        var Bio = DTOConversionBio(result);
+        return Bio;
+    }
 }

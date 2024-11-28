@@ -12,6 +12,7 @@ public class ChirpDBContext : IdentityDbContext<ApplicationUser>
     public DbSet<Cheep> Cheeps { get; set; }
     public DbSet<Author> Authors { get; set; }
     public DbSet<AuthorFollow> AuthorFollows { get; set; }
+    public DbSet<Bio> Bios { get; set; }
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

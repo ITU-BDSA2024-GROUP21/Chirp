@@ -21,8 +21,7 @@ public class AboutMeModel : PageModel
     public required List<Cheep> CheepsList { get; set; }
     public  required List<string> CheepsListString;
     public required string Cheeps { get; set; }
-    public bool whichButton = false;
-    public List<BioDTO> Bio { get; set; }
+    public BioDTO Bio { get; set; }
 
     public AboutMeModel(ICheepRepository cheepRepository, SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager, ICheepService cheepService)
     {
@@ -48,6 +47,11 @@ public class AboutMeModel : PageModel
         //Loading The users email adress
         Author author = await _cheepService.GetAuthorByName(User.Identity?.Name!);
         Email = author.Email;
+
+        if (await _cheepRepository.AuthorHasBio(author.Name))
+        {
+            Bio = await _cheepService.GetBio(User.Identity?.Name!);
+        }
 
         int authorid = author.AuthorId;
         
@@ -126,44 +130,40 @@ public class AboutMeModel : PageModel
         
         return RedirectToPage();
     }
-
-    public async Task<IActionResult> OnPostedit()
-    {
-        whichButton = true;
-        return Redirect(whichButton ? "/AboutMe" : "/AboutMe");
-    }
-
-    public async Task<IActionResult> OnPostsave()
-    {
-        whichButton = false;
-        return Redirect(whichButton ? "/AboutMe" : "/AboutMe");
-    }
     
     public async Task<IActionResult> OnPost()
     {
+        var author = await _cheepService.GetAuthorByName(User.Identity?.Name!);
+        Console.WriteLine("HEJ" + author.Name);
+        var user = await _userManager.GetUserAsync(User);
+        if (await _cheepRepository.AuthorHasBio(User.Identity?.Name!))
+        {
+            await _cheepRepository.DeleteBio(author);
+            Console.WriteLine("Has to have an author");
+        } 
+
         if (string.IsNullOrWhiteSpace(BioInput.Text))
         {
             ModelState.AddModelError("CheepInput.Text", "The message can't be empty.");
         }
-        else if (BioInput.Text.Length > 160)
+        else if (BioInput.Text.Length > 300)
         {
             ModelState.AddModelError("CheepInput.Text", "The message can't be longer than 160 characters");
         }
 
         if (!ModelState.IsValid)
         {
-            Bio = await _cheepService.GetBio(1);
+            Bio = await _cheepService.GetBio(author.Name);
             return Page();
         }
-        
-        var user = await _userManager.GetUserAsync(User);
         var email = user.Email;
         
         var guid = Guid.NewGuid();
         var bioId = BitConverter.ToInt32(guid.ToByteArray(), 0);
 
         await _cheepService.CreateBIO(User.Identity?.Name!, email!,BioInput.Text, bioId);
-        return RedirectToPage("AboutMe");
+        return RedirectToPage("./_AboutMe");
     }
+    
     
 }

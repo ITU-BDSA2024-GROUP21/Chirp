@@ -33,6 +33,16 @@ public class ChirpDBContext : IdentityDbContext<ApplicationUser>
             .WithMany(a => a.Followers)
             .HasForeignKey(af => af.FollowingId)
             .OnDelete(DeleteBehavior.Restrict);
+        
+        modelBuilder.Entity<Bio>()
+            .HasKey(b => new { b.BioId, b.AuthorId });
+        
+        modelBuilder.Entity<Bio>()
+            .HasOne(b => b.Author)
+            .WithOne(a => a.Bio)
+            .HasForeignKey<Bio>(b => b.AuthorId)
+            .OnDelete(DeleteBehavior.Restrict);
+            
     }
     
 }

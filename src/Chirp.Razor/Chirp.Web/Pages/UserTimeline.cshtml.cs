@@ -74,16 +74,12 @@ public class UserTimelineModel : PageModel
         var email = user.Email;
         
         var guid = Guid.NewGuid();
-        var cheepId = BitConverter.ToInt32(guid.ToByteArray(), 0);
+        var cheepId = BitConverter.ToInt32(guid.ToByteArray(), 1);
 
         await _cheepService.CreateCheep(User.Identity?.Name!, email!,CheepInput.Text, DateTimeKind.Local.ToString(), cheepId);
         return RedirectToPage("Public");
     }
-
-    public static int ConvertGuidToInt(Guid guid)
-    {
-        return BitConverter.ToInt32(guid.ToByteArray(), 0);
-    }
+    
     public async Task<IActionResult> OnPostFollow(int followingAuthorId, string followerAuthor, int page)
     {
         Author author = await _cheepService.GetAuthorByName(followerAuthor);

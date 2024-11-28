@@ -52,7 +52,7 @@
             </div>
            
         </li>
-        @if( routeName!.ToString()!.EndsWith("s"))
+        @if( routeName.ToString()!.EndsWith("s"))
         {
             <h2> @routeName' BIO </h2>
         }
@@ -60,18 +60,14 @@
         {
             <h2> @routeName's BIO </h2>
         }
-        @if (Model.Bio.Any())
+        @if (Model.Bio != null)
         {
-            @foreach (var bio in Model.Bio)
-            {
-                <p>
-                    <strong>
-                        <a href="/@bio.Author">@bio.Author</a>
-                    </strong>
-                    @bio.Text
-
-                </p>
-            }
+            <p>
+                <strong>
+                    <a href="/@Model.Bio.Author">@Model.Bio.Author</a>
+                </strong>
+                @Model.Bio.Text
+            </p>
         } else
         {
             <em>There are no Bio so far.</em>

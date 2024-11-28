@@ -20,5 +20,7 @@ public interface ICheepRepository
     public Task DeleteAuthorAndCheepsByEmail(string email);
     
     public Task<Bio> ConvertBio(BioDTO newBio, AuthorDTO newAuthor);
-    public Task<List<Bio>> GetBio(int page);
+    public Task<Bio> GetBio(string author);
+    public Task<bool> AuthorHasBio(string author);
+    public Task DeleteBio(Author author);
 }

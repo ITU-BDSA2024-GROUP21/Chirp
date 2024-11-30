@@ -1,4 +1,7 @@
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using Xunit.Abstractions;
 
 namespace Chirp.Razor.Tests;
 using Microsoft.Data.Sqlite;
@@ -6,9 +9,41 @@ using Xunit;
 
 public class UnitTest
 {
+    private readonly ITestOutputHelper _testOutputHelper;
+
+    public UnitTest(ITestOutputHelper testOutputHelper)
+    {
+        _testOutputHelper = testOutputHelper;
+    }
+
+    public static UserManager<ApplicationUser> GetUserManager(ChirpDBContext context)
+    {
+        var userStore = new UserStore<ApplicationUser>(context);
+        var optionsManager = Options.Create(new IdentityOptions());
+        var passwordHasher = new PasswordHasher<ApplicationUser>();
+        var userValidators = new List<IUserValidator<ApplicationUser>> { new UserValidator<ApplicationUser>() };
+        var passwordValidators = new List<IPasswordValidator<ApplicationUser>> { new PasswordValidator<ApplicationUser>() };
+        var lookupNormalizer = new UpperInvariantLookupNormalizer();
+        var errorDescriber = new IdentityErrorDescriber();
+        var services = new ServiceCollection();
+        var logger = new Logger<UserManager<ApplicationUser>>(new LoggerFactory());
+
+        var userManager = new UserManager<ApplicationUser>(
+            userStore,
+            optionsManager,
+            passwordHasher,
+            userValidators,
+            passwordValidators,
+            lookupNormalizer,
+            errorDescriber,
+            services.BuildServiceProvider(),
+            logger
+        );
+        return userManager;
+    }
+
     public async Task<ICheepRepository> RepositorySetUp()
     {
-        UserManager<ApplicationUser> userManager = null;
         // This is to create an in-memory SQLite connection
         var connection = new SqliteConnection("Filename=:memory:");
         await connection.OpenAsync();
@@ -16,6 +51,7 @@ public class UnitTest
 
         // Then we create the ChirpDBContext instance with builder.Options
         var context = new ChirpDBContext(builder.Options);
+        var userManager = GetUserManager(context);
     
         // Then we ensure that the database schema is created
         await context.Database.EnsureDeletedAsync();
@@ -137,5 +173,71 @@ public class UnitTest
         Assert.NotNull(testAuthor1);
         Assert.Equal(testCheepDTO.Text, cheepsByAuthor.First().Text);
     }
-    
+
+    [Fact]
+    public async Task DeleteAuthorTest()
+    {
+        var repository6 = await RepositorySetUp();
+
+        var testAuthorDTO = new AuthorDTO
+        {
+            Name = "Percy_Jackson1",
+            Email = "Percy.Jackson1@gmail.com"
+        };
+        
+        var Author = await repository6.ConvertAuthors(testAuthorDTO);
+        _testOutputHelper.WriteLine(Author.Email);
+        Assert.Equal(await repository6.CheckAuthorExists(testAuthorDTO), Author);
+        var email = Author.Email;
+       
+        
+        await repository6.DeleteAuthorAndCheepsByEmail(email);
+        
+       Assert.Null(await repository6.CheckAuthorExists(testAuthorDTO));
+    }
+
+    [Fact]
+    public async Task DeleteCheepTest()
+    {
+
+        var repository5 = await RepositorySetUp();
+
+        var testAuthor1 = new Author
+        {
+            Name = "Tom Holland",
+            Email = "Tom.Holland@gmail.com",
+            AuthorId = 6000,
+            Cheeps = null!,
+            Followers = null!,
+            Following = null!
+        };
+
+        var testCheepDTO = new CheepDTO
+        {
+            Text = "This is a test",
+            Author = testAuthor1.ToString()!,
+            TimeStamp = "2023-07-21 10:30:45",
+            CheepId = 2147483647,
+            AuthorId = testAuthor1.AuthorId
+        };
+        var testAuthorDTO1 = new AuthorDTO
+        {
+            Name = "Tom Holland",
+            Email = "Tom.Holland@gmail.com"
+        };
+        
+
+        await repository5.ConvertCheeps(testCheepDTO, testAuthorDTO1);
+
+        var cheepsByAuthor = await repository5.GetCheepsFromAuthor(testAuthor1.Name, 0);
+
+        Assert.NotNull(testAuthor1);
+        Assert.Equal(testCheepDTO.Text, cheepsByAuthor.First().Text);
+        
+        await repository5.DeleteCheep(cheepsByAuthor.First().CheepId);
+        
+        Assert.Empty(await repository5.GetCheepsFromAuthor(testAuthor1.Name, 0));
+    }
+
 }
+

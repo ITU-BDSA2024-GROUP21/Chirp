@@ -49,7 +49,7 @@
                         <form method="post" asp-page-handler="DeleteCheep">
                             <input type="hidden" name="cheepId" value="@cheep.CheepId.ToString()" />
                             <button type="submit" class="DeleteButton">
-                                <img class="binphoto" src="/images/bin.png"/>
+                                <img alt="Delete" class="binphoto" src="/images/bin.png"/>
                             </button>
                         </form>
                         
@@ -62,7 +62,7 @@
                                 <input type="hidden" name="followerAuthor" value="@User.Identity.Name"/>
                                 <input type="hidden" name="page" value="@currPage"/>
                                 <button type="submit" class="FollowButtonPublic" style="background-color: transparent; border: none; padding-right: 25px" >
-                                    <img class="Followphoto" src="/images/Follow.png"/>
+                                    <img alt="Follow logo" class="Followphoto" src="/images/Follow.png"/>
                                 </button>
                             </form>
                         }
@@ -73,7 +73,7 @@
                                 <input type="hidden" name="followerAuthor" value="@User.Identity.Name"/>
                                 <input type="hidden" name="page" value="@currPage"/>
                                 <button   type="submit" class="UnfollowButtonPublic" style="background-color: transparent; border: none; padding-right: 25px">
-                                    <img class="UnFollowphoto" src="/images/Unfollow.png"/>
+                                    <img alt="Unfollow logo" class="UnFollowphoto" src="/images/Unfollow.png"/>
                                 </button>
                             </form>
                             

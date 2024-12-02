@@ -110,7 +110,7 @@ public class UserTimelineModel : PageModel
             return Redirect($"/{author.Name}");
         }
         
-        Console.WriteLine(followingAuthorId);
+        
         await _cheepRepository.Unfollow(id,followingAuthorId);
         _followerMap[author.Name] = false;
         return Redirect($"/{author.Name}");
@@ -136,8 +136,7 @@ public class UserTimelineModel : PageModel
             var currentAuthor = await _cheepService.GetAuthorByName(user.UserName);
             var followedAuthors = await _cheepService.GetFollowedAuthors(currentAuthor.AuthorId);
             followedAuthors.Add(user.UserName);
-            Console.WriteLine(followedAuthors[0]);
-            Console.WriteLine(followedAuthors[1]);
+            
         
             Cheeps = await _cheepService.GetCheepsFromFollowedAuthor(followedAuthors, _page);
             foreach (var cheep in Cheeps)

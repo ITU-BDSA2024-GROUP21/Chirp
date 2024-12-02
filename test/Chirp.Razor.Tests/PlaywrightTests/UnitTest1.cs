@@ -323,4 +323,15 @@ public class UnitTest1 : PageTest
         Assert.False(nextPageButton);
 
     }
+    [Test]
+    public async Task NoPreviousPage()
+    {
+        await Page.GotoAsync("https://localhost:5273/?page=1");
+
+        var nextPageButton = await Page.IsVisibleAsync("a:has-text('Previous Page')");
+        
+        Assert.False(nextPageButton);
+
+    }
+    
 }

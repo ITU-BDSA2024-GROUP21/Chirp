@@ -136,8 +136,6 @@ public class UserTimelineModel : PageModel
             var currentAuthor = await _cheepService.GetAuthorByName(user.UserName);
             var followedAuthors = await _cheepService.GetFollowedAuthors(currentAuthor.AuthorId);
             followedAuthors.Add(user.UserName);
-            Console.WriteLine(followedAuthors[0]);
-            Console.WriteLine(followedAuthors[1]);
         
             Cheeps = await _cheepService.GetCheepsFromFollowedAuthor(followedAuthors, _page);
             foreach (var cheep in Cheeps)

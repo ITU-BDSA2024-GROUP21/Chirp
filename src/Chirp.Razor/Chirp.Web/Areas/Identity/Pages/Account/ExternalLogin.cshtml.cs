@@ -85,6 +85,8 @@ namespace Chirp.Web.Areas.Identity.Pages.Account
             [EmailAddress]
             public string Email { get; set; }
             
+            [Required]
+            [Length(2, 64, ErrorMessage = "Username must be between 2 and 64 characters long")]
             public string Username { get; set; }
             
             public bool Complete()

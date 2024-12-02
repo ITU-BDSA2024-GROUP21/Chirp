@@ -8,6 +8,7 @@ namespace Chirp.Infrastructure;
 public class CheepRepository : ICheepRepository
 {
     private readonly ChirpDBContext _chirpDbContext;
+    public ChirpDBContext DbContext => _chirpDbContext;
     private readonly UserManager<ApplicationUser> _userManager;
     
     
@@ -218,7 +219,14 @@ public class CheepRepository : ICheepRepository
         
         var followRelation = await _chirpDbContext.AuthorFollows
             .FirstOrDefaultAsync(f => f.FollowerId == followingAuthorId && f.FollowingId == followedAuthorId);
+
         _chirpDbContext.AuthorFollows.Remove(followRelation!);
+        await _chirpDbContext.SaveChangesAsync();
+        
+    }
+    public async Task AddAuthorAsync(Author author)
+    {
+        _chirpDbContext.Authors.Add(author);
         await _chirpDbContext.SaveChangesAsync();
     }
     

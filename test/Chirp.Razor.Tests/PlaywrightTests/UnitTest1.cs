@@ -269,4 +269,58 @@ public class UnitTest1 : PageTest
         await Expect(specificCheep).Not.ToBeVisibleAsync();
     
     }
+
+    [Test]
+    public async Task NextPage()
+    {
+        await Page.GotoAsync("https://localhost:5273/");
+        
+        
+        await Page.GetByRole(AriaRole.Button, new() { Name = "Next Page" }).ClickAsync();
+        
+        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+        
+        string currentUrl = Page.Url;
+        StringAssert.Contains("/?page=2", currentUrl);
+    }
+    
+    [Test]
+    public async Task PrevPage()
+    {
+        await Page.GotoAsync("https://localhost:5273/?page=4");
+        
+        
+        await Page.GetByRole(AriaRole.Button, new() { Name = "Previous Page" }).ClickAsync();
+        
+        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+        
+        string currentUrl = Page.Url;
+        StringAssert.Contains("/?page=3", currentUrl);
+    }
+
+    [Test]
+    public async Task NextPageUserTimeLine()
+    {
+        await Page.GotoAsync("https://localhost:5273/Jacqualine%20Gilcoine");
+        
+        await Page.GetByRole(AriaRole.Button, new() { Name = "Next Page" }).ClickAsync();
+        
+        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+
+        string currentUrl = Page.Url;
+        
+        StringAssert.Contains("/Jacqualine%20Gilcoine/?page=2", currentUrl);
+        
+    }
+
+    [Test]
+    public async Task NoNextPageRegister()
+    {
+        await Page.GotoAsync("https://localhost:5273/Register");
+
+        var nextPageButton = await Page.IsVisibleAsync("a:has-text('Next Page')");
+        
+        Assert.False(nextPageButton);
+
+    }
 }

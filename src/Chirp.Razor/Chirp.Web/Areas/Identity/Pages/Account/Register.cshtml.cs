@@ -71,6 +71,7 @@ namespace Chirp.Web.Areas.Identity.Pages.Account
         public class InputModel
         {
             [Required]
+            [StringLength(64, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 2)]
             [DataType(DataType.Text)]
             [Display(Name = "Username")]
             public string Fullname { get; set; }

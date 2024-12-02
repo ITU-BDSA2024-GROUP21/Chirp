@@ -261,7 +261,6 @@ public class CheepRepository : ICheepRepository
     public async Task DeleteBio(Author author)
     {
         var FindBio = await _chirpDbContext.Bios.FirstOrDefaultAsync(b => b.AuthorId == author.AuthorId);
-        Console.WriteLine("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" + author.AuthorId);
         if (FindBio != null)
         { 
             _chirpDbContext.Bios.Remove(FindBio);

@@ -45,11 +45,21 @@ public class UserTimelineModel : PageModel
             await _cheepService.CheckFollowerExistElseCreate(user!);
             Cheeps = await GetCheepsWhenLoggedIn(author);
             Author author1 = await _cheepService.GetAuthorByName(User.Identity?.Name!);
-        
-            if (await _cheepRepository.AuthorHasBio(author1.Name))
+            if (User.Identity?.Name != author)
             {
-                Bio = await _cheepService.GetBio(User.Identity?.Name!);
+                if (await _cheepRepository.AuthorHasBio(author))
+                {
+                    Bio = await _cheepService.GetBio(author);
+                }
             }
+            else
+            {
+                if (await _cheepRepository.AuthorHasBio(author1.Name))
+                {
+                    Bio = await _cheepService.GetBio(User.Identity?.Name!);
+                }
+            }
+
         }
         else
         {

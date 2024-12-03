@@ -167,7 +167,7 @@ public class CheepRepository : ICheepRepository
 
     }
     
-    private async Task<Author> CheckAuthorExists(AuthorDTO author)
+    public async Task<Author> CheckAuthorExists(AuthorDTO author)
     {
         var doesAuthorExist = await  _chirpDbContext.Authors.FirstOrDefaultAsync(a => a.Name == author.Name || a.Email == author.Email);
         if (doesAuthorExist == null)

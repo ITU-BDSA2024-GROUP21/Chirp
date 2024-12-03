@@ -68,7 +68,7 @@ public class UIEnd2EndTest : PageTest
         // await Expect(Page.GetByRole(AriaRole.Link, new() { Name = "Click here to confirm your" })).ToBeVisibleAsync();
         // await Page.GetByRole(AriaRole.Link, new() { Name = "Click here to confirm your" }).ClickAsync();
 
-
+        
         //checking that we are now direkte to our public timeline
         await Expect(Page.GetByRole(AriaRole.Heading, new() { Name = "Public timeline" })).ToBeVisibleAsync();
 

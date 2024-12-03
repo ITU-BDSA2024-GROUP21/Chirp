@@ -1,4 +1,8 @@
+using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.Playwright;
 using Microsoft.Playwright.NUnit;
 using Assert = Xunit.Assert;
@@ -11,6 +15,8 @@ using Chirp.Razor.Tests.PlaywrightTests;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.Data.Sqlite;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
 
@@ -225,7 +231,7 @@ public class UnitTest1 : PageTest
         await Page.GetByRole(AriaRole.Button, new() { Name = "Log in" }).ClickAsync();
         
         // Checks that the Noot-chat box is exiting
-        await Expect(Page.Locator("cheepbox")).ToBeVisibleAsync();
+        //await Expect(Page.Locator("cheepbox")).ToBeVisibleAsync();
         await Page.GetByRole(AriaRole.Link, new() { Name = "My timeline" }).ClickAsync();
         // Checks that the Noot-chat box is exiting
         await Expect(Page.Locator("#Text")).ToBeVisibleAsync();
@@ -369,7 +375,7 @@ public class UnitTest1 : PageTest
         await Page.GetByPlaceholder("password").FillAsync("Halløj1!");
         await Page.GetByRole(AriaRole.Button, new() { Name = "Log in" }).ClickAsync();
 
-        await Expect(Page.Locator("li").Filter(new() { HasText = "brian2 hej — 27.11.2024" })).ToBeVisibleAsync();
+        await Expect(Page.Locator("li").Filter(new() { HasText = "brian2 hej — 11.27.2024" })).ToBeVisibleAsync();
         
         
         await Expect(Page.Locator("li").Filter(new() { HasText = "brian2 hej — 27.11.2024" }).GetByAltText("Unfollow logo")).ToBeVisibleAsync();

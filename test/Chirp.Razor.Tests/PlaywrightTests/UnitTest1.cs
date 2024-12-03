@@ -650,5 +650,21 @@ public class UnitTest1 : PageTest
         await Page.GetByRole(AriaRole.Button, new() { Name = "Forget Me!" }).ClickAsync();
 
     }
+
+    [Test]
+    public async Task BioOnUserWhenNotLoggedIn()
+    {
+        await Page.GotoAsync("https://localhost:5273/");
+
+        await Page.GetByRole(AriaRole.Link, new() { Name = "Birthe" }).ClickAsync();
+        await Expect(Page.GetByText("Birthe's BIO")).ToBeVisibleAsync();
+        await Expect(Page.GetByText("hejsa")).ToBeVisibleAsync();
+
+        await Page.GetByRole(AriaRole.Link, new() { Name = "Public timeline" }).ClickAsync();
+        await Page.GetByRole(AriaRole.Link, new() { Name = "brian2" }).ClickAsync();
+        await Expect(Page.GetByText("brian2's BIO")).ToBeVisibleAsync();
+        await Expect(Page.GetByText("There are no Bio so far.")).ToBeVisibleAsync();
+
+    }
     
 }

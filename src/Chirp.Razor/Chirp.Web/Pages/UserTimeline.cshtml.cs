@@ -12,6 +12,7 @@ public class UserTimelineModel : PageModel
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly ICheepRepository _cheepRepository;
     private Dictionary<string, bool> _followerMap;
+    public BioDTO Bio { get; set; }
 
 
     public UserTimelineModel(ICheepService cheepService, UserManager<ApplicationUser> userManager,ICheepRepository cheepRepository )
@@ -43,13 +44,18 @@ public class UserTimelineModel : PageModel
             var user = await _userManager.GetUserAsync(User);
             await _cheepService.CheckFollowerExistElseCreate(user!);
             Cheeps = await GetCheepsWhenLoggedIn(author);
+            Author author1 = await _cheepService.GetAuthorByName(User.Identity?.Name!);
+        
+            if (await _cheepRepository.AuthorHasBio(author1.Name))
+            {
+                Bio = await _cheepService.GetBio(User.Identity?.Name!);
+            }
         }
         else
         {
             Cheeps = await _cheepService.GetCheepsFromAuthor(author, _page);
         }
         ViewData["FollowerMap"] = _followerMap;
-        
 
         return Page();
     }
@@ -74,16 +80,12 @@ public class UserTimelineModel : PageModel
         var email = user.Email;
         
         var guid = Guid.NewGuid();
-        var cheepId = BitConverter.ToInt32(guid.ToByteArray(), 0);
+        var cheepId = BitConverter.ToInt32(guid.ToByteArray(), 1);
 
         await _cheepService.CreateCheep(User.Identity?.Name!, email!,CheepInput.Text, DateTimeKind.Local.ToString(), cheepId);
         return RedirectToPage("Public");
     }
-
-    public static int ConvertGuidToInt(Guid guid)
-    {
-        return BitConverter.ToInt32(guid.ToByteArray(), 0);
-    }
+    
     public async Task<IActionResult> OnPostFollow(int followingAuthorId, string followerAuthor, int page)
     {
         Author author = await _cheepService.GetAuthorByName(followerAuthor);

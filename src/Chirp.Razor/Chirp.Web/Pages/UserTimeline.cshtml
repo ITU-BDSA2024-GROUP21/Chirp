@@ -21,14 +21,40 @@
 
 
     <partial name ="Shared/_NootBoxPartial" model="Model.CheepInput"/>
-    @if( routeName.ToString().EndsWith("s"))
-    {
-        <h2> @routeName' Timeline </h2> 
-    }
-    else
-    {
-        <h2> @routeName's Timeline </h2>  
-    }
+    
+        @if( routeName.ToString()!.EndsWith("s"))
+        {
+            <h2> @routeName' BIO </h2>
+        }
+        else
+        {
+            <h2> @routeName's BIO </h2>
+        }
+        <ul id="messagelist" class="cheeps">
+            <li>
+            
+                @if (Model.Bio != null)
+                {
+                    <p>
+                        @Model.Bio.Text
+                    </p>
+                }
+                else
+                {
+                    <em>There are no Bio so far.</em>
+                }
+            
+            </li>
+        </ul>
+        
+@if( routeName.ToString().EndsWith("s"))
+{
+    <h2> @routeName' Timeline </h2>
+}
+else
+{
+    <h2> @routeName's Timeline </h2>
+}
     @if (Model.Cheeps.Any())
     {
         <ul id="messagelist" class="cheeps">

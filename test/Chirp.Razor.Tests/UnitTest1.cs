@@ -10,6 +10,7 @@ using Xunit;
 public class UnitTest
 {
     private readonly ITestOutputHelper _testOutputHelper;
+    private readonly NooterService _nooterService;
 
     public UnitTest(ITestOutputHelper testOutputHelper)
     {
@@ -276,8 +277,7 @@ public class UnitTest
     [Fact]
     public async Task FollowTest()
     {
-        var repositoryFollow6 = await FollowRepositorySetUp();
-        var repositoryAuthor6 = await AuthorRepositorySetUp();
+        var repository6 = await AuthorRepositorySetUp();
         var testAuthor1 = new Author
         {
             Name = "John10",
@@ -287,7 +287,7 @@ public class UnitTest
             Followers = null!,
             Following = null!
         };
-        await repositoryAuthor6.AddAuthorToDB(testAuthor1);
+        await repository6.AddAuthorToDB(testAuthor1);
         var testAuthor2 = new Author
         {
             Name = "John11",
@@ -297,18 +297,17 @@ public class UnitTest
             Followers = null!,
             Following = null!
         };
-        await repositoryAuthor6.AddAuthorToDB(testAuthor2);
-        await repositoryFollow6.FollowAuthor(testAuthor1.AuthorId, testAuthor2.AuthorId);
+        await repository6.AddAuthorToDB(testAuthor2);
+        await repository6.FollowAuthor(testAuthor1.AuthorId, testAuthor2.AuthorId);
 
-        var follows = await repositoryFollow6.GetFollowedAuthors(testAuthor1.AuthorId);
+        var follows = await repository6.GetFollowedAuthors(testAuthor1.AuthorId);
         Assert.Contains(testAuthor2.Name, follows);
         
     }
     [Fact]
     public async Task UnfollowTest()
     {
-        var repositoryFollow7 = await FollowRepositorySetUp();
-        var repositoryAuthor7 = await AuthorRepositorySetUp();
+        var repository7 = await AuthorRepositorySetUp();
         var testAuthor1 = new Author
         {
             Name = "John10",
@@ -319,7 +318,7 @@ public class UnitTest
             Following = null!
         };
 
-        await repositoryAuthor7.AddAuthorToDB(testAuthor1);
+        await repository7.AddAuthorToDB(testAuthor1);
         var testAuthor2 = new Author
         {
             Name = "John11",
@@ -329,14 +328,14 @@ public class UnitTest
             Followers = null!,
             Following = null!
         };
-        await repositoryAuthor7.AddAuthorToDB(testAuthor2);
-        await repositoryFollow7.FollowAuthor(testAuthor1.AuthorId, testAuthor2.AuthorId);
+        await repository7.AddAuthorToDB(testAuthor2);
+        await repository7.FollowAuthor(testAuthor1.AuthorId, testAuthor2.AuthorId);
 
-        var follows = await repositoryFollow7.GetFollowedAuthors(testAuthor1.AuthorId);
+        var follows = await repository7.GetFollowedAuthors(testAuthor1.AuthorId);
         Assert.Contains(testAuthor2.Name, follows);
         
-        await repositoryFollow7.Unfollow(testAuthor1.AuthorId, testAuthor2.AuthorId);
-        var follows2 = await repositoryFollow7.GetFollowedAuthors(testAuthor1.AuthorId);
+        await repository7.Unfollow(testAuthor1.AuthorId, testAuthor2.AuthorId);
+        var follows2 = await repository7.GetFollowedAuthors(testAuthor1.AuthorId);
 
         Assert.DoesNotContain(testAuthor2.Name, follows2);
         

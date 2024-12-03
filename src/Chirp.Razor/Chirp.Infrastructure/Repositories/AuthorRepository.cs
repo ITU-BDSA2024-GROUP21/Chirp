@@ -96,7 +96,10 @@ public class AuthorRepository : IAuthorRepository
         _chirpDbContext.AuthorFollows.RemoveRange(followed);
 
         var bio = await _chirpDbContext.Bios.FirstOrDefaultAsync(b => b.AuthorId == author.AuthorId);
-        _chirpDbContext.Bios.Remove(bio);
+        if (bio != null)
+        {
+            _chirpDbContext.Bios.Remove(bio);
+        }
 
         
         Console.WriteLine(author.AuthorId);
@@ -118,6 +121,36 @@ public class AuthorRepository : IAuthorRepository
         _chirpDbContext.Authors.Add(author);
         await _chirpDbContext.SaveChangesAsync();
     }
+    
+    // These are used for testing purposes only and does not reflect our refactoring
+    public async Task FollowAuthor(int followingAuthorId, int followedAuthorId)
+    {
+        var followRelation = new AuthorFollow
+        {
+            FollowerId = followingAuthorId,
+            FollowingId = followedAuthorId
+        };
+        _chirpDbContext.AuthorFollows.Add(followRelation);
 
+        await _chirpDbContext.SaveChangesAsync();
+    }
 
+    public async Task<List<String>> GetFollowedAuthors(int authorId)
+    {
+        return await _chirpDbContext.AuthorFollows
+            .Where(f => f.FollowerId == authorId)
+            .Select(f => f.following.Name)
+            .ToListAsync();
+    }
+    
+    public async Task Unfollow(int followingAuthorId, int followedAuthorId)
+    {
+        
+        var followRelation = await _chirpDbContext.AuthorFollows
+            .FirstOrDefaultAsync(f => f.FollowerId == followingAuthorId && f.FollowingId == followedAuthorId);
+
+        _chirpDbContext.AuthorFollows.Remove(followRelation!);
+        await _chirpDbContext.SaveChangesAsync();
+        
+    }
 }

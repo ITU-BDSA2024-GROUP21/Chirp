@@ -112,17 +112,12 @@ public class CheepService : ICheepService
     
     public async Task CheckFollowerExistElseCreate(ApplicationUser user)
     {
-        if (GetAuthorByName(user.UserName) != null) 
-        {
-            return;
-        } else {
             AuthorDTO newAuthor = new AuthorDTO
             {
                 Name = user.UserName,
                 Email = user.Email,
             };
             _cheepRepository.ConvertAuthors(newAuthor).Wait();
-        }
     }
     
     public async Task<Bio> CreateBIO(string username,  string email, string message, int id)

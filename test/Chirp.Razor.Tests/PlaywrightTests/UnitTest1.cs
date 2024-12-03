@@ -469,4 +469,37 @@ public class UnitTest1 : PageTest
         Assert.False(nextPageButton);
 
     }
+
+    [Test]
+    public async Task ForgetAboutMeTest()
+    {
+        await Page.GotoAsync("https://localhost:5273");
+        
+        await Page.GetByRole(AriaRole.Link, new() { Name = "Register" }).ClickAsync();
+    
+        await Page.GetByPlaceholder("username").ClickAsync();
+        await Page.GetByPlaceholder("username").FillAsync("Birthe19");
+        await Page.GetByPlaceholder("name@example.com").ClickAsync();
+        await Page.GetByPlaceholder("name@example.com").FillAsync("Birthe19@mail.dk");
+        await Page.GetByLabel("Password", new() { Exact = true }).ClickAsync();
+        await Page.GetByLabel("Password", new() { Exact = true }).FillAsync("Halløj691!");
+        await Page.GetByLabel("Confirm Password").ClickAsync();
+        await Page.GetByLabel("Confirm Password").FillAsync("Halløj691!");
+    
+        await Page.GetByRole(AriaRole.Button, new() { Name = "Register" }).ClickAsync();
+
+        await Page.GetByRole(AriaRole.Link, new() { Name = "About Me" }).ClickAsync();
+
+        await Page.GetByRole(AriaRole.Button, new() { Name = "Forget Me!" }).ClickAsync();
+        
+        await Page.GetByPlaceholder("name@example.com").ClickAsync();
+        await Page.GetByPlaceholder("name@example.com").FillAsync("Birthe19@mail.dk");
+        await Page.GetByPlaceholder("password").ClickAsync();
+        await Page.GetByPlaceholder("password").FillAsync("Halløj691!");
+        
+        await Page.GetByRole(AriaRole.Button, new() { Name = "Log in" }).ClickAsync();
+        
+        var _content = await Page.ContentAsync();
+        StringAssert.Contains("Invalid login attempt.", _content);
+    }
 }

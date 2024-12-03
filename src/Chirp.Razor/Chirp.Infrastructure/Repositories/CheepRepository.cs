@@ -205,6 +205,7 @@ public class CheepRepository : ICheepRepository
             .OrderByDescending(c => c.TimeStamp)
             .Skip(page * 32)
             .Take(32)
+            .Include(c => c.Author)
             .Select(cheep => cheep)
             .ToListAsync();
     }

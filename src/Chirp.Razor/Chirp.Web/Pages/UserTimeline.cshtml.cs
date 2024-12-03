@@ -112,7 +112,7 @@ public class UserTimelineModel : PageModel
             return Redirect($"/{author.Name}");
         }
         
-        Console.WriteLine(followingAuthorId);
+        
         await _cheepRepository.Unfollow(id,followingAuthorId);
         _followerMap[author.Name] = false;
         return Redirect($"/{author.Name}");

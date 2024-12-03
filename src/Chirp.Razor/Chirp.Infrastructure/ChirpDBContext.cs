@@ -29,7 +29,7 @@ public class ChirpDBContext : IdentityDbContext<ApplicationUser>
             .OnDelete(DeleteBehavior.Restrict);
 
         modelBuilder.Entity<AuthorFollow>()
-            .HasOne(af => af.following)
+            .HasOne(af => af.Following)
             .WithMany(a => a.Followers)
             .HasForeignKey(af => af.FollowingId)
             .OnDelete(DeleteBehavior.Restrict);

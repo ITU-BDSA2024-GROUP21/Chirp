@@ -1,8 +1,9 @@
 using System.Data;
+using Chirp.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Data.Sqlite;
 
-namespace Chirp.Infrastructure;
+namespace Chirp.Infrastructure.Services;
 
 public class NooterService : INooterService
 {

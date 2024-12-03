@@ -13,7 +13,7 @@ namespace Chirp.Web.Pages;
 public class PublicModel : PageModel
 {
     private readonly ICheepService _cheepService;
-    private readonly ICheepRepository _cheepRepository;
+    private readonly IFollowRepository _followRepository;
     public required List<CheepDTO> Cheeps { get; set; }
     private int _page;
     private readonly UserManager<ApplicationUser> _userManager;
@@ -23,12 +23,12 @@ public class PublicModel : PageModel
     public required NootBoxModel CheepInput { get; set; }
     
 
-    public PublicModel(ICheepService cheepService, UserManager<ApplicationUser> userManager, ICheepRepository cheepRepository)
+    public PublicModel(ICheepService cheepService, UserManager<ApplicationUser> userManager, IFollowRepository followRepository)
     {
         _cheepService = cheepService;
-        _cheepRepository = cheepRepository;
         _userManager = userManager;
         FollowerMap = new Dictionary<string, bool>();
+        _followRepository = followRepository;
     }
     
 
@@ -104,7 +104,7 @@ public class PublicModel : PageModel
         Author author = await _cheepService.GetAuthorByName(followerAuthor);
         int id = author.AuthorId;
         
-        await _cheepRepository.FollowAuthor(id,followingAuthorId);
+        await _followRepository.FollowAuthor(id,followingAuthorId);
         FollowerMap[author.Name] = true;
         return Redirect($"/?page={page}");
     }
@@ -120,7 +120,7 @@ public class PublicModel : PageModel
         int id = author.AuthorId;
         
         Console.WriteLine(followingAuthorId);
-        await _cheepRepository.Unfollow(id,followingAuthorId);
+        await _followRepository.Unfollow(id,followingAuthorId);
         FollowerMap[author.Name] = false;
         return Redirect($"/?page={page}");
     }

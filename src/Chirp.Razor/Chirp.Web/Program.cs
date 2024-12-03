@@ -23,7 +23,10 @@ public partial class Program
         builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = false)
             .AddEntityFrameworkStores<ChirpDBContext>();
         
-        builder.Services.AddScoped<ICheepRepository, CheepRepository>();
+        builder.Services.AddScoped<INootRepository, NootRepository>();
+        builder.Services.AddScoped<IBioRepository, BioRepository>();
+        builder.Services.AddScoped<IFollowRepository, FollowRepository>();
+        builder.Services.AddScoped<IAuthorRepository, AuthorRepository>();
         builder.Services.AddScoped<ICheepService, CheepService>();
         
         builder.Services.AddAuthentication()

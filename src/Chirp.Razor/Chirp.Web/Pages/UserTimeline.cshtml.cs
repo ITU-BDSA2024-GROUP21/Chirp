@@ -10,22 +10,26 @@ public class UserTimelineModel : PageModel
     public List<CheepDTO> Cheeps { get; set; } = null!;
     private int _page;
     private readonly UserManager<ApplicationUser> _userManager;
-    private readonly ICheepRepository _cheepRepository;
+    private readonly INootRepository _nootRepository;
+    private readonly IBioRepository _bioRepository;
+    private readonly IFollowRepository _followRepository;
     private Dictionary<string, bool> _followerMap;
     public BioDTO Bio { get; set; }
 
 
-    public UserTimelineModel(ICheepService cheepService, UserManager<ApplicationUser> userManager,ICheepRepository cheepRepository )
+    public UserTimelineModel(ICheepService cheepService, UserManager<ApplicationUser> userManager,INootRepository nootRepository, IBioRepository bioRepository, IFollowRepository followRepository)
     {
         _cheepService = cheepService;
         _userManager = userManager;
-        _cheepRepository = cheepRepository;
+        _nootRepository = nootRepository;
         _followerMap = new Dictionary<string, bool>();
+        _bioRepository = bioRepository;
+        _followRepository = followRepository;
     }
     
     public async Task<IActionResult> OnPostDeleteCheepAsync(int cheepId)
     {
-        await _cheepRepository.DeleteCheep(cheepId);
+        await _nootRepository.DeleteNoot(cheepId);
         return RedirectToPage(new { author = RouteData.Values["author"] });
     }
 
@@ -47,14 +51,14 @@ public class UserTimelineModel : PageModel
             Author author1 = await _cheepService.GetAuthorByName(User.Identity?.Name!);
             if (User.Identity?.Name != author)
             {
-                if (await _cheepRepository.AuthorHasBio(author))
+                if (await _bioRepository.AuthorHasBio(author))
                 {
                     Bio = await _cheepService.GetBio(author);
                 }
             }
             else
             {
-                if (await _cheepRepository.AuthorHasBio(author1.Name))
+                if (await _bioRepository.AuthorHasBio(author1.Name))
                 {
                     Bio = await _cheepService.GetBio(User.Identity?.Name!);
                 }
@@ -107,7 +111,7 @@ public class UserTimelineModel : PageModel
             return Redirect($"/{author.Name}");
         }
         
-        await _cheepRepository.FollowAuthor(id,followingAuthorId);
+        await _followRepository.FollowAuthor(id,followingAuthorId);
         _followerMap[author.Name] = true;
         return Redirect($"/{author.Name}");
     }
@@ -123,7 +127,7 @@ public class UserTimelineModel : PageModel
         }
         
         
-        await _cheepRepository.Unfollow(id,followingAuthorId);
+        await _followRepository.Unfollow(id,followingAuthorId);
         _followerMap[author.Name] = false;
         return Redirect($"/{author.Name}");
     }

@@ -1,7 +1,12 @@
 body {
-  background: #E4F1FF;
+  background-image: url("../images/igloo.png"),  url("../images/Ice_tundra.png");
+  background-repeat: no-repeat, repeat-x;  
+  background-color: #e7f0ef;
   font-family: 'Trebuchet MS', sans-serif;
   font-size: 14px;
+  margin: 0;
+  height: 100vh;
+  position: relative;
 }
 
 a {
@@ -45,6 +50,11 @@ div.page {
   border: 1px solid #99B1DDFF;
   width: 700px;
   margin: 30px auto;
+}
+
+.page {
+    position: relative;
+    z-index: 10; 
 }
 
 div.page > h1 {
@@ -390,3 +400,17 @@ ul.nav li a:hover {
     display: flex;
 }
 
+.pingu-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    z-index: 5; 
+}
+
+#pingu {
+    position: absolute;
+    width: 100px;
+}

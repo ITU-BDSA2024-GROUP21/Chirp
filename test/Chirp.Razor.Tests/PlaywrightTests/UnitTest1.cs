@@ -546,4 +546,58 @@ public class UnitTest1 : PageTest
         await Page.GetByRole(AriaRole.Link, new() { Name = "About Me" }).ClickAsync();
         await Page.GetByRole(AriaRole.Button, new() { Name = "Forget Me!" }).ClickAsync();
     }
+    
+    [Test]
+    public async Task ChangingBio()
+    {
+        await Page.GotoAsync("https://localhost:5273/");
+
+        await Page.GetByRole(AriaRole.Link, new() { Name = "Register" }).ClickAsync();
+
+        await Page.GetByPlaceholder("username").ClickAsync();
+        await Page.GetByPlaceholder("username").FillAsync("Bulderrr");
+        await Page.GetByPlaceholder("name@example.com").ClickAsync();
+        await Page.GetByPlaceholder("name@example.com").FillAsync("Bulderrr@mail.dk");
+        await Page.GetByLabel("Password", new() { Exact = true }).ClickAsync();
+        await Page.GetByLabel("Password", new() { Exact = true }).FillAsync("Halløj1!");
+        await Page.GetByLabel("Confirm Password").ClickAsync();
+        await Page.GetByLabel("Confirm Password").FillAsync("Halløj1!");
+        
+        await Page.GetByRole(AriaRole.Button, new() { Name = "Register" }).ClickAsync();
+
+
+        await Expect(Page.GetByRole(AriaRole.Link, new() { Name = "About Me" })).ToBeVisibleAsync();
+        await Page.GetByRole(AriaRole.Link, new() { Name = "About Me" }).ClickAsync();
+
+        await Expect(Page.GetByRole(AriaRole.Heading, new() { Name = "Edit Your Bio" })).ToBeVisibleAsync();
+        await Expect(Page.Locator("#Text")).ToBeVisibleAsync();
+        await Expect(Page.GetByRole(AriaRole.Button, new() { Name = "Save" })).ToBeVisibleAsync();
+        await Expect(Page.GetByRole(AriaRole.Heading, new() { Name = "Bulderrr's BIO" })).ToBeVisibleAsync();
+        await Expect(Page.GetByText("There are no Bio so far.")).ToBeVisibleAsync();
+
+        await Page.Locator("#Text").ClickAsync();
+        await Page.Locator("#Text").FillAsync("Jeg Hedder william");
+        await Page.GetByRole(AriaRole.Button, new() { Name = "Save" }).ClickAsync();
+        await Expect(Page.GetByText("Jeg Hedder william")).ToBeVisibleAsync();
+
+        await Page.GetByRole(AriaRole.Link, new() { Name = "My timeline" }).ClickAsync();
+
+        await Expect(Page.GetByText("Jeg Hedder william")).ToBeVisibleAsync();
+        await Page.GetByRole(AriaRole.Link, new() { Name = "About Me" }).ClickAsync();
+        
+        await Page.Locator("#Text").ClickAsync();
+        await Page.Locator("#Text").FillAsync("bulder boy");
+        await Page.GetByRole(AriaRole.Button, new() { Name = "Save" }).ClickAsync();
+        await Expect(Page.GetByText("bulder boy")).ToBeVisibleAsync();
+        
+        await Page.GetByRole(AriaRole.Link, new() { Name = "My timeline" }).ClickAsync();
+
+        await Expect(Page.GetByText("bulder boy")).ToBeVisibleAsync();
+        
+        await Page.GetByRole(AriaRole.Link, new() { Name = "About Me" }).ClickAsync();
+        
+        await Page.GetByRole(AriaRole.Button, new() { Name = "Forget Me!" }).ClickAsync();
+    }
+    
+    
 }

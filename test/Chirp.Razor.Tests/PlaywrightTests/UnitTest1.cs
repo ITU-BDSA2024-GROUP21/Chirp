@@ -18,8 +18,8 @@ using Microsoft.Extensions.Options;
 [TestFixture]
 public class UnitTest1 : PageTest
 {
-    private Process _serverProcess;
-    protected IBrowser _browser;
+    public required Process _serverProcess;
+    public required IBrowser _browser;
     
     public override BrowserNewContextOptions ContextOptions()
     {

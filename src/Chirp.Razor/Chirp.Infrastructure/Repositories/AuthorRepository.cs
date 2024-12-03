@@ -139,7 +139,7 @@ public class AuthorRepository : IAuthorRepository
     {
         return await _chirpDbContext.AuthorFollows
             .Where(f => f.FollowerId == authorId)
-            .Select(f => f.Following.Name)
+            .Select(f => f.Following!.Name)
             .ToListAsync();
     }
     

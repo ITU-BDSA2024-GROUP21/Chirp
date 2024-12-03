@@ -11,7 +11,6 @@ using Xunit;
 public class UnitTest
 {
     private readonly ITestOutputHelper _testOutputHelper;
-    private readonly NooterService _nooterService;
 
     public UnitTest(ITestOutputHelper testOutputHelper)
     {

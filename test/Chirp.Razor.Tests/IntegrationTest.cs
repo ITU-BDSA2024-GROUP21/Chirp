@@ -14,7 +14,7 @@ public class IntegrationTest
     }
 
     [Fact]
-    public async void testGetCheeps()
+    public async void TestGetCheeps()
     {
         // Using in-memory SQLite db
         await using var connection = new SqliteConnection("Filename=:memory:");
@@ -25,7 +25,7 @@ public class IntegrationTest
         await context.Database.EnsureDeletedAsync();
         await context.Database.EnsureCreatedAsync(); // Applies the schema to the database
 
-        var repository = new NootRepository(context, userManager: null);
+        var repository = new NootRepository(context, userManager: null!);
         
         var cheeps = await repository.GetNoots(33);
         

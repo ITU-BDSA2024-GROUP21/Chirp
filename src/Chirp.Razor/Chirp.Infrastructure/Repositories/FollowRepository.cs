@@ -35,7 +35,7 @@ public class FollowRepository : IFollowRepository
     {
         return await _chirpDbContext.AuthorFollows
             .Where(f => f.FollowerId == authorId)
-            .Select(f => f.Following.Name)
+            .Select(f => f.Following!.Name)
             .ToListAsync();
     }
 

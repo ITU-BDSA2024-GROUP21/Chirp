@@ -8,7 +8,11 @@ using Chirp.Infrastructure;
 
 
 using Chirp.Razor.Tests.PlaywrightTests;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.Data.Sqlite;
+using Microsoft.Extensions.Options;
+
 
 [Parallelizable(ParallelScope.None)]
 [TestFixture]
@@ -24,6 +28,50 @@ public class UnitTest1 : PageTest
             IgnoreHTTPSErrors = true
         };
     }
+    public static UserManager<ApplicationUser> GetUserManager(ChirpDBContext context)
+    {
+        var userStore = new UserStore<ApplicationUser>(context);
+        var optionsManager = Options.Create(new IdentityOptions());
+        var passwordHasher = new PasswordHasher<ApplicationUser>();
+        var userValidators = new List<IUserValidator<ApplicationUser>> { new UserValidator<ApplicationUser>() };
+        var passwordValidators = new List<IPasswordValidator<ApplicationUser>> { new PasswordValidator<ApplicationUser>() };
+        var lookupNormalizer = new UpperInvariantLookupNormalizer();
+        var errorDescriber = new IdentityErrorDescriber();
+        var services = new ServiceCollection();
+        var logger = new Logger<UserManager<ApplicationUser>>(new LoggerFactory());
+
+        var userManager = new UserManager<ApplicationUser>(
+            userStore,
+            optionsManager,
+            passwordHasher,
+            userValidators,
+            passwordValidators,
+            lookupNormalizer,
+            errorDescriber,
+            services.BuildServiceProvider(),
+            logger
+        );
+        return userManager;
+    }
+
+    public async Task<ICheepRepository> RepositorySetUp()
+    {
+        // This is to create an in-memory SQLite connection
+        var connection = new SqliteConnection("Filename=:memory:");
+        await connection.OpenAsync();
+        var builder = new DbContextOptionsBuilder<ChirpDBContext>().UseSqlite(connection);
+
+        // Then we create the ChirpDBContext instance with builder.Options
+        var context = new ChirpDBContext(builder.Options);
+        var userManager = GetUserManager(context);
+    
+        // Then we ensure that the database schema is created
+        await context.Database.EnsureDeletedAsync();
+        await context.Database.EnsureCreatedAsync();
+
+        // In the end we return the CheepRepository instance for testing
+        return new CheepRepository(context, userManager);
+    }
 
     [SetUp]
     public async Task Setup()
@@ -32,8 +80,6 @@ public class UnitTest1 : PageTest
         Thread.Sleep(5000); // Increase this if needed
 
         _browser = await Playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions {Headless = true});
-        
-        
     }
     
     [TearDown]
@@ -220,21 +266,24 @@ public class UnitTest1 : PageTest
     [Test]
     public async Task RegisterTest()
     {
+        var repo = await RepositorySetUp();
         await Page.GotoAsync("https://localhost:5273/");
     
         await Page.GetByRole(AriaRole.Link, new() { Name = "Register" }).ClickAsync();
     
         await Page.GetByPlaceholder("username").ClickAsync();
-        await Page.GetByPlaceholder("username").FillAsync("Carla49");
+        await Page.GetByPlaceholder("username").FillAsync("Carla59");
         await Page.GetByPlaceholder("name@example.com").ClickAsync();
-        await Page.GetByPlaceholder("name@example.com").FillAsync("carla49@mail.dk");
+        await Page.GetByPlaceholder("name@example.com").FillAsync("carla59@mail.dk");
         await Page.GetByLabel("Password", new() { Exact = true }).ClickAsync();
         await Page.GetByLabel("Password", new() { Exact = true }).FillAsync("Halløj691!");
         await Page.GetByLabel("Confirm Password").ClickAsync();
         await Page.GetByLabel("Confirm Password").FillAsync("Halløj691!");
     
         await Page.GetByRole(AriaRole.Button, new() { Name = "Register" }).ClickAsync();
-
+        
+        
+        await repo.DeleteAuthorAndCheepsByEmail("carla59@mail.dk");
         // await Expect(Page.GetByRole(AriaRole.Link, new() { Name = "Click here to confirm your" })).ToBeVisibleAsync();
         // await Page.GetByRole(AriaRole.Link, new() { Name = "Click here to confirm your" }).ClickAsync();
         

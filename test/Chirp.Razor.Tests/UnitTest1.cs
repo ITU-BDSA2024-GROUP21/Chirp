@@ -234,7 +234,7 @@ public class UnitTest
         Assert.Empty(await repository5.GetCheepsFromAuthor(testAuthor1.Name, 0));
     }
       
-      
+    [Fact]
     public async Task FollowTest()
     {
         var repository6 = await RepositorySetUp();

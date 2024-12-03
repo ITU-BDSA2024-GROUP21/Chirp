@@ -44,7 +44,7 @@ public class UserTimelineModel : PageModel
             _page = int.Parse(Request.Query["page"]!) -1;
         }
         
-        if (User.Identity!.IsAuthenticated)
+        if (User.Identity?.IsAuthenticated == true)
         {
             var user = await _userManager.GetUserAsync(User);
             await _nooterService.CheckFollowerExistElseCreate(user!);
@@ -69,6 +69,10 @@ public class UserTimelineModel : PageModel
         else
         {
             Cheeps = await _nooterService.GetCheepsFromAuthor(author, _page);
+            if (await _bioRepository.AuthorHasBio(author))
+            {
+                Bio = await _nooterService.GetBio(author);
+            }
         }
         ViewData["FollowerMap"] = _followerMap;
 

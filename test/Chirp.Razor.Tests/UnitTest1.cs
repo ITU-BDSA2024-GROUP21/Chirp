@@ -208,7 +208,7 @@ public class UnitTest
             Name = "Tom Holland",
             Email = "Tom.Holland@gmail.com",
             AuthorId = 6000,
-        }
+        };
           var testCheepDTO = new CheepDTO
         {
             Text = "This is a test",
@@ -233,8 +233,6 @@ public class UnitTest
         
         Assert.Empty(await repository5.GetCheepsFromAuthor(testAuthor1.Name, 0));
     }
-
-}
       
       
     public async Task FollowTest()

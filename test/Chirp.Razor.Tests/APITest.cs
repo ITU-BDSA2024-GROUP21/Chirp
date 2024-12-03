@@ -90,4 +90,38 @@ public class APITest : IClassFixture<WebApplicationFactory<Program>>
         Assert.Contains("Twitter", content);
         Assert.Contains("Hello, BDSA students!", content);
     }
+
+    [Theory]
+    [InlineData("Quintin Sitts")]
+    public async Task LastPage(string author)
+    {
+        int page = 1;
+        bool textFound = false;
+        bool nextPageExists = true;
+
+        while (nextPageExists)
+        {
+            var response = await _client.GetAsync($"/{author}/?page={page}");
+            response.EnsureSuccessStatusCode();
+            var content = await response.Content.ReadAsStringAsync();
+
+            if (content.Contains(
+                    "He had, as you perceive, was made that suggestion to me that no wood is in reality his wife."))
+            {
+                textFound = true;
+            }
+
+            nextPageExists = content.Contains("Next Page");
+
+            if (textFound && !nextPageExists)
+            {
+                break;
+            }
+
+            page++;
+        }
+
+        Assert.True(textFound);
+        Assert.False(nextPageExists);
+    }
 }

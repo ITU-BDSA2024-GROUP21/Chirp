@@ -7,6 +7,7 @@
 
     <IsPackable>false</IsPackable>
     <IsTestProject>true</IsTestProject>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
 
   <ItemGroup>
@@ -24,6 +25,7 @@
     </PackageReference>
     <ProjectReference Include="../../src/Chirp.Razor/Chirp.Web/Chirp.Web.csproj" />
     <ProjectReference Include="../../src/Chirp.Razor/Chirp.Infrastructure/Chirp.Infrastructure.csproj" />
+    <ProjectReference Include="../../src/Chirp.Razor/Chirp.Core/Chirp.Core.csproj" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="8.0.8" />
     
   </ItemGroup>
@@ -34,6 +36,11 @@
     <_ContentIncludedByDefault Remove="PlaywrightTests\obj\Debug\net8.0\PlaywrightTests.sourcelink.json" />
     <_ContentIncludedByDefault Remove="PlaywrightTests\obj\PlaywrightTests.csproj.nuget.dgspec.json" />
     <_ContentIncludedByDefault Remove="PlaywrightTests\obj\project.assets.json" />
+    <_ContentIncludedByDefault Remove="PlaywrightTests\bin\Debug\net8.0\appsettings.Development.json" />
+    <_ContentIncludedByDefault Remove="PlaywrightTests\bin\Debug\net8.0\appsettings.json" />
+    <_ContentIncludedByDefault Remove="PlaywrightTests\bin\Debug\net8.0\Chirp.Web.deps.json" />
+    <_ContentIncludedByDefault Remove="PlaywrightTests\bin\Debug\net8.0\Chirp.Web.runtimeconfig.json" />
+    <_ContentIncludedByDefault Remove="PlaywrightTests\bin\Debug\net8.0\Chirp.Web.staticwebassets.runtime.json" />
   </ItemGroup>
 
 </Project>

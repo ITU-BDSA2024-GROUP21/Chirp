@@ -7,6 +7,7 @@
 
     <IsPackable>false</IsPackable>
     <IsTestProject>true</IsTestProject>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
 
   <ItemGroup>
@@ -17,6 +18,10 @@
     <PackageReference Include="NUnit.Analyzers" Version="3.9.0" />
     <PackageReference Include="NUnit3TestAdapter" Version="4.5.0" />
     <PackageReference Include="xunit" Version="2.9.2" />
+
+    <ProjectReference Include="../../../src/Chirp.Razor/Chirp.Web/Chirp.Web.csproj" />
+    <ProjectReference Include="../../../src/Chirp.Razor/Chirp.Infrastructure/Chirp.Infrastructure.csproj" />
+    <ProjectReference Include="../../../src/Chirp.Razor/Chirp.Core/Chirp.Core.csproj" />
   </ItemGroup>
 
   <ItemGroup>

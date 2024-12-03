@@ -85,6 +85,8 @@ namespace Chirp.Web.Areas.Identity.Pages.Account
             [EmailAddress]
             public string Email { get; set; }
             
+            [Required]
+            [Length(2, 64, ErrorMessage = "Username must be between 2 and 64 characters long")]
             public string Username { get; set; }
             
             public bool Complete()
@@ -137,14 +139,37 @@ namespace Chirp.Web.Areas.Identity.Pages.Account
                 // Checks if the user has specific claims (username and email in this case) within their identity
                 // if that is the case a new input model is made with the claims
                 // info.principal represents the current user's identity
-                if (info.Principal.HasClaim(c => c.Type == ClaimTypes.Email) && info.Principal.HasClaim(c => c.Type == ClaimTypes.Name))
+
+                try
                 {
-                    Input = new InputModel
+                    if (info.Principal.HasClaim(c => c.Type == ClaimTypes.Email) && info.Principal.HasClaim(c => c.Type == ClaimTypes.Name))
                     {
-                        Email = info.Principal.FindFirstValue(ClaimTypes.Email),
-                        Username = info.Principal.FindFirstValue(ClaimTypes.Name)
-                    };
-                }
+                        Input = new InputModel
+                        {
+                            Email = info.Principal.FindFirstValue(ClaimTypes.Email),
+                            Username = info.Principal.FindFirstValue(ClaimTypes.Name)
+                        };
+                    } else if (info.Principal.HasClaim(c => c.Type == ClaimTypes.Email))
+                    {
+                        Input = new InputModel
+                        {
+                            Email = info.Principal.FindFirstValue(ClaimTypes.Email),
+                        };
+                    } else if (info.Principal.HasClaim(c => c.Type == ClaimTypes.Name))
+                    {
+                        Input = new InputModel
+                        {
+                            Username = info.Principal.FindFirstValue(ClaimTypes.Name),
+                        };
+                    }
+                }                        
+                catch (Exception e)      
+                {                        
+                    Console.WriteLine(e);
+                    throw new ApplicationException("Error loading external login information.", e);               
+                }                        
+                
+                
                 if (Input.Complete())
                 {
                     return await OnPostConfirmationAsync("~/");

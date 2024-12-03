@@ -12,42 +12,98 @@
         currPage = 1; // Default to 1 if parsing fails
     }
 
-    bool followed;
 
     int nextPage = currPage + 1; // Calculate the next page
     int prevPage = currPage > 1 ? currPage - 1 : 1; // This is to ensure that the previous page doesn't go below 1
+    var followerMap = ViewData["followerMap"] as Dictionary<string, bool> ?? new Dictionary<string, bool>();
+
 }
 
-<div>
+
     <partial name ="Shared/_NootBoxPartial" model="Model.CheepInput"/>
-    <h2> @routeName's Timeline 
-        
-        @if (User.Identity.IsAuthenticated && User.Identity.Name != @routeName.ToString())
+    
+        @if( routeName.ToString()!.EndsWith("s"))
         {
-            <button onclick="toggleLabel()" >Follow</button>
+            <h2> @routeName' BIO </h2>
         }
-    </h2> 
+        else
+        {
+            <h2> @routeName's BIO </h2>
+        }
+        <ul id="messagelist" class="cheeps">
+            <li>
+            
+                @if (Model.Bio != null)
+                {
+                    <p>
+                        @Model.Bio.Text
+                    </p>
+                }
+                else
+                {
+                    <em>There are no Bio so far.</em>
+                }
+            
+            </li>
+        </ul>
+        
+@if( routeName.ToString().EndsWith("s"))
+{
+    <h2> @routeName' Timeline </h2>
+}
+else
+{
+    <h2> @routeName's Timeline </h2>
+}
     @if (Model.Cheeps.Any())
     {
         <ul id="messagelist" class="cheeps">
             @foreach (var cheep in Model.Cheeps)
             {
-                <li>
+                <li class="Noot">
                     <p>
                         <strong>
                             <a href="/@cheep.Author">@cheep.Author</a>
                         </strong>
                         @cheep.Text
                         <small>&mdash; @cheep.TimeStamp</small>
+                        
                     </p>
-
+                    
                     @if (User.Identity.IsAuthenticated && User.Identity.Name == cheep.Author)
                     {
                         <form method="post" asp-page-handler="DeleteCheep">
                             <input type="hidden" name="cheepId" value="@cheep.CheepId.ToString()" />
-                            <button type="submit" class="btn btn-danger">Delete</button>
+                            <button type="submit" class="DeleteButton">
+                                <img alt="Delete" class="binphoto" src="/images/bin.png"/>
+                            </button>
                         </form>
+                        
                     }
+                    @if (User.Identity!.IsAuthenticated && User.Identity.Name != cheep.Author)
+                        @if (followerMap.ContainsKey(cheep.Author) && !followerMap[cheep.Author])
+                        {
+                            <form method="post" asp-page-handler="Follow">
+                                <input type="hidden" name="followingAuthorId" value="@cheep.AuthorId"/>
+                                <input type="hidden" name="followerAuthor" value="@User.Identity.Name"/>
+                                <input type="hidden" name="page" value="@currPage"/>
+                                <button type="submit" class="FollowButtonPublic" style="background-color: transparent; border: none; padding-right: 25px" >
+                                    <img alt="Follow logo" class="Followphoto" src="/images/Follow.png"/>
+                                </button>
+                            </form>
+                        }
+                        else
+                        {
+                            <form method="post" asp-page-handler="Unfollow">
+                                <input type="hidden" name="followingAuthorId" value="@cheep.AuthorId"/>
+                                <input type="hidden" name="followerAuthor" value="@User.Identity.Name"/>
+                                <input type="hidden" name="page" value="@currPage"/>
+                                <button   type="submit" class="UnfollowButtonPublic" style="background-color: transparent; border: none; padding-right: 25px">
+                                    <img alt="Unfollow logo" class="UnFollowphoto" src="/images/Unfollow.png"/>
+                                </button>
+                            </form>
+                            
+                        }
                 </li>
             }
         </ul>
@@ -56,20 +112,18 @@
     {
         <em>There are no cheeps so far.</em>
     }
-    @if (currPage > 1) {
-        <button onclick="document.location='/@routeName?page=@prevPage'" @if (currPage <= 1) { <text>disabled</text> } class="PageButton" >Previous Page</button>
+    @if (currPage > 1 && Model.Cheeps.Count < 32)
+    {
+    <button onclick="document.location='/@routeName/?page=@prevPage'" @if (currPage <= 1) { <text>disabled</text> } class="PageButton" >Previous Page</button>
     }
-    
-    <button onclick="document.location='/@routeName/?page=@nextPage'" style="float: right;" class="PageButton">Next Page</button>
-</div>
-<script> 
-    function toggleLabel() {
-    console.log("FUCK")
-    const btn =
-        document.querySelector('button');
-    if (btn.innerText === 'Follow') {
-        btn.innerText = 'Unfollow';
-    } else {
-        btn.innerText = 'Follow';
+    @if (currPage > 1 && Model.Cheeps.Count >= 32) 
+    { 
+        <button onclick="document.location='/@routeName/?page=@prevPage'" @if (currPage <= 1) { <text>disabled</text> } class="PageButton" >Previous Page</button> 
+        <button onclick="document.location='/@routeName/?page=@nextPage'" style="float: right;" class="PageButton">Next Page</button> 
     }
-}</script>
+    @if (Model.Cheeps.Count >= 32 && currPage == 1) 
+    { 
+        <div class="PButton">
+            <button onclick="document.location='/@routeName/?page=@nextPage'" style="float: right;" class="PageButton">Next Page</button>
+        </div> 
+    }

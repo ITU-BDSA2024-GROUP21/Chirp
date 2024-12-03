@@ -31,6 +31,13 @@ jobs:
         with:
           name: .net-app
           path: ./myapp
+      # - name: Apply migrations
+        # run: |
+          # dotnet tool install --global dotnet-ef
+          # dotnet tool restore
+          # dotnet ef database update
+        env:
+          ASPNETCORE_ENVIRONMENT: Development
 
   deploy:
     runs-on: ubuntu-latest

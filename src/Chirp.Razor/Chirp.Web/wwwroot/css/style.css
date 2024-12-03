@@ -22,7 +22,7 @@ input[type="text"],
 input[type="tel"],
 input[type="password"] {
     background: white;
-    border: 1px solid #e6c0bf;
+    border: 1px solid #99b1dd;
     padding: 2px;
     font-family: 'Trebuchet MS', sans-serif;
     font-size: 14px;
@@ -120,10 +120,32 @@ div.page div.footer {
   padding: 5px 10px;
   font-size: 12px;
 }
+
 .PageButton {
+    border-radius: 4px;
     font-size:12px;
     height:30px;
     width:115px;
+    
+}
+.PButton{
+    margin-bottom: 40px;
+}
+
+.Noot{
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.FollowButtonPublic{
+    width: 70px;
+    height: 30px;
+    margin-inside: auto;
+}
+
+.FollowButtonPublic:hover{
+    background-color: #657ba3;
 }
 
 div.page div.followstatus {
@@ -276,8 +298,44 @@ button {
     cursor: pointer;
 }
 
+.DeleteButton{
+    background-color: transparent !important;
+    padding: 0 !important;
+    border: none !important;
+    padding-right: 25px !important;
+    
+}
+
+.binphoto{
+    width: 20px;
+    height: 20px;
+}
+
+.Noot{
+    display: flex;
+    justify-content: space-between; /* Skubber indhold til venstre og højre */
+   
+}
+
+
+
+.Followphoto{
+    width: 20px;
+    height: 20px;
+}
+
+
+
+
+.UnFollowphoto{
+    width: 20px;
+    height: 20px;
+}
+
+
+
 button:hover {
-    background-color: #8b4949;
+    background-color: #657ba3;
 }
 
 ul.nav {
@@ -301,7 +359,45 @@ ul.nav li a {
 }
 
 ul.nav li a:hover {
-    background-color: #8b4949;
+    background-color: #657ba3;
+}
+
+.ForgetMe{
+    background: #f80000;
+    border-radius: 4px;
+    float: right;
+}
+
+.ForgetMe:hover {
+    background: #cc0202;
+}
+
+.Aboutme{
+    display: flex;
+    justify-content: space-between;
+}
+
+.information{
+    border-radius: 4px;
+}
+
+.Informationandbutton{
+    display: flex;
+    justify-content: space-between;
+}
+
+#bio{
+    width: 200px;
+    margin-right: 20px;
+}
+
+.biostuff{
+    display: flex;
+    justify-content: left;
+}
+
+.BioDiv{
+    display: flex;
 }
 
 .pingu-container {

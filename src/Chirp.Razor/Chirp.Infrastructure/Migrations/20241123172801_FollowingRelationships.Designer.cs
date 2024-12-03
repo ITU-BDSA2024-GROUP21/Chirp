@@ -3,6 +3,7 @@ using System;
 using Chirp.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Chirp.Infrastructure.Migrations
 {
     [DbContext(typeof(ChirpDBContext))]
-    partial class ChirpDBContextModelSnapshot : ModelSnapshot
+    [Migration("20241123172801_FollowingRelationships")]
+    partial class FollowingRelationships
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.8");
@@ -49,27 +52,6 @@ namespace Chirp.Infrastructure.Migrations
                     b.HasIndex("FollowingId");
 
                     b.ToTable("AuthorFollows");
-                });
-
-            modelBuilder.Entity("Chirp.Core.Bio", b =>
-                {
-                    b.Property<int>("BioId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("AuthorId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Text")
-                        .IsRequired()
-                        .HasMaxLength(160)
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("BioId", "AuthorId");
-
-                    b.HasIndex("AuthorId")
-                        .IsUnique();
-
-                    b.ToTable("Bios");
                 });
 
             modelBuilder.Entity("Chirp.Core.Cheep", b =>
@@ -307,17 +289,6 @@ namespace Chirp.Infrastructure.Migrations
                     b.Navigation("following");
                 });
 
-            modelBuilder.Entity("Chirp.Core.Bio", b =>
-                {
-                    b.HasOne("Chirp.Core.Author", "Author")
-                        .WithOne("Bio")
-                        .HasForeignKey("Chirp.Core.Bio", "AuthorId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Author");
-                });
-
             modelBuilder.Entity("Chirp.Core.Cheep", b =>
                 {
                     b.HasOne("Chirp.Core.Author", "Author")
@@ -382,9 +353,6 @@ namespace Chirp.Infrastructure.Migrations
 
             modelBuilder.Entity("Chirp.Core.Author", b =>
                 {
-                    b.Navigation("Bio")
-                        .IsRequired();
-
                     b.Navigation("Cheeps");
 
                     b.Navigation("Followers");

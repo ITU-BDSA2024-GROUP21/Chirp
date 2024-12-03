@@ -4,14 +4,14 @@ using Microsoft.Data.Sqlite;
 
 namespace Chirp.Infrastructure;
 
-public class CheepService : ICheepService
+public class NooterService : INooterService
 {
     private readonly INootRepository _nootRepository;
     private readonly IAuthorRepository _authorRepository;
     private readonly IBioRepository _bioRepository;
     private readonly IFollowRepository _followRepository;
     
-    public CheepService(INootRepository nootRepository, IAuthorRepository authorRepository, IBioRepository bioRepository, IFollowRepository followRepository) {
+    public NooterService(INootRepository nootRepository, IAuthorRepository authorRepository, IBioRepository bioRepository, IFollowRepository followRepository) {
         _nootRepository = nootRepository;
         _authorRepository = authorRepository;
         _bioRepository = bioRepository;

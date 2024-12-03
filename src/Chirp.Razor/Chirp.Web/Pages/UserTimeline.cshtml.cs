@@ -6,7 +6,7 @@ namespace Chirp.Web.Pages;
 
 public class UserTimelineModel : PageModel
 {
-    private readonly ICheepService _cheepService;
+    private readonly INooterService _nooterService;
     public List<CheepDTO> Cheeps { get; set; } = null!;
     private int _page;
     private readonly UserManager<ApplicationUser> _userManager;
@@ -17,9 +17,9 @@ public class UserTimelineModel : PageModel
     public BioDTO Bio { get; set; }
 
 
-    public UserTimelineModel(ICheepService cheepService, UserManager<ApplicationUser> userManager,INootRepository nootRepository, IBioRepository bioRepository, IFollowRepository followRepository)
+    public UserTimelineModel(INooterService nooterService, UserManager<ApplicationUser> userManager,INootRepository nootRepository, IBioRepository bioRepository, IFollowRepository followRepository)
     {
-        _cheepService = cheepService;
+        _nooterService = nooterService;
         _userManager = userManager;
         _nootRepository = nootRepository;
         _followerMap = new Dictionary<string, bool>();
@@ -46,28 +46,28 @@ public class UserTimelineModel : PageModel
         if (User.Identity!.IsAuthenticated)
         {
             var user = await _userManager.GetUserAsync(User);
-            await _cheepService.CheckFollowerExistElseCreate(user!);
+            await _nooterService.CheckFollowerExistElseCreate(user!);
             Cheeps = await GetCheepsWhenLoggedIn(author);
-            Author author1 = await _cheepService.GetAuthorByName(User.Identity?.Name!);
+            Author author1 = await _nooterService.GetAuthorByName(User.Identity?.Name!);
             if (User.Identity?.Name != author)
             {
                 if (await _bioRepository.AuthorHasBio(author))
                 {
-                    Bio = await _cheepService.GetBio(author);
+                    Bio = await _nooterService.GetBio(author);
                 }
             }
             else
             {
                 if (await _bioRepository.AuthorHasBio(author1.Name))
                 {
-                    Bio = await _cheepService.GetBio(User.Identity?.Name!);
+                    Bio = await _nooterService.GetBio(User.Identity?.Name!);
                 }
             }
 
         }
         else
         {
-            Cheeps = await _cheepService.GetCheepsFromAuthor(author, _page);
+            Cheeps = await _nooterService.GetCheepsFromAuthor(author, _page);
         }
         ViewData["FollowerMap"] = _followerMap;
 
@@ -86,7 +86,7 @@ public class UserTimelineModel : PageModel
 
         if (!ModelState.IsValid)
         {
-            Cheeps = await _cheepService.GetCheeps(1);
+            Cheeps = await _nooterService.GetCheeps(1);
             return Page();
         }
         
@@ -96,13 +96,13 @@ public class UserTimelineModel : PageModel
         var guid = Guid.NewGuid();
         var cheepId = BitConverter.ToInt32(guid.ToByteArray(), 1);
 
-        await _cheepService.CreateCheep(User.Identity?.Name!, email!,CheepInput.Text, DateTimeKind.Local.ToString(), cheepId);
+        await _nooterService.CreateCheep(User.Identity?.Name!, email!,CheepInput.Text, DateTimeKind.Local.ToString(), cheepId);
         return RedirectToPage("Public");
     }
     
     public async Task<IActionResult> OnPostFollow(int followingAuthorId, string followerAuthor, int page)
     {
-        Author author = await _cheepService.GetAuthorByName(followerAuthor);
+        Author author = await _nooterService.GetAuthorByName(followerAuthor);
         int id = author.AuthorId;
         
         if (string.IsNullOrEmpty(followerAuthor))
@@ -117,7 +117,7 @@ public class UserTimelineModel : PageModel
     }
     public async Task<IActionResult> OnPostUnfollow(int followingAuthorId, string followerAuthor, int page)
     {
-        Author author = await _cheepService.GetAuthorByName(followerAuthor);
+        Author author = await _nooterService.GetAuthorByName(followerAuthor);
         int id = author.AuthorId;
         
         if (string.IsNullOrEmpty(followerAuthor))
@@ -135,28 +135,28 @@ public class UserTimelineModel : PageModel
     public async Task<List<CheepDTO>> GetCheepsWhenLoggedIn(string author)
     {
         var user = await _userManager.GetUserAsync(User);
-        Author _author = await _cheepService.GetAuthorByName(User.Identity.Name);
+        Author _author = await _nooterService.GetAuthorByName(User.Identity.Name);
         int id = _author.AuthorId;
         if (user.UserName != author)
         {
-            Cheeps = await _cheepService.GetCheepsFromAuthor(author, _page);
+            Cheeps = await _nooterService.GetCheepsFromAuthor(author, _page);
             foreach (var cheep in Cheeps)
             {
-                _followerMap[cheep.Author] = await _cheepService.IsFollowing(id, cheep.AuthorId);
+                _followerMap[cheep.Author] = await _nooterService.IsFollowing(id, cheep.AuthorId);
             }
 
             return Cheeps;
         }
         else
         {
-            var currentAuthor = await _cheepService.GetAuthorByName(user.UserName);
-            var followedAuthors = await _cheepService.GetFollowedAuthors(currentAuthor.AuthorId);
+            var currentAuthor = await _nooterService.GetAuthorByName(user.UserName);
+            var followedAuthors = await _nooterService.GetFollowedAuthors(currentAuthor.AuthorId);
             followedAuthors.Add(user.UserName);
         
-            Cheeps = await _cheepService.GetCheepsFromFollowedAuthor(followedAuthors, _page);
+            Cheeps = await _nooterService.GetCheepsFromFollowedAuthor(followedAuthors, _page);
             foreach (var cheep in Cheeps)
             {
-                _followerMap[cheep.Author] = await _cheepService.IsFollowing(id, cheep.AuthorId);
+                _followerMap[cheep.Author] = await _nooterService.IsFollowing(id, cheep.AuthorId);
             }
 
             return Cheeps;

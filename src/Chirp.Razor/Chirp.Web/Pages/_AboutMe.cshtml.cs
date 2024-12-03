@@ -11,7 +11,7 @@ public class AboutMeModel : PageModel
 {
     private readonly SignInManager<ApplicationUser> _signInManager;
     private readonly UserManager<ApplicationUser> _userManager;
-    private readonly ICheepService _cheepService;
+    private readonly INooterService _nooterService;
     private readonly INootRepository _nootRepository;
     private readonly IBioRepository _bioRepository;
     private readonly IFollowRepository _followRepository;
@@ -25,11 +25,11 @@ public class AboutMeModel : PageModel
     public required string Cheeps { get; set; }
     public BioDTO Bio { get; set; }
 
-    public AboutMeModel(INootRepository nootRepository, SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager, ICheepService cheepService, IBioRepository bioRepository, IFollowRepository followRepository)
+    public AboutMeModel(INootRepository nootRepository, SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager, INooterService nooterService, IBioRepository bioRepository, IFollowRepository followRepository)
     {
         _signInManager = signInManager;
         _userManager = userManager;
-        _cheepService = cheepService;
+        _nooterService = nooterService;
         CheepsListString = new List<string>();
         _nootRepository = nootRepository;
         _bioRepository = bioRepository;
@@ -49,18 +49,18 @@ public class AboutMeModel : PageModel
         }
         
         //Loading The users email adress
-        Author author = await _cheepService.GetAuthorByName(User.Identity?.Name!);
+        Author author = await _nooterService.GetAuthorByName(User.Identity?.Name!);
         Email = author.Email;
 
         if (await _bioRepository.AuthorHasBio(author.Name))
         {
-            Bio = await _cheepService.GetBio(User.Identity?.Name!);
+            Bio = await _nooterService.GetBio(User.Identity?.Name!);
         }
 
         int authorid = author.AuthorId;
         
         //loading who our uses is following
-        FollowersList = await _cheepService.GetFollowedAuthors(authorid);
+        FollowersList = await _nooterService.GetFollowedAuthors(authorid);
         Followers = string.Join( ", ", FollowersList.ToArray() );
         
         //loading all the cheeps
@@ -86,16 +86,16 @@ public class AboutMeModel : PageModel
         {
             return NotFound("User not found.");
         }
-        Author author1 = await _cheepService.GetAuthorByName(User.Identity?.Name!);
+        Author author1 = await _nooterService.GetAuthorByName(User.Identity?.Name!);
         if (await _bioRepository.AuthorHasBio(author1.Name))
         {
-            Bio = await _cheepService.GetBio(User.Identity?.Name!);
+            Bio = await _nooterService.GetBio(User.Identity?.Name!);
         }
 
         var personalData = new Dictionary<string, object>();
 
         
-        var author = await _cheepService.GetAuthorByName(User.Identity?.Name!);
+        var author = await _nooterService.GetAuthorByName(User.Identity?.Name!);
         if (author != null!)
         {
             personalData.Add("Name", author.Name);
@@ -103,7 +103,7 @@ public class AboutMeModel : PageModel
             
 
             // Følgere
-            var followersList = await _cheepService.GetFollowedAuthors(author.AuthorId);
+            var followersList = await _nooterService.GetFollowedAuthors(author.AuthorId);
             personalData.Add("Followers", followersList);
 
             // Cheeps
@@ -127,7 +127,7 @@ public class AboutMeModel : PageModel
 
     {
         var user = await _userManager.GetUserAsync(User);
-        Author author1 = await _cheepService.GetAuthorByName(User.Identity?.Name!);
+        Author author1 = await _nooterService.GetAuthorByName(User.Identity?.Name!);
         
         if (string.IsNullOrEmpty(author1.ToString()))
         {
@@ -135,7 +135,7 @@ public class AboutMeModel : PageModel
             return Redirect("/Identity/Account/Login");
         }
         
-        await _cheepService.DeleteAuthorAndCheepsByEmail(author1.Email);
+        await _nooterService.DeleteAuthorAndCheepsByEmail(author1.Email);
             
         await _signInManager.SignOutAsync();
         
@@ -144,7 +144,7 @@ public class AboutMeModel : PageModel
     
     public async Task<IActionResult> OnPost()
     {
-        var author = await _cheepService.GetAuthorByName(User.Identity?.Name!);
+        var author = await _nooterService.GetAuthorByName(User.Identity?.Name!);
         Console.WriteLine("HEJ" + author.Name);
         var user = await _userManager.GetUserAsync(User);
         if (await _bioRepository.AuthorHasBio(User.Identity?.Name!))
@@ -164,7 +164,7 @@ public class AboutMeModel : PageModel
 
         if (!ModelState.IsValid)
         {
-            Bio = await _cheepService.GetBio(author.Name);
+            Bio = await _nooterService.GetBio(author.Name);
             return Page();
         }
         var email = user.Email;
@@ -172,7 +172,7 @@ public class AboutMeModel : PageModel
         var guid = Guid.NewGuid();
         var bioId = BitConverter.ToInt32(guid.ToByteArray(), 0);
 
-        await _cheepService.CreateBIO(User.Identity?.Name!, email!,BioInput.Text, bioId);
+        await _nooterService.CreateBIO(User.Identity?.Name!, email!,BioInput.Text, bioId);
         return RedirectToPage("./_AboutMe");
     }
     

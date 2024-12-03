@@ -12,7 +12,7 @@ namespace Chirp.Web.Pages;
 
 public class PublicModel : PageModel
 {
-    private readonly ICheepService _cheepService;
+    private readonly INooterService _nooterService;
     private readonly IFollowRepository _followRepository;
     public required List<CheepDTO> Cheeps { get; set; }
     private int _page;
@@ -23,9 +23,9 @@ public class PublicModel : PageModel
     public required NootBoxModel CheepInput { get; set; }
     
 
-    public PublicModel(ICheepService cheepService, UserManager<ApplicationUser> userManager, IFollowRepository followRepository)
+    public PublicModel(INooterService nooterService, UserManager<ApplicationUser> userManager, IFollowRepository followRepository)
     {
-        _cheepService = cheepService;
+        _nooterService = nooterService;
         _userManager = userManager;
         FollowerMap = new Dictionary<string, bool>();
         _followRepository = followRepository;
@@ -39,7 +39,7 @@ public class PublicModel : PageModel
             _page = int.Parse(Request.Query["page"]!) -1;
         }
         
-        Cheeps = await _cheepService.GetCheeps(_page);
+        Cheeps = await _nooterService.GetCheeps(_page);
 
         if (User.Identity?.Name == null)
         {
@@ -50,14 +50,14 @@ public class PublicModel : PageModel
         if (User.Identity!.IsAuthenticated)
         {
             var user = await _userManager.GetUserAsync(User);
-            await _cheepService.CheckFollowerExistElseCreate(user!);
+            await _nooterService.CheckFollowerExistElseCreate(user!);
             
 
-            Author author = await _cheepService.GetAuthorByName(User.Identity.Name!);
+            Author author = await _nooterService.GetAuthorByName(User.Identity.Name!);
             int id = author.AuthorId;
             foreach (var cheep in Cheeps)
             {
-                FollowerMap[cheep.Author] = await _cheepService.IsFollowing(id, cheep.AuthorId);
+                FollowerMap[cheep.Author] = await _nooterService.IsFollowing(id, cheep.AuthorId);
             }
         }
         ViewData["FollowerMap"] = FollowerMap;
@@ -79,7 +79,7 @@ public class PublicModel : PageModel
 
         if (!ModelState.IsValid)
         {
-            Cheeps = await _cheepService.GetCheeps(1);
+            Cheeps = await _nooterService.GetCheeps(1);
             return Page();
         }
         
@@ -89,7 +89,7 @@ public class PublicModel : PageModel
         var guid = Guid.NewGuid();
         var cheepId = BitConverter.ToInt32(guid.ToByteArray(), 0);
 
-        await _cheepService.CreateCheep(User.Identity?.Name!,email! ,CheepInput.Text, DateTime.Now.AddHours(1).ToString("yyyy-MM-dd HH:mm:ss"), cheepId);
+        await _nooterService.CreateCheep(User.Identity?.Name!,email! ,CheepInput.Text, DateTime.Now.AddHours(1).ToString("yyyy-MM-dd HH:mm:ss"), cheepId);
         return RedirectToPage("Public");
     }
 
@@ -101,7 +101,7 @@ public class PublicModel : PageModel
             return Redirect($"/?page={page}");
         }
         
-        Author author = await _cheepService.GetAuthorByName(followerAuthor);
+        Author author = await _nooterService.GetAuthorByName(followerAuthor);
         int id = author.AuthorId;
         
         await _followRepository.FollowAuthor(id,followingAuthorId);
@@ -116,7 +116,7 @@ public class PublicModel : PageModel
             return Redirect($"/?page={page}");
         }
         
-        Author author = await _cheepService.GetAuthorByName(followerAuthor);
+        Author author = await _nooterService.GetAuthorByName(followerAuthor);
         int id = author.AuthorId;
         
         Console.WriteLine(followingAuthorId);

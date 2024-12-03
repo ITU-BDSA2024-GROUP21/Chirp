@@ -27,7 +27,7 @@ public partial class Program
         builder.Services.AddScoped<IBioRepository, BioRepository>();
         builder.Services.AddScoped<IFollowRepository, FollowRepository>();
         builder.Services.AddScoped<IAuthorRepository, AuthorRepository>();
-        builder.Services.AddScoped<ICheepService, CheepService>();
+        builder.Services.AddScoped<INooterService, NooterService>();
         
         builder.Services.AddAuthentication()
             .AddCookie()

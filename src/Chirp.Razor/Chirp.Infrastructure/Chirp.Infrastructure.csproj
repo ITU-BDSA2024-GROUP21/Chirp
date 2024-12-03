@@ -21,7 +21,6 @@
     
     <ItemGroup> 
         <Folder Include="Chirp.Data\" />
-        <Folder Include="Repositories\" />
         <Folder Include="Services\" />
     </ItemGroup>
 

@@ -1,14 +1,21 @@
 using System.Data;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Data.Sqlite;
 
 namespace Chirp.Infrastructure;
 
-public class CheepService : ICheepService
+public class NooterService : INooterService
 {
-    private readonly ICheepRepository _cheepRepository;
+    private readonly INootRepository _nootRepository;
+    private readonly IAuthorRepository _authorRepository;
+    private readonly IBioRepository _bioRepository;
+    private readonly IFollowRepository _followRepository;
     
-    public CheepService(ICheepRepository cheepRepository) {
-        _cheepRepository = cheepRepository;
+    public NooterService(INootRepository nootRepository, IAuthorRepository authorRepository, IBioRepository bioRepository, IFollowRepository followRepository) {
+        _nootRepository = nootRepository;
+        _authorRepository = authorRepository;
+        _bioRepository = bioRepository;
+        _followRepository = followRepository;
     }
 
     public static string UnixTimeStampToDateTimeString(double unixTimeStamp)
@@ -26,7 +33,7 @@ public class CheepService : ICheepService
             Name = username,
             Email = email,
         };
-        var author = await _cheepRepository.ConvertAuthors(newAuthor);
+        var author = await _authorRepository.ConvertAuthors(newAuthor);
         
         CheepDTO newCheep = new CheepDTO
         {
@@ -37,27 +44,27 @@ public class CheepService : ICheepService
             AuthorId = author.AuthorId
             
         };
-        var cheep = await _cheepRepository.ConvertCheeps(newCheep, newAuthor);
+        var cheep = await _nootRepository.ConvertNoots(newCheep, newAuthor);
         return cheep;
     }
 
     public async Task<List<CheepDTO>> GetCheeps(int page)
     {
-        var result = await _cheepRepository.GetCheeps(page);
+        var result = await _nootRepository.GetNoots(page);
         var cheeps = DTOConversion(result);
         return cheeps;
     }
 
     public async Task<List<CheepDTO>> GetCheepsFromAuthor(string author, int page)
     {
-        var result = await _cheepRepository.GetCheepsFromAuthor(author, page);
+        var result = await _nootRepository.GetNootsFromAuthor(author, page);
         var cheeps = DTOConversion(result);
         return cheeps;
     }
 
     public async Task<Author> GetAuthorByName(string name)
     {
-        return await _cheepRepository.GetAuthorByName(name);
+        return await _authorRepository.GetAuthorByName(name);
     }
 
 
@@ -80,34 +87,34 @@ public class CheepService : ICheepService
 
     public async Task Follow(int followingAuthorId, int followedAuthorId)
     {
-        await _cheepRepository.FollowAuthor(followingAuthorId, followedAuthorId);
+        await _followRepository.FollowAuthor(followingAuthorId, followedAuthorId);
     }
 
     public async Task<List<string>> GetFollowedAuthors(int authorId)
     {
-        return await _cheepRepository.GetFollowedAuthorsAsync(authorId);
+        return await _followRepository.GetFollowedAuthors(authorId);
     }
     
     public async Task<List<CheepDTO>> GetCheepsFromFollowedAuthor(IEnumerable<string> followedAuthors, int authorId)
     {
-        var cheep = await _cheepRepository.GetCheepsFromFollowedAuthorsAsync(followedAuthors, authorId);
+        var cheep = await _nootRepository.GetNootsFromFollowedAuthors(followedAuthors, authorId);
         var cheeps = DTOConversion(cheep);
         return cheeps;
     }
 
     public async Task<bool> IsFollowing(int followingAuthorId, int followedAuthorId)
     {
-        return await _cheepRepository.IsFollowing(followingAuthorId, followedAuthorId);
+        return await _followRepository.IsFollowing(followingAuthorId, followedAuthorId);
     }
 
     public async Task Unfollow(int followingAuthorId, int followedAuthorId)
     {
-        await _cheepRepository.Unfollow(followingAuthorId, followedAuthorId);
+        await _followRepository.Unfollow(followingAuthorId, followedAuthorId);
     }
 
     public async Task DeleteAuthorAndCheepsByEmail(string email)
     {
-        await _cheepRepository.DeleteAuthorAndCheepsByEmail(email);
+        await _authorRepository.DeleteAuthorByEmail(email);
     }
     
     public async Task CheckFollowerExistElseCreate(ApplicationUser user)
@@ -117,7 +124,7 @@ public class CheepService : ICheepService
                 Name = user.UserName,
                 Email = user.Email,
             };
-            _cheepRepository.ConvertAuthors(newAuthor).Wait();
+            _authorRepository.ConvertAuthors(newAuthor).Wait();
     }
     
     public async Task<Bio> CreateBIO(string username,  string email, string message, int id)
@@ -127,7 +134,7 @@ public class CheepService : ICheepService
             Name = username,
             Email = email,
         };
-        var author = await _cheepRepository.ConvertAuthors(newAuthor);
+        var author = await _authorRepository.ConvertAuthors(newAuthor);
 
         BioDTO newBio = new BioDTO
         {
@@ -138,7 +145,7 @@ public class CheepService : ICheepService
         };
         
         
-        var bio = await _cheepRepository.ConvertBio(newBio, newAuthor);
+        var bio = await _bioRepository.ConvertBio(newBio, newAuthor);
         return bio;
     }
     
@@ -153,10 +160,12 @@ public class CheepService : ICheepService
             });
         
     }
+    
     public async Task<BioDTO> GetBio(string author)
     {
-        var result = await _cheepRepository.GetBio(author);
+        var result = await _bioRepository.GetBio(author);
         var Bio = DTOConversionBio(result);
         return Bio;
     }
+
 }

@@ -54,7 +54,7 @@ public class UnitTest1 : PageTest
         return userManager;
     }
 
-    public async Task<ICheepRepository> RepositorySetUp()
+    public async Task<IAuthorRepository> RepositorySetUp()
     {
         // This is to create an in-memory SQLite connection
         var connection = new SqliteConnection("Filename=:memory:");
@@ -70,7 +70,7 @@ public class UnitTest1 : PageTest
         await context.Database.EnsureCreatedAsync();
 
         // In the end we return the CheepRepository instance for testing
-        return new CheepRepository(context, userManager);
+        return new AuthorRepository(context, userManager);
     }
 
     [SetUp]
@@ -283,7 +283,7 @@ public class UnitTest1 : PageTest
         await Page.GetByRole(AriaRole.Button, new() { Name = "Register" }).ClickAsync();
         
         
-        await repo.DeleteAuthorAndCheepsByEmail("carla59@mail.dk");
+        await repo.DeleteAuthorByEmail("carla59@mail.dk");
         // await Expect(Page.GetByRole(AriaRole.Link, new() { Name = "Click here to confirm your" })).ToBeVisibleAsync();
         // await Page.GetByRole(AriaRole.Link, new() { Name = "Click here to confirm your" }).ClickAsync();
         

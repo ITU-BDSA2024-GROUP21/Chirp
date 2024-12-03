@@ -1,6 +1,6 @@
 namespace Chirp.Infrastructure;
 
-public interface ICheepService
+public interface INooterService
 {
     public Task<List<CheepDTO>> GetCheeps(int page);
 

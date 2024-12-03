@@ -70,7 +70,7 @@ public class UIEnd2EndTest : PageTest
 
 
         //checking that we are now direkte to our public timeline
-        await Expect(Page.GetByRole(AriaRole.Heading, new() { Name = "Public Timeline" })).ToBeVisibleAsync();
+        await Expect(Page.GetByRole(AriaRole.Heading, new() { Name = "Public timeline" })).ToBeVisibleAsync();
 
         //Checkign That Alan is logged in and can log out
         await Expect(Page.GetByRole(AriaRole.Link, new() { Name = "Logout Alan" })).ToBeVisibleAsync();
@@ -134,7 +134,7 @@ public class UIEnd2EndTest : PageTest
 
 
         //checking that we are now direkte to our public timeline
-        await Expect(Page.GetByRole(AriaRole.Heading, new() { Name = "Public Timeline" })).ToBeVisibleAsync();
+        await Expect(Page.GetByRole(AriaRole.Heading, new() { Name = "Public timeline" })).ToBeVisibleAsync();
 
         //CHANGE NUMBER HERE
         //Checkign That Alan is logged in and can log out

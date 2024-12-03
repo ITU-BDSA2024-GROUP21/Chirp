@@ -25,9 +25,9 @@ public class IntegrationTest
         await context.Database.EnsureDeletedAsync();
         await context.Database.EnsureCreatedAsync(); // Applies the schema to the database
 
-        var repository = new CheepRepository(context, userManager: null);
+        var repository = new NootRepository(context, userManager: null);
         
-        var cheeps = await repository.GetCheeps(33);
+        var cheeps = await repository.GetNoots(33);
         
         Assert.Empty(cheeps);
         Assert.NotNull(cheeps);

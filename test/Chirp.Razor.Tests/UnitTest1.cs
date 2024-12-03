@@ -10,6 +10,7 @@ using Xunit;
 public class UnitTest
 {
     private readonly ITestOutputHelper _testOutputHelper;
+    private readonly NooterService _nooterService;
 
     public UnitTest(ITestOutputHelper testOutputHelper)
     {
@@ -42,7 +43,7 @@ public class UnitTest
         return userManager;
     }
 
-    public async Task<ICheepRepository> RepositorySetUp()
+    public async Task<INootRepository> NootRepositorySetUp()
     {
         // This is to create an in-memory SQLite connection
         var connection = new SqliteConnection("Filename=:memory:");
@@ -58,15 +59,54 @@ public class UnitTest
         await context.Database.EnsureCreatedAsync();
 
         // In the end we return the CheepRepository instance for testing
-        return new CheepRepository(context, userManager);
+        return new NootRepository(context, userManager);
+    }
+    
+    public async Task<IAuthorRepository> AuthorRepositorySetUp()
+    {
+        var repositoryFollow = FollowRepositorySetUp();
+        // This is to create an in-memory SQLite connection
+        var connection = new SqliteConnection("Filename=:memory:");
+        await connection.OpenAsync();
+        var builder = new DbContextOptionsBuilder<ChirpDBContext>().UseSqlite(connection);
+
+        // Then we create the ChirpDBContext instance with builder.Options
+        var context = new ChirpDBContext(builder.Options);
+        var userManager = GetUserManager(context);
+    
+        // Then we ensure that the database schema is created
+        await context.Database.EnsureDeletedAsync();
+        await context.Database.EnsureCreatedAsync();
+
+        // In the end we return the CheepRepository instance for testing
+        return new AuthorRepository(context, userManager);
+    }
+    
+    public async Task<IFollowRepository> FollowRepositorySetUp()
+    {
+        // This is to create an in-memory SQLite connection
+        var connection = new SqliteConnection("Filename=:memory:");
+        await connection.OpenAsync();
+        var builder = new DbContextOptionsBuilder<ChirpDBContext>().UseSqlite(connection);
+
+        // Then we create the ChirpDBContext instance with builder.Options
+        var context = new ChirpDBContext(builder.Options);
+        var userManager = GetUserManager(context);
+    
+        // Then we ensure that the database schema is created
+        await context.Database.EnsureDeletedAsync();
+        await context.Database.EnsureCreatedAsync();
+
+        // In the end we return the CheepRepository instance for testing
+        return new FollowRepository(context, userManager);
     }
     
     [Fact]
     public async Task CheepRepositoryTest()
     {
-        var repository1 = await RepositorySetUp();
+        var repository1 = await NootRepositorySetUp();
         
-        var cheeps = await repository1.GetCheeps(1);
+        var cheeps = await repository1.GetNoots(1);
 
         Assert.Empty(cheeps);
         Assert.NotNull(cheeps);
@@ -76,7 +116,7 @@ public class UnitTest
     public async Task GetAuthorByEmailTest()
     {
         // Arrange
-        var repository2 = await RepositorySetUp();
+        var repository2 = await AuthorRepositorySetUp();
 
         var testAuthor = new Author
         {
@@ -100,7 +140,7 @@ public class UnitTest
     [Fact]
     public async Task GetAuthorByNameTest()
     {
-        var repository3 = await RepositorySetUp();
+        var repository3 = await AuthorRepositorySetUp();
 
         var testAuthor1 = new Author
         {
@@ -122,7 +162,7 @@ public class UnitTest
     public async Task CreateNewAuthorTest()
     {
         
-        var repository4 = await RepositorySetUp();
+        var repository4 = await AuthorRepositorySetUp();
 
         var testAuthorDTO = new AuthorDTO
         {
@@ -138,9 +178,9 @@ public class UnitTest
     }
 
     [Fact]
-    public async Task CreateCheep()
+    public async Task CreateNoot()
     {
-        var repository5 = await RepositorySetUp();
+        var repository5 = await NootRepositorySetUp();
 
         var testAuthor1 = new Author
         {
@@ -167,9 +207,9 @@ public class UnitTest
         };
         
 
-        await repository5.ConvertCheeps(testCheepDTO, testAuthorDTO1);
+        await repository5.ConvertNoots(testCheepDTO, testAuthorDTO1);
 
-        var cheepsByAuthor = await repository5.GetCheepsFromAuthor(testAuthor1.Name, 0);
+        var cheepsByAuthor = await repository5.GetNootsFromAuthor(testAuthor1.Name, 0);
 
         Assert.NotNull(testAuthor1);
         Assert.Equal(testCheepDTO.Text, cheepsByAuthor.First().Text);
@@ -178,7 +218,7 @@ public class UnitTest
     [Fact]
     public async Task DeleteAuthorTest()
     {
-        var repository6 = await RepositorySetUp();
+        var repository6 = await AuthorRepositorySetUp();
 
         var testAuthorDTO = new AuthorDTO
         {
@@ -192,16 +232,16 @@ public class UnitTest
         var email = Author.Email;
        
         
-        await repository6.DeleteAuthorAndCheepsByEmail(email);
+        await repository6.DeleteAuthorByEmail(email);
         
        Assert.Null(await repository6.CheckAuthorExists(testAuthorDTO));
     }
 
     [Fact]
-    public async Task DeleteCheepTest()
+    public async Task DeleteNootTest()
     {
 
-        var repository5 = await RepositorySetUp();
+        var repository5 = await NootRepositorySetUp();
 
         var testAuthor1 = new Author
         {
@@ -222,22 +262,22 @@ public class UnitTest
             Name = "Tom Holland",
             Email = "Tom.Holland@gmail.com"
         };
-              await repository5.ConvertCheeps(testCheepDTO, testAuthorDTO1);
+              await repository5.ConvertNoots(testCheepDTO, testAuthorDTO1);
 
-        var cheepsByAuthor = await repository5.GetCheepsFromAuthor(testAuthor1.Name, 0);
+        var cheepsByAuthor = await repository5.GetNootsFromAuthor(testAuthor1.Name, 0);
 
         Assert.NotNull(testAuthor1);
         Assert.Equal(testCheepDTO.Text, cheepsByAuthor.First().Text);
         
-        await repository5.DeleteCheep(cheepsByAuthor.First().CheepId);
+        await repository5.DeleteNoot(cheepsByAuthor.First().CheepId);
         
-        Assert.Empty(await repository5.GetCheepsFromAuthor(testAuthor1.Name, 0));
+        Assert.Empty(await repository5.GetNootsFromAuthor(testAuthor1.Name, 0));
     }
       
     [Fact]
     public async Task FollowTest()
     {
-        var repository6 = await RepositorySetUp();
+        var repository6 = await AuthorRepositorySetUp();
         var testAuthor1 = new Author
         {
             Name = "John10",
@@ -247,7 +287,7 @@ public class UnitTest
             Followers = null!,
             Following = null!
         };
-        await repository6.AddAuthorAsync(testAuthor1);
+        await repository6.AddAuthorToDB(testAuthor1);
         var testAuthor2 = new Author
         {
             Name = "John11",
@@ -257,17 +297,17 @@ public class UnitTest
             Followers = null!,
             Following = null!
         };
-        await repository6.AddAuthorAsync(testAuthor2);
+        await repository6.AddAuthorToDB(testAuthor2);
         await repository6.FollowAuthor(testAuthor1.AuthorId, testAuthor2.AuthorId);
 
-        var follows = await repository6.GetFollowedAuthorsAsync(testAuthor1.AuthorId);
+        var follows = await repository6.GetFollowedAuthors(testAuthor1.AuthorId);
         Assert.Contains(testAuthor2.Name, follows);
         
     }
     [Fact]
     public async Task UnfollowTest()
     {
-        var repository7 = await RepositorySetUp();
+        var repository7 = await AuthorRepositorySetUp();
         var testAuthor1 = new Author
         {
             Name = "John10",
@@ -278,7 +318,7 @@ public class UnitTest
             Following = null!
         };
 
-        await repository7.AddAuthorAsync(testAuthor1);
+        await repository7.AddAuthorToDB(testAuthor1);
         var testAuthor2 = new Author
         {
             Name = "John11",
@@ -288,14 +328,14 @@ public class UnitTest
             Followers = null!,
             Following = null!
         };
-        await repository7.AddAuthorAsync(testAuthor2);
+        await repository7.AddAuthorToDB(testAuthor2);
         await repository7.FollowAuthor(testAuthor1.AuthorId, testAuthor2.AuthorId);
 
-        var follows = await repository7.GetFollowedAuthorsAsync(testAuthor1.AuthorId);
+        var follows = await repository7.GetFollowedAuthors(testAuthor1.AuthorId);
         Assert.Contains(testAuthor2.Name, follows);
         
         await repository7.Unfollow(testAuthor1.AuthorId, testAuthor2.AuthorId);
-        var follows2 = await repository7.GetFollowedAuthorsAsync(testAuthor1.AuthorId);
+        var follows2 = await repository7.GetFollowedAuthors(testAuthor1.AuthorId);
 
         Assert.DoesNotContain(testAuthor2.Name, follows2);
         

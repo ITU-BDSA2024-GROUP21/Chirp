@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Logging;
 
 namespace Chirp.Infrastructure;
 
@@ -7,6 +8,7 @@ namespace Chirp.Infrastructure;
 public class CheepRepository : ICheepRepository
 {
     private readonly ChirpDBContext _chirpDbContext;
+    public ChirpDBContext DbContext => _chirpDbContext;
     private readonly UserManager<ApplicationUser> _userManager;
     
     
@@ -203,6 +205,7 @@ public class CheepRepository : ICheepRepository
             .OrderByDescending(c => c.TimeStamp)
             .Skip(page * 32)
             .Take(32)
+            .Include(c => c.Author)
             .Select(cheep => cheep)
             .ToListAsync();
     }
@@ -217,9 +220,62 @@ public class CheepRepository : ICheepRepository
         
         var followRelation = await _chirpDbContext.AuthorFollows
             .FirstOrDefaultAsync(f => f.FollowerId == followingAuthorId && f.FollowingId == followedAuthorId);
+
         _chirpDbContext.AuthorFollows.Remove(followRelation!);
+        await _chirpDbContext.SaveChangesAsync();
+        
+    }
+    public async Task AddAuthorAsync(Author author)
+    {
+        _chirpDbContext.Authors.Add(author);
         await _chirpDbContext.SaveChangesAsync();
     }
     
+    public async Task<Bio> ConvertBio(BioDTO bio, AuthorDTO author)
+    {
+        var _author = await ConvertAuthors(author);
+        
+        Bio newBio = new Bio { Author = _author, Text = bio.Text, BioId = bio.BioId, AuthorId = _author.AuthorId };
+        
+        
+        await _chirpDbContext.Bios.AddAsync(newBio);
+        await _chirpDbContext.SaveChangesAsync();
+        return newBio;
+
+    }
+    
+    public async Task<Bio> GetBio(string author)
+    {
+        var sqlQuery = _chirpDbContext.Bios
+            .Where(bio => bio.Author.Name == author)
+            .Select(bio => bio)
+            .Include(bio => bio.Author);
+
+        var result = await sqlQuery.FirstOrDefaultAsync();
+        return result;
+    }
+
+    public async Task<bool> AuthorHasBio(string author)
+    {
+        if (await _chirpDbContext.Bios.AnyAsync(bio => bio.Author.Name == author))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    public async Task DeleteBio(Author author)
+    {
+        var FindBio = await _chirpDbContext.Bios.FirstOrDefaultAsync(b => b.AuthorId == author.AuthorId);
+        if (FindBio != null)
+        { 
+            _chirpDbContext.Bios.Remove(FindBio);
+        }
+        
+        await _chirpDbContext.SaveChangesAsync();
+    }
 
 }

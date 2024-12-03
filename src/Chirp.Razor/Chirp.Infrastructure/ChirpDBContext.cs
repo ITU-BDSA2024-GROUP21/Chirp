@@ -12,6 +12,7 @@ public class ChirpDBContext : IdentityDbContext<ApplicationUser>
     public DbSet<Cheep> Cheeps { get; set; }
     public DbSet<Author> Authors { get; set; }
     public DbSet<AuthorFollow> AuthorFollows { get; set; }
+    public DbSet<Bio> Bios { get; set; }
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -32,6 +33,16 @@ public class ChirpDBContext : IdentityDbContext<ApplicationUser>
             .WithMany(a => a.Followers)
             .HasForeignKey(af => af.FollowingId)
             .OnDelete(DeleteBehavior.Restrict);
+        
+        modelBuilder.Entity<Bio>()
+            .HasKey(b => new { b.BioId, b.AuthorId });
+        
+        modelBuilder.Entity<Bio>()
+            .HasOne(b => b.Author)
+            .WithOne(a => a.Bio)
+            .HasForeignKey<Bio>(b => b.AuthorId)
+            .OnDelete(DeleteBehavior.Restrict);
+            
     }
     
 }

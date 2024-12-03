@@ -265,8 +265,159 @@ public class UnitTest1 : PageTest
         await Expect(specificCheep).ToBeVisibleAsync();
         
         // Delete Noot and check that it no longer exists on users timeline
-        await specificCheep.GetByRole(AriaRole.Button, new() { Name = "Delete" }).ClickAsync();
+        await specificCheep.GetByAltText("Delete").ClickAsync();
+
         await Expect(specificCheep).Not.ToBeVisibleAsync();
     
+    }
+    
+    [Test]
+    public async Task FollowTest1()
+    {
+        await Page.GotoAsync("https://localhost:5273/");
+        await Page.GetByRole(AriaRole.Link, new() { Name = "Login" }).ClickAsync();
+        await Page.GetByPlaceholder("name@example.com").ClickAsync();
+        await Page.GetByPlaceholder("name@example.com").FillAsync("marcus@mail.dk");
+        await Page.GetByPlaceholder("password").ClickAsync();
+        await Page.GetByPlaceholder("password").FillAsync("Halløj1!");
+        await Page.GetByRole(AriaRole.Button, new() { Name = "Log in" }).ClickAsync();
+
+        await Expect(Page.Locator("li").Filter(new() { HasText = "brian2 hej — 27.11.2024" })).ToBeVisibleAsync();
+        
+        
+        await Expect(Page.Locator("li").Filter(new() { HasText = "brian2 hej — 27.11.2024" }).GetByAltText("Follow logo")).ToBeVisibleAsync();
+        
+        await Page.Locator("li").Filter(new() { HasText = "brian2 hej — 27.11.2024" }).GetByAltText("Follow logo").ClickAsync();
+        
+        await Expect(Page.Locator("li").Filter(new() { HasText = "brian2 hej — 27.11.2024" }).GetByAltText("Unfollow logo")).ToBeVisibleAsync();
+        
+        // Conforming that the following photo isn't visible for brian anymor because we are
+        // know following hum and the unfollow image is now visible
+        await Expect(Page.Locator("li")
+                .Filter(new() { HasText = "brian2 hej — 27.11.2024" })
+                .Locator("img[alt='Follow logo']"))
+            .Not.ToBeVisibleAsync();
+
+        
+        await Page.GetByRole(AriaRole.Link, new() { Name = "My timeline" }).ClickAsync(); 
+        await Expect(Page.Locator("li").Filter(new() { HasText = "brian2 hej — 27.11.2024" })).ToBeVisibleAsync();
+
+        await Expect(Page.Locator("li").Filter(new() { HasText = "brian2 hej — 27.11.2024" }).GetByAltText("Unfollow logo")).ToBeVisibleAsync();
+        
+        var _content = await Page.ContentAsync();
+        Console.WriteLine(_content);
+        
+    }
+    
+    [Test]
+    public async Task UnFollowTest()
+    {
+        await Page.GotoAsync("https://localhost:5273/");
+        await Page.GetByRole(AriaRole.Link, new() { Name = "Login" }).ClickAsync();
+        await Page.GetByPlaceholder("name@example.com").ClickAsync();
+        await Page.GetByPlaceholder("name@example.com").FillAsync("marcus@mail.dk");
+        await Page.GetByPlaceholder("password").ClickAsync();
+        await Page.GetByPlaceholder("password").FillAsync("Halløj1!");
+        await Page.GetByRole(AriaRole.Button, new() { Name = "Log in" }).ClickAsync();
+
+        await Expect(Page.Locator("li").Filter(new() { HasText = "brian2 hej — 27.11.2024" })).ToBeVisibleAsync();
+        
+        
+        await Expect(Page.Locator("li").Filter(new() { HasText = "brian2 hej — 27.11.2024" }).GetByAltText("Unfollow logo")).ToBeVisibleAsync();
+        
+        await Page.GetByRole(AriaRole.Link, new() { Name = "My timeline" }).ClickAsync(); 
+        
+        await Expect(Page.Locator("li").Filter(new() { HasText = "brian2 hej — 27.11.2024" })).ToBeVisibleAsync();
+
+        
+        await Expect(Page.Locator("li").Filter(new() { HasText = "brian2 hej — 27.11.2024" }).GetByAltText("Unfollow logo")).ToBeVisibleAsync();
+
+        
+        await Page.Locator("li").Filter(new() { HasText = "brian2 hej — 27.11.2024" }).GetByAltText("Unfollow logo").ClickAsync();
+        
+        await Expect(Page.Locator("li").Filter(new() { HasText = "brian2 hej — 27.11.2024" })).Not.ToBeVisibleAsync();
+        
+        await Page.GetByRole(AriaRole.Link, new() { Name = "Public timeline" }).ClickAsync(); 
+        
+        await Expect(Page.Locator("li").Filter(new() { HasText = "brian2 hej — 27.11.2024" }).GetByAltText("Unfollow logo")).Not.ToBeVisibleAsync();
+
+        
+        await Expect(Page.Locator("li").Filter(new() { HasText = "brian2 hej — 27.11.2024" }).GetByAltText("Follow logo")).ToBeVisibleAsync();
+        
+        // Conforming that the following photo isn't visible for brian anymor because we are
+        // know following hum and the unfollow image is now visible
+        await Expect(Page.Locator("li")
+                .Filter(new() { HasText = "brian2 hej — 27.11.2024" })
+                .Locator("img[alt='Unfollow logo']"))
+            .Not.ToBeVisibleAsync();
+
+        
+        var _content = await Page.ContentAsync();
+        Console.WriteLine(_content);
+        
+    }
+
+    [Test]
+    public async Task NextPage()
+    {
+        await Page.GotoAsync("https://localhost:5273/");
+        
+        
+        await Page.GetByRole(AriaRole.Button, new() { Name = "Next Page" }).ClickAsync();
+        
+        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+        
+        string currentUrl = Page.Url;
+        StringAssert.Contains("/?page=2", currentUrl);
+    }
+    
+    [Test]
+    public async Task PrevPage()
+    {
+        await Page.GotoAsync("https://localhost:5273/?page=4");
+        
+        
+        await Page.GetByRole(AriaRole.Button, new() { Name = "Previous Page" }).ClickAsync();
+        
+        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+        
+        string currentUrl = Page.Url;
+        StringAssert.Contains("/?page=3", currentUrl);
+    }
+
+    [Test]
+    public async Task NextPageUserTimeLine()
+    {
+        await Page.GotoAsync("https://localhost:5273/Jacqualine%20Gilcoine");
+        
+        await Page.GetByRole(AriaRole.Button, new() { Name = "Next Page" }).ClickAsync();
+        
+        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+
+        string currentUrl = Page.Url;
+        
+        StringAssert.Contains("/Jacqualine%20Gilcoine/?page=2", currentUrl);
+        
+    }
+
+    [Test]
+    public async Task NoNextPageRegister()
+    {
+        await Page.GotoAsync("https://localhost:5273/Register");
+
+        var nextPageButton = await Page.IsVisibleAsync("a:has-text('Next Page')");
+        
+        Assert.False(nextPageButton);
+
+    }
+    [Test]
+    public async Task NoPreviousPage()
+    {
+        await Page.GotoAsync("https://localhost:5273/?page=1");
+
+        var nextPageButton = await Page.IsVisibleAsync("a:has-text('Previous Page')");
+        
+        Assert.False(nextPageButton);
+
     }
 }

@@ -10,8 +10,8 @@
     @if (User.Identity.IsAuthenticated)
     {
         <div>
-            <a href="/@(User.Identity.Name)">My timeline</a> |
             <a href="/">Public timeline</a> |
+            <a href="/@(User.Identity.Name)">My timeline</a> |
             <a href ="/@User.Identity.Name/AboutMe">About Me</a> |
             <a href="/Identity/Account/Logout">Logout @(User.Identity.Name)</a>
         </div>

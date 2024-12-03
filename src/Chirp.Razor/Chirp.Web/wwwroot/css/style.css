@@ -17,7 +17,7 @@ input[type="text"],
 input[type="tel"],
 input[type="password"] {
     background: white;
-    border: 1px solid #e6c0bf;
+    border: 1px solid #99b1dd;
     padding: 2px;
     font-family: 'Trebuchet MS', sans-serif;
     font-size: 14px;
@@ -376,5 +376,17 @@ ul.nav li a:hover {
     justify-content: space-between;
 }
 
+#bio{
+    width: 200px;
+    margin-right: 20px;
+}
 
+.biostuff{
+    display: flex;
+    justify-content: left;
+}
+
+.BioDiv{
+    display: flex;
+}
 

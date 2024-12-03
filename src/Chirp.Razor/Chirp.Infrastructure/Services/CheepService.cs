@@ -112,11 +112,56 @@ public class CheepService : ICheepService
     
     public async Task CheckFollowerExistElseCreate(ApplicationUser user)
     {
+        if (GetAuthorByName(user.UserName) != null) 
+        {
+            return;
+        } else {
+            AuthorDTO newAuthor = new AuthorDTO
+            {
+                Name = user.UserName,
+                Email = user.Email,
+            };
+            _cheepRepository.ConvertAuthors(newAuthor).Wait();
+        }
+    }
+    
+    public async Task<Bio> CreateBIO(string username,  string email, string message, int id)
+    {
         AuthorDTO newAuthor = new AuthorDTO
         {
-            Name = user.UserName,
-            Email = user.Email,
+            Name = username,
+            Email = email,
         };
-        _cheepRepository.ConvertAuthors(newAuthor).Wait();
+        var author = await _cheepRepository.ConvertAuthors(newAuthor);
+
+        BioDTO newBio = new BioDTO
+        {
+            Author = username,
+            Text = message,
+            BioId = id,
+            AuthorId = author.AuthorId
+        };
+        
+        
+        var bio = await _cheepRepository.ConvertBio(newBio, newAuthor);
+        return bio;
+    }
+    
+    private static BioDTO DTOConversionBio(Bio bio)
+    {
+        return (new BioDTO
+            {
+                Author = bio.Author.Name,
+                Text = bio.Text,
+                BioId = bio.BioId,
+                AuthorId = bio.Author.AuthorId
+            });
+        
+    }
+    public async Task<BioDTO> GetBio(string author)
+    {
+        var result = await _cheepRepository.GetBio(author);
+        var Bio = DTOConversionBio(result);
+        return Bio;
     }
 }

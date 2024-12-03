@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Chirp.Infrastructure;
+using Chirp.Infrastructure.Repositories;
+using Chirp.Infrastructure.Services;
 
 
 public partial class Program

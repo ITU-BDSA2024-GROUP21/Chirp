@@ -7,7 +7,7 @@
 </head>
 <body>
 <div class=navigation>
-    @if (User.Identity.IsAuthenticated)
+    @if (User.Identity!.IsAuthenticated)
     {
         <div>
             <a href="/">Public timeline</a> |

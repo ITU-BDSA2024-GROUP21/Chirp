@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using System.Text.Json;
+using Chirp.Infrastructure.Repositories;
 using Microsoft.Build.Framework;
 namespace Chirp.Web.Pages;
 
@@ -23,7 +24,7 @@ public class AboutMeModel : PageModel
     public required List<Cheep> CheepsList { get; set; }
     public  required List<string> CheepsListString;
     public required string Cheeps { get; set; }
-    public BioDTO Bio { get; set; }
+    public BioDTO? Bio { get; set; }
 
     public AboutMeModel(INootRepository nootRepository, SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager, INooterService nooterService, IBioRepository bioRepository, IFollowRepository followRepository)
     {
@@ -33,11 +34,12 @@ public class AboutMeModel : PageModel
         CheepsListString = new List<string>();
         _nootRepository = nootRepository;
         _bioRepository = bioRepository;
+        _followRepository = followRepository;
         
     }
 
     [BindProperty]
-    public BioBoxModel BioInput { get; set; }
+    public BioBoxModel? BioInput { get; set; }
     
     public async Task<IActionResult> OnGet()
     {
@@ -110,7 +112,7 @@ public class AboutMeModel : PageModel
             var cheepsList = await _nootRepository.GetNootsWithoutPage(author.Name);
             personalData.Add("Noots", cheepsList.Select(c => c.Text)); // Kun tekst
             
-            personalData.Add("Bio", Bio.Text);
+            personalData.Add("Bio", Bio?.Text!);
         }
 
         // Returner som JSON-fil
@@ -153,7 +155,7 @@ public class AboutMeModel : PageModel
             Console.WriteLine("Has to have an author");
         } 
 
-        if (string.IsNullOrWhiteSpace(BioInput.Text))
+        if (string.IsNullOrWhiteSpace(BioInput?.Text))
         {
             ModelState.AddModelError("CheepInput.Text", "The message can't be empty.");
         }
@@ -167,12 +169,12 @@ public class AboutMeModel : PageModel
             Bio = await _nooterService.GetBio(author.Name);
             return Page();
         }
-        var email = user.Email;
+        var email = user?.Email;
         
         var guid = Guid.NewGuid();
         var bioId = BitConverter.ToInt32(guid.ToByteArray(), 0);
 
-        await _nooterService.CreateBIO(User.Identity?.Name!, email!,BioInput.Text, bioId);
+        await _nooterService.CreateBIO(User.Identity?.Name!, email!,BioInput?.Text!, bioId);
         return RedirectToPage("./_AboutMe");
     }
     

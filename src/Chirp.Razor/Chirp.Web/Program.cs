@@ -30,7 +30,6 @@ public partial class Program
         builder.Services.AddScoped<IFollowRepository, FollowRepository>();
         builder.Services.AddScoped<IAuthorRepository, AuthorRepository>();
         builder.Services.AddScoped<INooterService, NooterService>();
-        builder.Services.AddDistributedMemoryCache();
         
         builder.Services.AddAuthentication()
             .AddCookie()

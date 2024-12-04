@@ -212,20 +212,9 @@ public class ActualUnitTest : PageTest
             .ToBeVisibleAsync();
 
         await Expect(Page.GetByRole(AriaRole.Button, new() { Name = "GitHub" })).ToBeVisibleAsync();
-
-
-
-
         
-        
-
-
-
 
     }
-    
-    
-    
     
 }
     

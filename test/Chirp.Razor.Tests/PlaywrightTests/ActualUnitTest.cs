@@ -118,6 +118,14 @@ public class ActualUnitTest : PageTest
 
         await Expect(Page.GetByRole(AriaRole.Heading, new (){Name = "Public Timeline"})).ToBeVisibleAsync();
     }
+
+    [Test]
+    public async Task RegisterButtonTest()
+    {
+        await Page.GotoAsync("https://localhost:5273/");
+        
+        await Expect(Page.GetByRole(AriaRole.Link, new() {Name = "Register"})).ToBeVisibleAsync();
+    }
     
     
 }

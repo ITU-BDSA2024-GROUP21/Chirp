@@ -1,3 +1,4 @@
+using Chirp.Infrastructure.Repositories;
 using Chirp.Infrastructure.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;

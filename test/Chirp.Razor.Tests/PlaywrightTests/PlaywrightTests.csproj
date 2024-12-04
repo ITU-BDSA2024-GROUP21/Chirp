@@ -30,6 +30,10 @@
 
   </ItemGroup>
 
+  <Target Name="InstallPlaywright" BeforeTargets="Test">
+    <Exec Command="pwsh bin/Debug/net8.0/playwright.ps1 install" />
+  </Target>
+
   <ItemGroup>
     <Using Include="NUnit.Framework" />
   </ItemGroup>

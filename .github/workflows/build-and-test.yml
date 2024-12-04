@@ -43,8 +43,6 @@ jobs:
 
     - name: Install dependencies
       run: npm ci
-    - name: Install Playwright Browsers
-      run: pwsh test/Chirp.Razor.Tests/PlaywrightTests/bin/Debug/net8.0/playwright.ps1 install
 
     - name: Run Playwright tests
       run: dotnet test test/Chirp.Razor.Tests/PlaywrightTests

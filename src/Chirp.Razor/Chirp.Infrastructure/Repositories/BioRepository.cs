@@ -1,8 +1,9 @@
+using Chirp.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 
-namespace Chirp.Infrastructure;
+namespace Chirp.Infrastructure.Repositories;
 
 
 public class BioRepository : IBioRepository
@@ -32,7 +33,7 @@ public class BioRepository : IBioRepository
 
     }
     
-    public async Task<Bio> GetBio(string author)
+    public async Task<Bio?> GetBio(string author)
     {
         var sqlQuery = _chirpDbContext.Bios
             .Where(bio => bio.Author.Name == author)

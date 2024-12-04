@@ -1,3 +1,4 @@
+using Chirp.Infrastructure.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
@@ -10,7 +11,6 @@ using Xunit;
 public class UnitTest
 {
     private readonly ITestOutputHelper _testOutputHelper;
-    private readonly NooterService _nooterService;
 
     public UnitTest(ITestOutputHelper testOutputHelper)
     {

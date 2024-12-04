@@ -12,8 +12,8 @@ using Chirp.Razor.Tests.PlaywrightTests;
 [TestFixture]
 public class UIEnd2EndTest : PageTest
 {
-    private Process _serverProcess;
-    protected IBrowser _browser;
+    public required Process _serverProcess;
+    public required IBrowser _browser;
     public override BrowserNewContextOptions ContextOptions()
     {
         return new BrowserNewContextOptions

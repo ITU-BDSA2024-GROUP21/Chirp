@@ -92,7 +92,7 @@ public class AuthorRepository : IAuthorRepository
         var following = _chirpDbContext.AuthorFollows.Where(a => a.Follower == author);
         _chirpDbContext.AuthorFollows.RemoveRange(following);
         
-        var followed = _chirpDbContext.AuthorFollows.Where(a => a.following == author);
+        var followed = _chirpDbContext.AuthorFollows.Where(a => a.Following == author);
         _chirpDbContext.AuthorFollows.RemoveRange(followed);
 
         var bio = await _chirpDbContext.Bios.FirstOrDefaultAsync(b => b.AuthorId == author.AuthorId);
@@ -139,7 +139,7 @@ public class AuthorRepository : IAuthorRepository
     {
         return await _chirpDbContext.AuthorFollows
             .Where(f => f.FollowerId == authorId)
-            .Select(f => f.following.Name)
+            .Select(f => f.Following!.Name)
             .ToListAsync();
     }
     

@@ -4,7 +4,7 @@ namespace Chirp.Razor.Tests.PlaywrightTests;
 
     public static class ServerUtil
     {
-        public static async Task<Process> StartServer()
+        public static Task<Process> StartServer()
         {
             string projectPath = PersonalProjectPath.getPath();
 
@@ -43,6 +43,6 @@ namespace Chirp.Razor.Tests.PlaywrightTests;
 
             // Wait for server to start up and become ready
 
-            return serverProcess;
+            return Task.FromResult(serverProcess);
         }
     }

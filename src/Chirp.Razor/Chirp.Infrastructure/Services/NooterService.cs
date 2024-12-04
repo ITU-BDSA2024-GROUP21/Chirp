@@ -1,8 +1,9 @@
 using System.Data;
+using Chirp.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Data.Sqlite;
 
-namespace Chirp.Infrastructure;
+namespace Chirp.Infrastructure.Services;
 
 public class NooterService : INooterService
 {
@@ -77,7 +78,7 @@ public class NooterService : INooterService
             {
                 Author = cheep.Author.Name,
                 Text = cheep.Text,
-                TimeStamp = cheep.TimeStamp.ToString(),
+                TimeStamp = cheep.TimeStamp.ToString("MM/dd/yy H:mm:ss"),
                 CheepId = cheep.CheepId,
                 AuthorId = cheep.Author.AuthorId
             });
@@ -117,14 +118,15 @@ public class NooterService : INooterService
         await _authorRepository.DeleteAuthorByEmail(email);
     }
     
-    public async Task CheckFollowerExistElseCreate(ApplicationUser user)
+    public Task CheckFollowerExistElseCreate(ApplicationUser user)
     {
             AuthorDTO newAuthor = new AuthorDTO
             {
-                Name = user.UserName,
-                Email = user.Email,
+                Name = user?.UserName!,
+                Email = user?.Email!,
             };
             _authorRepository.ConvertAuthors(newAuthor).Wait();
+            return Task.CompletedTask;
     }
     
     public async Task<Bio> CreateBIO(string username,  string email, string message, int id)
@@ -164,8 +166,8 @@ public class NooterService : INooterService
     public async Task<BioDTO> GetBio(string author)
     {
         var result = await _bioRepository.GetBio(author);
-        var Bio = DTOConversionBio(result);
-        return Bio;
+        var bio = DTOConversionBio(result!);
+        return bio;
     }
 
 }

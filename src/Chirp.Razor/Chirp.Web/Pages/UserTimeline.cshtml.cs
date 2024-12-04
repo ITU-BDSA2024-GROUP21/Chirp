@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.ComponentModel.DataAnnotations;
+using Chirp.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Identity;
 namespace Chirp.Web.Pages;
 
@@ -14,7 +15,7 @@ public class UserTimelineModel : PageModel
     private readonly IBioRepository _bioRepository;
     private readonly IFollowRepository _followRepository;
     private Dictionary<string, bool> _followerMap;
-    public BioDTO Bio { get; set; }
+    public BioDTO? Bio { get; set; }
 
 
     public UserTimelineModel(INooterService nooterService, UserManager<ApplicationUser> userManager,INootRepository nootRepository, IBioRepository bioRepository, IFollowRepository followRepository)
@@ -34,7 +35,7 @@ public class UserTimelineModel : PageModel
     }
 
     [BindProperty]
-    public NootBoxModel CheepInput { get; set; }
+    public NootBoxModel? CheepInput { get; set; }
 
     public async Task<ActionResult> OnGet(string author)
     {
@@ -79,7 +80,7 @@ public class UserTimelineModel : PageModel
     }
     public async Task<IActionResult> OnPost()
     {
-        if (string.IsNullOrWhiteSpace(CheepInput.Text))
+        if (string.IsNullOrWhiteSpace(CheepInput?.Text))
         {
             ModelState.AddModelError("CheepInput.Text", "The message can't be empty.");
         }
@@ -95,12 +96,12 @@ public class UserTimelineModel : PageModel
         }
         
         var user = await _userManager.GetUserAsync(User);
-        var email = user.Email;
+        var email = user?.Email;
         
         var guid = Guid.NewGuid();
         var cheepId = BitConverter.ToInt32(guid.ToByteArray(), 1);
 
-        await _nooterService.CreateCheep(User.Identity?.Name!, email!,CheepInput.Text, DateTimeKind.Local.ToString(), cheepId);
+        await _nooterService.CreateCheep(User.Identity?.Name!, email!,CheepInput?.Text!, DateTimeKind.Local.ToString(), cheepId);
         return RedirectToPage("Public");
     }
     
@@ -139,9 +140,9 @@ public class UserTimelineModel : PageModel
     public async Task<List<CheepDTO>> GetCheepsWhenLoggedIn(string author)
     {
         var user = await _userManager.GetUserAsync(User);
-        Author _author = await _nooterService.GetAuthorByName(User.Identity.Name);
-        int id = _author.AuthorId;
-        if (user.UserName != author)
+        Author loggedAuthor = await _nooterService.GetAuthorByName(User.Identity?.Name!);
+        int id = loggedAuthor.AuthorId;
+        if (user?.UserName != author)
         {
             Cheeps = await _nooterService.GetCheepsFromAuthor(author, _page);
             foreach (var cheep in Cheeps)

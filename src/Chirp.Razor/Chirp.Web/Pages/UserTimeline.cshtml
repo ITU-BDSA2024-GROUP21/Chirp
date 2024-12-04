@@ -22,7 +22,7 @@
 
     <partial name ="Shared/_NootBoxPartial" model="Model.CheepInput"/>
     
-        @if( routeName.ToString()!.EndsWith("s"))
+        @if( routeName!.ToString()!.EndsWith("s"))
         {
             <h2> @routeName' BIO </h2>
         }
@@ -47,7 +47,7 @@
             </li>
         </ul>
         
-@if( routeName.ToString().EndsWith("s"))
+@if( routeName!.ToString()!.EndsWith("s"))
 {
     <h2> @routeName' Timeline </h2>
 }
@@ -70,7 +70,7 @@ else
                         
                     </p>
                     
-                    @if (User.Identity.IsAuthenticated && User.Identity.Name == cheep.Author)
+                    @if (User.Identity!.IsAuthenticated && User.Identity.Name == cheep.Author)
                     {
                         <form method="post" asp-page-handler="DeleteCheep">
                             <input type="hidden" name="cheepId" value="@cheep.CheepId.ToString()" />
@@ -114,11 +114,11 @@ else
     }
     @if (currPage > 1 && Model.Cheeps.Count < 32)
     {
-    <button onclick="document.location='/@routeName/?page=@prevPage'" @if (currPage <= 1) { <text>disabled</text> } class="PageButton" >Previous Page</button>
+    <button onclick="document.location='/@routeName/?page=@prevPage'" class="PageButton" >Previous Page</button>
     }
     @if (currPage > 1 && Model.Cheeps.Count >= 32) 
     { 
-        <button onclick="document.location='/@routeName/?page=@prevPage'" @if (currPage <= 1) { <text>disabled</text> } class="PageButton" >Previous Page</button> 
+        <button onclick="document.location='/@routeName/?page=@prevPage'" class="PageButton" >Previous Page</button> 
         <button onclick="document.location='/@routeName/?page=@nextPage'" style="float: right;" class="PageButton">Next Page</button> 
     }
     @if (Model.Cheeps.Count >= 32 && currPage == 1) 

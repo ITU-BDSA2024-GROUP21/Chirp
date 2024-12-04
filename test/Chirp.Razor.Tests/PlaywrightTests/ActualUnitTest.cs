@@ -144,6 +144,17 @@ public class ActualUnitTest : PageTest
         await Expect(Page.GetByRole(AriaRole.Link, new() { Name = "Login" })).ToBeVisibleAsync();
     }
     
+    [Test]
+    public async Task NavigationLoginButtonWorkTest()
+    {
+        await Page.GotoAsync("https://localhost:5273/");
+        await Page.GetByRole(AriaRole.Link, new() {Name = "Login"}).ClickAsync();
+
+        await Expect(Page.GetByRole(AriaRole.Heading, new() {Name = "Log in", Exact = true})).ToBeVisibleAsync();
+    }
+    
+    
+    
     
 }
     

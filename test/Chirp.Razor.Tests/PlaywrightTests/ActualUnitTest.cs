@@ -109,6 +109,15 @@ public class ActualUnitTest : PageTest
 
         await Expect(Page.GetByRole(AriaRole.Link, new() { Name = "Public timeline" })).ToBeVisibleAsync();
     }
+
+    [Test]
+    public async Task PublicTimelineButtonWorkTest()
+    {
+        await Page.GotoAsync("https://localhost:5273/");
+        await Page.GetByRole(AriaRole.Link, new() { Name = "Public timeline" }).ClickAsync();
+
+        await Expect(Page.GetByRole(AriaRole.Heading, new (){Name = "Public Timeline"})).ToBeVisibleAsync();
+    }
     
     
 }

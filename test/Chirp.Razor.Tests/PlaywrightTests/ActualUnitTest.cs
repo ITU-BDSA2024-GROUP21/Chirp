@@ -180,6 +180,46 @@ public class ActualUnitTest : PageTest
             .ToBeVisibleAsync();
 
         await Expect(Page.GetByRole(AriaRole.Button, new() { Name = "GitHub" })).ToBeVisibleAsync();
+        
+
+    }
+
+    [Test]
+    public async Task LoginPageTest()
+    {
+        await Page.GotoAsync("https://localhost:5273/");
+        await Page.GetByRole(AriaRole.Link, new() {Name = "Login"}).ClickAsync();
+        
+        await Expect(Page.GetByRole(AriaRole.Heading, new() {Name = "Log in", Exact = true})).ToBeVisibleAsync();
+        await Expect(Page.GetByRole(AriaRole.Heading, new() { Name = "Use a local account to log in." })).ToBeVisibleAsync();
+        
+        await Expect(Page.GetByPlaceholder("name@example.com")).ToBeVisibleAsync();
+        await Expect(Page.GetByText("Email",new(){Exact = true})).ToBeVisibleAsync();
+        
+        await Expect(Page.GetByPlaceholder("password")).ToBeVisibleAsync();
+        await Expect(Page.GetByText("Password",new(){Exact = true})).ToBeVisibleAsync();
+
+        await Expect(Page.GetByLabel("Remember me?")).ToBeVisibleAsync();
+        await Expect(Page.GetByText("Remember me?")).ToBeVisibleAsync();
+        
+        await Expect(Page.GetByRole(AriaRole.Button, new() { Name = "Log in" })).ToBeVisibleAsync();
+        
+        await Expect(Page.GetByRole(AriaRole.Link, new() { Name = "Forgot your password?" })).ToBeVisibleAsync();
+        await Expect(Page.GetByRole(AriaRole.Link, new() { Name = "Register as a new user" })).ToBeVisibleAsync();
+        await Expect(Page.GetByRole(AriaRole.Link, new() { Name = "Resend email confirmation" })).ToBeVisibleAsync();
+        
+        await Expect(Page.GetByRole(AriaRole.Heading, new() { Name = "Use another service to log in." }))
+            .ToBeVisibleAsync();
+
+        await Expect(Page.GetByRole(AriaRole.Button, new() { Name = "GitHub" })).ToBeVisibleAsync();
+
+
+
+
+        
+        
+
+
 
 
     }

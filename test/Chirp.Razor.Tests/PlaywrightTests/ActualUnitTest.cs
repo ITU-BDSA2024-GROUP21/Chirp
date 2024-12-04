@@ -103,7 +103,7 @@ public class ActualUnitTest : PageTest
 
 
     [Test]
-    public async Task PublicTimelineButtonTest()
+    public async Task NavigationPublicTimelineButtonTest()
     {
         await Page.GotoAsync("https://localhost:5273/");
 
@@ -111,7 +111,7 @@ public class ActualUnitTest : PageTest
     }
 
     [Test]
-    public async Task PublicTimelineButtonWorkTest()
+    public async Task NavigationPublicTimelineButtonWorkTest()
     {
         await Page.GotoAsync("https://localhost:5273/");
         await Page.GetByRole(AriaRole.Link, new() { Name = "Public timeline" }).ClickAsync();
@@ -120,7 +120,7 @@ public class ActualUnitTest : PageTest
     }
 
     [Test]
-    public async Task RegisterButtonTest()
+    public async Task NavigationRegisterButtonTest()
     {
         await Page.GotoAsync("https://localhost:5273/");
         
@@ -128,12 +128,20 @@ public class ActualUnitTest : PageTest
     }
 
     [Test]
-    public async Task RegisterButtonWorkTest()
+    public async Task NavigationRegisterButtonWorkTest()
     {
         await Page.GotoAsync("https://localhost:5273/");
         await Page.GetByRole(AriaRole.Link, new() {Name = "Register"}).ClickAsync();
 
         await Expect(Page.GetByRole(AriaRole.Heading, new() {Name = "Register", Exact = true})).ToBeVisibleAsync();
+    }
+    
+    [Test]
+    public async Task NavigationLoginButtonTest()
+    {
+        await Page.GotoAsync("https://localhost:5273/");
+
+        await Expect(Page.GetByRole(AriaRole.Link, new() { Name = "Login" })).ToBeVisibleAsync();
     }
     
     

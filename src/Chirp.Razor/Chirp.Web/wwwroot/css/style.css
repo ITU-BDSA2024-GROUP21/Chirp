@@ -1,20 +1,20 @@
 body {
-  background-image: url("../images/igloo.png"),  url("../images/Ice_tundra.png");
-  background-repeat: no-repeat, repeat-x;  
-  background-color: #e7f0ef;
-  font-family: 'Trebuchet MS', sans-serif;
-  font-size: 14px;
-  margin: 0;
-  height: 100vh;
-  position: relative;
+    background-image: url("../images/igloo.png"),  url("../images/Ice_tundra.png");
+    background-repeat: no-repeat, repeat-x;
+    background-color: #e7f0ef;
+    font-family: 'Trebuchet MS', sans-serif;
+    font-size: 14px;
+    margin: 0;
+    height: 100vh;
+    position: relative;
 }
 
 a {
-  color: #26776F;
+    color: #26776F;
 }
 
 a:hover {
-  color: #333;
+    color: #333;
 }
 
 input[type="email"],
@@ -22,7 +22,7 @@ input[type="text"],
 input[type="tel"],
 input[type="password"] {
     background: white;
-    border: 1px solid #99b1dd;
+    border: 1px solid #639CDF;
     padding: 2px;
     font-family: 'Trebuchet MS', sans-serif;
     font-size: 14px;
@@ -33,58 +33,58 @@ input[type="password"] {
 }
 
 input[type="submit"] {
-  background: #571010;
-  border: 1px solid #3b0707;
-  padding: 1px 3px;
-  font-family: 'Trebuchet MS', sans-serif;
-  font-size: 14px;
-  font-weight: bold;
-  border-radius: 2px;
-  -moz-border-radius: 2px;
-  -webkit-border-radius: 2px;
-  color: white;
+    background: #571010;
+    border: 1px solid #3b0707;
+    padding: 1px 3px;
+    font-family: 'Trebuchet MS', sans-serif;
+    font-size: 14px;
+    font-weight: bold;
+    border-radius: 2px;
+    -moz-border-radius: 2px;
+    -webkit-border-radius: 2px;
+    color: white;
 }
 
 div.page {
-  background: white;
-  border: 1px solid #99B1DDFF;
-  width: 700px;
-  margin: 30px auto;
+    background: white;
+    border: 1px solid #639CDF;
+    width: 700px;
+    margin: 30px auto;
 }
 
 .page {
     position: relative;
-    z-index: 10; 
+    z-index: 10;
 }
 
 div.page > h1 {
-  background: #99B1DDFF;
-  margin: 0;
-  padding: 10px 14px;
-  color: white;
-  letter-spacing: 1px;
-  text-shadow: 0 0 3px #772424;
-  font-weight: normal;
-  font-size: 80px;
+    background: #639CDF;
+    margin: 0;
+    padding: 10px 14px;
+    color: white;
+    letter-spacing: 1px;
+    text-shadow: 0 0 3px #772424;
+    font-weight: normal;
+    font-size: 80px;
 }
 
 div.page h1 img {
-  height: 1em;
+    height: 1em;
 }
 
 div.page div.navigation {
-  background: #DEE9E8;
-  padding: 4px 10px;
-  border-top: 1px solid #ccc;
-  border-bottom: 1px solid #eee;
-  color: #888;
-  font-size: 12px;
-  letter-spacing: 0.5px;
+    background: #DEE9E8;
+    padding: 4px 10px;
+    border-top: 1px solid #ccc;
+    border-bottom: 1px solid #eee;
+    color: #888;
+    font-size: 12px;
+    letter-spacing: 0.5px;
 }
 
 div.page div.navigation a {
-  color: #444;
-  font-weight: bold;
+    color: #444;
+    font-weight: bold;
 }
 
 div.page div.navigation form {
@@ -105,20 +105,20 @@ div.page div.navigation form button {
 }
 
 div.page h2 {
-  margin: 0 0 15px 0;
-  color: #571010;
-  text-shadow: 0 1px 2px #ccc;
+    margin: 0 0 15px 0;
+    color: #571010;
+    text-shadow: 0 1px 2px #ccc;
 }
 
 div.page div.body {
-  padding: 10px;
+    padding: 10px;
 }
 
 div.page div.footer {
-  background: #eee;
-  color: #888;
-  padding: 5px 10px;
-  font-size: 12px;
+    background: #eee;
+    color: #888;
+    padding: 5px 10px;
+    font-size: 12px;
 }
 
 .PageButton {
@@ -126,7 +126,7 @@ div.page div.footer {
     font-size:12px;
     height:30px;
     width:115px;
-    
+
 }
 .PButton{
     margin-bottom: 40px;
@@ -145,151 +145,151 @@ div.page div.footer {
 }
 
 .FollowButtonPublic:hover{
-    background-color: #657ba3;
+    background-color: #639CDF;
 }
 
 div.page div.followstatus {
-  border: 1px solid #ccc;
-  background: #E3EBEA;
-  border-radius: 2px;
-  -moz-border-radius: 2px;
-  -webkit-border-radius: 2px;
-  padding: 3px;
-  font-size: 13px;
+    border: 1px solid #ccc;
+    background: #E3EBEA;
+    border-radius: 2px;
+    -moz-border-radius: 2px;
+    -webkit-border-radius: 2px;
+    padding: 3px;
+    font-size: 13px;
 }
 
 div.page ul.cheeps {
-  list-style: none;
-  margin: 0;
-  padding: 0;
+    list-style: none;
+    margin: 0;
+    padding: 0;
 }
 
 div.page ul.cheeps li {
-  margin: 10px 0;
-  padding: 5px;
-  background: #F0FAF9;
-  border: 1px solid #DBF3F1;
-  border-radius: 2px;
-  -moz-border-radius: 5px;
-  -webkit-border-radius: 5px;
-  min-height: 48px;
+    margin: 10px 0;
+    padding: 5px;
+    background: #F0FAF9;
+    border: 1px solid #DBF3F1;
+    border-radius: 2px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    min-height: 48px;
 }
 
 div.page ul.cheeps p {
-  margin: 0;
+    margin: 0;
 }
 
 div.page ul.cheeps li img {
-  float: left;
-  padding: 0 10px 0 0;
+    float: left;
+    padding: 0 10px 0 0;
 }
 
 div.page ul.cheeps li small {
-  font-size: 0.9em;
-  color: #888;
+    font-size: 0.9em;
+    color: #888;
 }
 
 div.page div.cheepbox {
-  margin: 10px 0;
-  padding: 5px;
-  background: #F0FAF9;
-  border: 1px solid #99B1DDFF;
-  border-radius: 2px;
-  -moz-border-radius: 5px;
-  -webkit-border-radius: 5px;
+    margin: 10px 0;
+    padding: 5px;
+    background: #F0FAF9;
+    border: 1px solid #639CDF;
+    border-radius: 2px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
 }
 
 div.page div.cheepbox h3 {
-  margin: 0;
-  font-size: 1em;
-  color: #7e2c2c;
+    margin: 0;
+    font-size: 1em;
+    color: #7e2c2c;
 }
 
 div.page div.cheepbox p {
-  margin: 0;
+    margin: 0;
 }
 
 div.page div.cheepbox input[type="text"] {
-  width: 585px;
+    width: 585px;
 }
 
 div.page div.cheepbox input[type="submit"] {
-  width: 70px;
-  margin-left: 5px;
+    width: 70px;
+    margin-left: 5px;
 }
 
 div.message {
-  list-style: none;
-  margin: 10px 10px 0 10px;
+    list-style: none;
+    margin: 10px 10px 0 10px;
 
-  background: #99B1DDFF;
-  border: 1px solid #99B1DDFF;
-  border-radius: 2px;
-  -moz-border-radius: 2px;
-  -webkit-border-radius: 2px;
-  padding: 4px;
-  font-size: 13px;
+    background: #639CDF;
+    border: 1px solid #639CDF;
+    border-radius: 2px;
+    -moz-border-radius: 2px;
+    -webkit-border-radius: 2px;
+    padding: 4px;
+    font-size: 13px;
 }
 
 ul.message li {
-  background: #99B1DDFF;
-  border: 1px solid #99B1DDFF;
-  border-radius: 2px;
-  -moz-border-radius: 2px;
-  -webkit-border-radius: 2px;
-  padding: 4px;
-  font-size: 13px;
+    background: #639CDF;
+    border: 1px solid #639CDF;
+    border-radius: 2px;
+    -moz-border-radius: 2px;
+    -webkit-border-radius: 2px;
+    padding: 4px;
+    font-size: 13px;
 }
 
 div.error {
-  margin: 10px 0;
-  background: #FAE4E4;
-  border: 1px solid #DD6F6F;
-  border-radius: 2px;
-  -moz-border-radius: 2px;
-  -webkit-border-radius: 2px;
-  padding: 4px;
-  font-size: 13px;
+    margin: 10px 0;
+    background: #FAE4E4;
+    border: 1px solid #DD6F6F;
+    border-radius: 2px;
+    -moz-border-radius: 2px;
+    -webkit-border-radius: 2px;
+    padding: 4px;
+    font-size: 13px;
 }
 
 div.topics {
-  width: 180px;
-  height: 250px;
-  background: #ffffff;
-  border: 1px solid #99B1DDFF;
-  border-radius: 2px;
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  margin-left: 460px;
-  padding: 10px;
+    width: 180px;
+    height: 250px;
+    background: #ffffff;
+    border: 1px solid #639CDF;
+    border-radius: 2px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    margin-left: 460px;
+    padding: 10px;
 }
 
 ul.topic {
-  list-style: none;
-  margin: 0;
-  padding: 0;
+    list-style: none;
+    margin: 0;
+    padding: 0;
 }
 
 li.topic {
-  margin: 10px 0;
-  padding: 5px;
-  background: #F0FAF9;
-  border: 1px solid #DBF3F1;
-  border-radius: 2px;
-  -moz-border-radius: 5px;
-  -webkit-border-radius: 5px;
-  min-height: 20px;
+    margin: 10px 0;
+    padding: 5px;
+    background: #F0FAF9;
+    border: 1px solid #DBF3F1;
+    border-radius: 2px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    min-height: 20px;
 }
 
 form * {
     margin: 2px 0;
- 
+
 }
 
 button {
-    background-color: #99B1DDFF;
+    background-color: #639CDF;
     border: none;
     color: white;
     padding: 8px 16px;
@@ -303,7 +303,7 @@ button {
     padding: 0 !important;
     border: none !important;
     padding-right: 25px !important;
-    
+
 }
 
 .binphoto{
@@ -314,7 +314,7 @@ button {
 .Noot{
     display: flex;
     justify-content: space-between; /* Skubber indhold til venstre og højre */
-   
+
 }
 
 
@@ -343,7 +343,7 @@ ul.nav {
     margin: 0;
     padding: 0;
     overflow: hidden;
-    background-color: #99B1DDFF;
+    background-color: #639CDF;
 }
 
 ul.nav li {
@@ -359,7 +359,7 @@ ul.nav li a {
 }
 
 ul.nav li a:hover {
-    background-color: #657ba3;
+    background-color: #639CDF;
 }
 
 .ForgetMe{
@@ -407,7 +407,7 @@ ul.nav li a:hover {
     width: 100vw;
     height: 100vh;
     pointer-events: none;
-    z-index: 5; 
+    z-index: 5;
 }
 
 #pingu {

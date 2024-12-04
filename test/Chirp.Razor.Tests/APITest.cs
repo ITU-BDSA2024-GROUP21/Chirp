@@ -11,6 +11,7 @@ public class APITest : IClassFixture<WebApplicationFactory<Program>>
     private readonly HttpClient _client;
     public APITest(WebApplicationFactory<Program> fixture, ITestOutputHelper testOutputHelper)
     {
+
         _fixture = fixture;
         _testOutputHelper = testOutputHelper;
         _client = fixture.CreateClient(new WebApplicationFactoryClientOptions
@@ -62,7 +63,7 @@ public class APITest : IClassFixture<WebApplicationFactory<Program>>
         response.EnsureSuccessStatusCode();
         var content = await response.Content.ReadAsStringAsync();
 
-        Assert.Contains("Twitter", content);
+        Assert.Contains("Nooter", content);
         Assert.Contains($"{author}'s Timeline", content);
     }
 
@@ -75,7 +76,7 @@ public class APITest : IClassFixture<WebApplicationFactory<Program>>
         response.EnsureSuccessStatusCode();
         var content = await response.Content.ReadAsStringAsync();
 
-        Assert.Contains("Twitter", content);
+        Assert.Contains("Nooter", content);
         Assert.Contains("Hej, velkommen til kurset", content);
 
     }
@@ -87,7 +88,7 @@ public class APITest : IClassFixture<WebApplicationFactory<Program>>
         response.EnsureSuccessStatusCode();
         var content = await response.Content.ReadAsStringAsync();
 
-        Assert.Contains("Twitter", content);
+        Assert.Contains("Nooter", content);
         Assert.Contains("Hello, BDSA students!", content);
     }
 

@@ -1,0 +1,25 @@
+{
+  "name": "chirp",
+  "version": "1.0.0",
+  "description": "a groundbreaking new social network with absolute freedom of speech",
+  "main": "src/Chirp.Razor/Chirp.Web/program.cs",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "dotnet test test/Chirp.Razor.Tests/PlaywrightTests"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ITU-BDSA2024-GROUP21/Chirp.git"
+  },
+  "keywords": [
+    "chirp"
+  ],
+  "author": "BDSA2024Group21",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ITU-BDSA2024-GROUP21/Chirp/issues"
+  },
+  "homepage": "https://github.com/ITU-BDSA2024-GROUP21/Chirp#readme"
+}

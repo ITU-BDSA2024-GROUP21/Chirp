@@ -45,6 +45,9 @@
     <_ContentIncludedByDefault Remove="PlaywrightTests\bin\Debug\net8.0\Chirp.Infrastructure.deps.json" />
     <_ContentIncludedByDefault Remove="PlaywrightTests\bin\Debug\net8.0\MvcTestingAppManifest.json" />
     <_ContentIncludedByDefault Remove="PlaywrightTests\bin\Debug\net8.0\PlaywrightTests.staticwebassets.runtime.json" />
+    <_ContentIncludedByDefault Remove="PlaywrightTests\obj\Debug\net8.0\MvcTestingAppManifest.json" />
+    <_ContentIncludedByDefault Remove="PlaywrightTests\obj\Debug\net8.0\staticwebassets.build.json" />
+    <_ContentIncludedByDefault Remove="PlaywrightTests\obj\Debug\net8.0\staticwebassets.development.json" />
   </ItemGroup>
 
 </Project>

@@ -208,13 +208,15 @@ public class ActualUnitTest : PageTest
         await Expect(Page.GetByRole(AriaRole.Link, new() { Name = "Register as a new user" })).ToBeVisibleAsync();
         await Expect(Page.GetByRole(AriaRole.Link, new() { Name = "Resend email confirmation" })).ToBeVisibleAsync();
         
-        await Expect(Page.GetByRole(AriaRole.Heading, new() { Name = "Use another service to log in." }))
+        
+       await Expect(Page.GetByRole(AriaRole.Heading, new() { Name = "Use another service to log in." }))
             .ToBeVisibleAsync();
 
         await Expect(Page.GetByRole(AriaRole.Button, new() { Name = "GitHub" })).ToBeVisibleAsync();
-        
+                
 
     }
+    
     
 }
     

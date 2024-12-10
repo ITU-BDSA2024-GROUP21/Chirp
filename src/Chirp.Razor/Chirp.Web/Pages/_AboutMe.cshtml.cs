@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using System.Text.Json;
-using Chirp.Infrastructure.Repositories;
 using Microsoft.Build.Framework;
 namespace Chirp.Web.Pages;
 
@@ -13,9 +12,6 @@ public class AboutMeModel : PageModel
     private readonly SignInManager<ApplicationUser> _signInManager;
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly INooterService _nooterService;
-    private readonly INootRepository _nootRepository;
-    private readonly IBioRepository _bioRepository;
-    private readonly IFollowRepository _followRepository;
 
     [BindProperty]
     public required string? Email { get; set; }
@@ -26,15 +22,12 @@ public class AboutMeModel : PageModel
     public required string Cheeps { get; set; }
     public BioDTO? Bio { get; set; }
 
-    public AboutMeModel(INootRepository nootRepository, SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager, INooterService nooterService, IBioRepository bioRepository, IFollowRepository followRepository)
+    public AboutMeModel(SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager, INooterService nooterService)
     {
         _signInManager = signInManager;
         _userManager = userManager;
         _nooterService = nooterService;
         CheepsListString = new List<string>();
-        _nootRepository = nootRepository;
-        _bioRepository = bioRepository;
-        _followRepository = followRepository;
         
     }
 
@@ -54,7 +47,7 @@ public class AboutMeModel : PageModel
         Author author = await _nooterService.GetAuthorByName(User.Identity?.Name!);
         Email = author.Email;
 
-        if (await _bioRepository.AuthorHasBio(author.Name))
+        if (await _nooterService.AuthorHasBio(author.Name))
         {
             Bio = await _nooterService.GetBio(User.Identity?.Name!);
         }
@@ -66,7 +59,7 @@ public class AboutMeModel : PageModel
         Followers = string.Join( ", ", FollowersList.ToArray() );
         
         //loading all the cheeps
-        CheepsList = await _nootRepository.GetNootsWithoutPage(author.Name);
+        CheepsList = await _nooterService.GetNootsWithoutPage(author.Name);
 
         foreach (Cheep cheep in CheepsList)
         {
@@ -89,7 +82,7 @@ public class AboutMeModel : PageModel
             return NotFound("User not found.");
         }
         Author author1 = await _nooterService.GetAuthorByName(User.Identity?.Name!);
-        if (await _bioRepository.AuthorHasBio(author1.Name))
+        if (await _nooterService.AuthorHasBio(author1.Name))
         {
             Bio = await _nooterService.GetBio(User.Identity?.Name!);
         }
@@ -109,7 +102,7 @@ public class AboutMeModel : PageModel
             personalData.Add("Followers", followersList);
 
             // Cheeps
-            var cheepsList = await _nootRepository.GetNootsWithoutPage(author.Name);
+            var cheepsList = await _nooterService.GetNootsWithoutPage(author.Name);
             personalData.Add("Noots", cheepsList.Select(c => c.Text)); // Kun tekst
             
             personalData.Add("Bio", Bio?.Text!);
@@ -149,9 +142,9 @@ public class AboutMeModel : PageModel
         var author = await _nooterService.GetAuthorByName(User.Identity?.Name!);
         Console.WriteLine("HEJ" + author.Name);
         var user = await _userManager.GetUserAsync(User);
-        if (await _bioRepository.AuthorHasBio(User.Identity?.Name!))
+        if (await _nooterService.AuthorHasBio(User.Identity?.Name!))
         {
-            await _bioRepository.DeleteBio(author);
+            await _nooterService.DeleteBio(author);
             Console.WriteLine("Has to have an author");
         } 
 

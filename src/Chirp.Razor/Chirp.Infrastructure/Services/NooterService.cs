@@ -63,6 +63,12 @@ public class NooterService : INooterService
         return cheeps;
     }
 
+    public async Task<List<Cheep>> GetNootsWithoutPage(string author)
+    {
+        var result = await _nootRepository.GetNootsWithoutPage(author);
+        return result;
+    }
+
     public async Task<Author> GetAuthorByName(string name)
     {
         return await _authorRepository.GetAuthorByName(name);
@@ -168,6 +174,17 @@ public class NooterService : INooterService
         var result = await _bioRepository.GetBio(author);
         var bio = DTOConversionBio(result!);
         return bio;
+    }
+
+    public async Task<bool> AuthorHasBio(string author)
+    {
+        var result = await _bioRepository.AuthorHasBio(author);
+        return result;
+    }
+
+    public async Task DeleteBio(Author author)
+    {
+        await _bioRepository.DeleteBio(author);
     }
 
 }

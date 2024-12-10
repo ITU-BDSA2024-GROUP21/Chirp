@@ -13,7 +13,6 @@ namespace Chirp.Web.Pages;
 public class PublicModel : PageModel
 {
     private readonly INooterService _nooterService;
-    private readonly IFollowRepository _followRepository;
     public required List<CheepDTO> Cheeps { get; set; }
     private int _page;
     private readonly UserManager<ApplicationUser> _userManager;
@@ -23,12 +22,11 @@ public class PublicModel : PageModel
     public required NootBoxModel CheepInput { get; set; }
     
 
-    public PublicModel(INooterService nooterService, UserManager<ApplicationUser> userManager, IFollowRepository followRepository)
+    public PublicModel(INooterService nooterService, UserManager<ApplicationUser> userManager)
     {
         _nooterService = nooterService;
         _userManager = userManager;
         FollowerMap = new Dictionary<string, bool>();
-        _followRepository = followRepository;
     }
     
 
@@ -104,7 +102,7 @@ public class PublicModel : PageModel
         Author author = await _nooterService.GetAuthorByName(followerAuthor);
         int id = author.AuthorId;
         
-        await _followRepository.FollowAuthor(id,followingAuthorId);
+        await _nooterService.Follow(id,followingAuthorId);
         FollowerMap[author.Name] = true;
         return Redirect($"/?page={page}");
     }
@@ -120,7 +118,7 @@ public class PublicModel : PageModel
         int id = author.AuthorId;
         
         Console.WriteLine(followingAuthorId);
-        await _followRepository.Unfollow(id,followingAuthorId);
+        await _nooterService.Unfollow(id,followingAuthorId);
         FollowerMap[author.Name] = false;
         return Redirect($"/?page={page}");
     }

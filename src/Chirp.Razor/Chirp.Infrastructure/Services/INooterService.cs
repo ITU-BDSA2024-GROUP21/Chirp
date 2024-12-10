@@ -7,9 +7,11 @@ public interface INooterService
     public Task<List<Cheep>> GetNootsWithoutPage(string author);
     public Task<Cheep> CreateCheep(string username, string email, string message, string timestamp, int id);
     public Task<Author> GetAuthorByName(string name);
+    public Task DeleteNoot(int nootId);
     public Task<List<CheepDTO>> GetCheepsFromFollowedAuthor(IEnumerable<string> authors, int page);
     public Task<List<string>> GetFollowedAuthors(int authorId);
     public Task<bool> IsFollowing(int followingAuthorId, int followerAuthorId);
+    public Task Follow(int followingAuthorId, int followerAuthorId);
     public Task Unfollow(int followingAuthorId, int followerAuthorId);
     public Task CheckFollowerExistElseCreate(ApplicationUser user);
     public Task DeleteAuthorAndCheepsByEmail(string email);

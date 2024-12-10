@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.ComponentModel.DataAnnotations;
-using Chirp.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Identity;
 namespace Chirp.Web.Pages;
 
@@ -11,26 +10,20 @@ public class UserTimelineModel : PageModel
     public List<CheepDTO> Cheeps { get; set; } = null!;
     private int _page;
     private readonly UserManager<ApplicationUser> _userManager;
-    private readonly INootRepository _nootRepository;
-    private readonly IBioRepository _bioRepository;
-    private readonly IFollowRepository _followRepository;
     private Dictionary<string, bool> _followerMap;
     public BioDTO? Bio { get; set; }
 
 
-    public UserTimelineModel(INooterService nooterService, UserManager<ApplicationUser> userManager,INootRepository nootRepository, IBioRepository bioRepository, IFollowRepository followRepository)
+    public UserTimelineModel(INooterService nooterService, UserManager<ApplicationUser> userManager)
     {
         _nooterService = nooterService;
         _userManager = userManager;
-        _nootRepository = nootRepository;
         _followerMap = new Dictionary<string, bool>();
-        _bioRepository = bioRepository;
-        _followRepository = followRepository;
     }
     
     public async Task<IActionResult> OnPostDeleteCheepAsync(int cheepId)
     {
-        await _nootRepository.DeleteNoot(cheepId);
+        await _nooterService.DeleteNoot(cheepId);
         return RedirectToPage(new { author = RouteData.Values["author"] });
     }
 
@@ -52,14 +45,14 @@ public class UserTimelineModel : PageModel
             Author author1 = await _nooterService.GetAuthorByName(User.Identity?.Name!);
             if (User.Identity?.Name != author)
             {
-                if (await _bioRepository.AuthorHasBio(author))
+                if (await _nooterService.AuthorHasBio(author))
                 {
                     Bio = await _nooterService.GetBio(author);
                 }
             }
             else
             {
-                if (await _bioRepository.AuthorHasBio(author1.Name))
+                if (await _nooterService.AuthorHasBio(author1.Name))
                 {
                     Bio = await _nooterService.GetBio(User.Identity?.Name!);
                 }
@@ -69,7 +62,7 @@ public class UserTimelineModel : PageModel
         else
         {
             Cheeps = await _nooterService.GetCheepsFromAuthor(author, _page);
-            if (await _bioRepository.AuthorHasBio(author))
+            if (await _nooterService.AuthorHasBio(author))
             {
                 Bio = await _nooterService.GetBio(author);
             }
@@ -116,7 +109,7 @@ public class UserTimelineModel : PageModel
             return Redirect($"/{author.Name}");
         }
         
-        await _followRepository.FollowAuthor(id,followingAuthorId);
+        await _nooterService.Follow(id,followingAuthorId);
         _followerMap[author.Name] = true;
         return Redirect($"/{author.Name}");
     }
@@ -132,7 +125,7 @@ public class UserTimelineModel : PageModel
         }
         
         
-        await _followRepository.Unfollow(id,followingAuthorId);
+        await _nooterService.Unfollow(id,followingAuthorId);
         _followerMap[author.Name] = false;
         return Redirect($"/{author.Name}");
     }

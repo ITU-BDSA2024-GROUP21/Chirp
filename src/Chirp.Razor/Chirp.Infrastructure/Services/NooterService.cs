@@ -74,6 +74,11 @@ public class NooterService : INooterService
         return await _authorRepository.GetAuthorByName(name);
     }
 
+    public async Task DeleteNoot(int nootId)
+    {
+        await _nootRepository.DeleteNoot(nootId);
+    }
+
 
     private static List<CheepDTO> DTOConversion(List<Cheep> cheeps)
     {

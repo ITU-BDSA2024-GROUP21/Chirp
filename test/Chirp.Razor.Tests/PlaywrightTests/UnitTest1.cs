@@ -518,9 +518,9 @@ public class UnitTest1 : PageTest
         await Page.GetByRole(AriaRole.Link, new() { Name = "Register" }).ClickAsync();
 
         await Page.GetByPlaceholder("username").ClickAsync();
-        await Page.GetByPlaceholder("username").FillAsync("Bulgur");
+        await Page.GetByPlaceholder("username").FillAsync("Bulgur1");
         await Page.GetByPlaceholder("name@example.com").ClickAsync();
-        await Page.GetByPlaceholder("name@example.com").FillAsync("Bulgur@mail.dk");
+        await Page.GetByPlaceholder("name@example.com").FillAsync("Bulgur1@mail.dk");
         await Page.GetByLabel("Password", new() { Exact = true }).ClickAsync();
         await Page.GetByLabel("Password", new() { Exact = true }).FillAsync("Halløj1!");
         await Page.GetByLabel("Confirm Password").ClickAsync();
@@ -539,7 +539,7 @@ public class UnitTest1 : PageTest
         await Expect(Page.GetByRole(AriaRole.Heading, new() { Name = "Edit Your Bio" })).ToBeVisibleAsync();
         await Expect(Page.Locator("#Text")).ToBeVisibleAsync();
         await Expect(Page.GetByRole(AriaRole.Button, new() { Name = "Save" })).ToBeVisibleAsync();
-        await Expect(Page.GetByRole(AriaRole.Heading, new() { Name = "Bulgur's BIO" })).ToBeVisibleAsync();
+        await Expect(Page.GetByRole(AriaRole.Heading, new() { Name = "Bulgur1's BIO" })).ToBeVisibleAsync();
         await Expect(Page.GetByText("There are no Bio so far.")).ToBeVisibleAsync();
 
         await Page.Locator("#Text").ClickAsync();
@@ -552,6 +552,7 @@ public class UnitTest1 : PageTest
         await Expect(Page.GetByText("Jeg Hedder william")).ToBeVisibleAsync();
         await Page.GetByRole(AriaRole.Link, new() { Name = "About Me" }).ClickAsync();
         await Page.GetByRole(AriaRole.Button, new() { Name = "Forget Me!" }).ClickAsync();
+
     }
     
     [Test]
@@ -609,16 +610,16 @@ public class UnitTest1 : PageTest
     [Test]
     public async Task AboutmePageTest()
     {
-        await Page.GotoAsync("https://localhost:5273/");
+        var repo = await RepositorySetUp();
         
         await Page.GotoAsync("https://localhost:5273/");
 
         await Page.GetByRole(AriaRole.Link, new() { Name = "Register" }).ClickAsync();
 
         await Page.GetByPlaceholder("username").ClickAsync();
-        await Page.GetByPlaceholder("username").FillAsync("Lief");
+        await Page.GetByPlaceholder("username").FillAsync("Lief3");
         await Page.GetByPlaceholder("name@example.com").ClickAsync();
-        await Page.GetByPlaceholder("name@example.com").FillAsync("Lief@mail.dk");
+        await Page.GetByPlaceholder("name@example.com").FillAsync("Lief3@mail.dk");
         await Page.GetByLabel("Password", new() { Exact = true }).ClickAsync();
         await Page.GetByLabel("Password", new() { Exact = true }).FillAsync("Halløj1!");
         await Page.GetByLabel("Confirm Password").ClickAsync();
@@ -626,7 +627,7 @@ public class UnitTest1 : PageTest
         
         await Page.GetByRole(AriaRole.Button, new() { Name = "Register" }).ClickAsync();
 
-        await Expect(Page.GetByText("Noot noot? Lief? Share")).ToBeVisibleAsync();
+        await Expect(Page.GetByText("Noot noot? Lief3? Share")).ToBeVisibleAsync();
         
 
         await Page.Locator("#Text").ClickAsync();
@@ -634,27 +635,30 @@ public class UnitTest1 : PageTest
         
         await Page.GetByRole(AriaRole.Button, new() { Name = "Share" }).ClickAsync();
         
-        await Expect(Page.Locator("li").Filter(new() { HasText = "brian2 hej — 27.11.2024" })).ToBeVisibleAsync();
+        await Expect(Page.Locator("li").Filter(new() { HasText = "brian2 hej — 11.27.24" })).ToBeVisibleAsync();
         
-        await Expect(Page.Locator("li").Filter(new() { HasText = "brian2 hej — 27.11.2024" }).GetByAltText("Follow logo")).ToBeVisibleAsync();
+        await Expect(Page.Locator("li").Filter(new() { HasText = "brian2 hej — 11.27.24" }).GetByAltText("Follow logo")).ToBeVisibleAsync();
         
-        await Page.Locator("li").Filter(new() { HasText = "brian2 hej — 27.11.2024" }).GetByAltText("Follow logo").ClickAsync();
+        await Page.Locator("li").Filter(new() { HasText = "brian2 hej — 11.27.24" }).GetByAltText("Follow logo").ClickAsync();
         
-        await Expect(Page.Locator("li").Filter(new() { HasText = "brian2 hej — 27.11.2024" }).GetByAltText("Unfollow logo")).ToBeVisibleAsync();
+        await Expect(Page.Locator("li").Filter(new() { HasText = "brian2 hej — 11.27.24" }).GetByAltText("Unfollow logo")).ToBeVisibleAsync();
         
         await Expect(Page.GetByRole(AriaRole.Link, new() { Name = "About Me" })).ToBeVisibleAsync();
         await Page.GetByRole(AriaRole.Link, new() { Name = "About Me" }).ClickAsync();
 
         await Expect(Page.GetByRole(AriaRole.Heading, new() { Name = "Personal Information" })).ToBeVisibleAsync();
         await Expect(Page.GetByRole(AriaRole.Button, new() { Name = "Download My Information" })).ToBeVisibleAsync();
-        await Expect(Page.GetByText("Name: Lief")).ToBeVisibleAsync();
-        await Expect(Page.GetByText("Email: lief@mail.dk")).ToBeVisibleAsync();
+        await Expect(Page.GetByText("Name: Lief3")).ToBeVisibleAsync();
+        await Expect(Page.GetByText("Email: lief3@mail.dk")).ToBeVisibleAsync();
         await Expect(Page.Locator("p").Filter(new() { HasText = "Following:" })).ToBeVisibleAsync();
         await Expect(Page.GetByText("brian2")).ToBeVisibleAsync();
         await Expect(Page.Locator("p").Filter(new() { HasText = "Noots:" })).ToBeVisibleAsync();
         await Expect(Page.GetByText("Lief siger hej")).ToBeVisibleAsync();
         
         await Page.GetByRole(AriaRole.Button, new() { Name = "Forget Me!" }).ClickAsync();
+        
+        await repo.DeleteAuthorByEmail("Lief3@mail.dk");
+
 
     }
 

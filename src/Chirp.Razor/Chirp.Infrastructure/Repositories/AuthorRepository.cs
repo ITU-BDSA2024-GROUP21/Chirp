@@ -81,6 +81,8 @@ public class AuthorRepository : IAuthorRepository
         var user = await _userManager.FindByEmailAsync(email);
         if (user != null)
         {
+            var logins = _chirpDbContext.UserLogins.Where(l => l.UserId == user.Id);
+            _chirpDbContext.RemoveRange(logins);
             await _userManager.DeleteAsync(user);
         }
 
@@ -100,18 +102,7 @@ public class AuthorRepository : IAuthorRepository
         {
             _chirpDbContext.Bios.Remove(bio);
         }
-
         
-        Console.WriteLine(author.AuthorId);
-        /*var follows = await _cheepService.GetFollowedAuthors(author.AuthorId);
-
-        foreach (var follow in follows)
-        {
-            var followingAuthor = await GetAuthorByName(follow);
-            var followingId = followingAuthor.AuthorId;
-            var authorfollow = new AuthorFollow { FollowerId = author.AuthorId, FollowingId = followingId };
-            _chirpDbContext.AuthorFollows.Remove(authorfollow);
-        }*/
         
         await _chirpDbContext.SaveChangesAsync();
     }

@@ -167,7 +167,7 @@ public class AboutMeModel : PageModel
         var guid = Guid.NewGuid();
         var bioId = BitConverter.ToInt32(guid.ToByteArray(), 0);
 
-        await _nooterService.CreateBIO(User.Identity?.Name!, email!,BioInput?.Text!, bioId);
+        await _nooterService.CreateBio(User.Identity?.Name!, email!,BioInput?.Text!, bioId);
         return RedirectToPage("./_AboutMe");
     }
     

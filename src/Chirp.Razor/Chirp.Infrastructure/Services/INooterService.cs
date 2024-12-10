@@ -15,7 +15,7 @@ public interface INooterService
     public Task Unfollow(int followingAuthorId, int followerAuthorId);
     public Task CheckFollowerExistElseCreate(ApplicationUser user);
     public Task DeleteAuthorAndCheepsByEmail(string email);
-    public Task<Bio> CreateBIO(string username, string email, string message, int id);
+    public Task<Bio> CreateBio(string username, string email, string message, int id);
     public Task<BioDTO> GetBio(string author);
     public Task<bool> AuthorHasBio(string author);
     public Task DeleteBio(Author author);

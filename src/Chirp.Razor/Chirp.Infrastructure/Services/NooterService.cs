@@ -140,7 +140,7 @@ public class NooterService : INooterService
             return Task.CompletedTask;
     }
     
-    public async Task<Bio> CreateBIO(string username,  string email, string message, int id)
+    public async Task<Bio> CreateBio(string username,  string email, string message, int id)
     {
         AuthorDTO newAuthor = new AuthorDTO
         {

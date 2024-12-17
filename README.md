@@ -3,6 +3,9 @@ Nooter is a clone of Twitter, where you can post noots, follow other users, amon
 This webapplication is hosted on Microsoft Azure, where you can access it with the following link:
 https://bdsagroup021chirprazor.azurewebsites.net/
 
+![image](https://github.com/user-attachments/assets/ce6ca2ed-9bc7-4cf3-871b-76e03dbf6cdb)
+
+
 # Running Nooter locally
 ## Cloning Repository
 To clone our project there are two ways. 

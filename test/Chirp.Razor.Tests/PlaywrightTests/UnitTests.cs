@@ -103,6 +103,7 @@ public class UnitTests : PageTest
 
 
     [Test]
+    // This is for testing if the Public timeline button/link is visible 
     public async Task NavigationPublicTimelineButtonTest()
     {
         await Page.GotoAsync("https://localhost:5273/");
@@ -111,6 +112,7 @@ public class UnitTests : PageTest
     }
 
     [Test]
+    // This is for testing if the public timeline button/link actually works when being clicked
     public async Task NavigationPublicTimelineButtonWorkTest()
     {
         await Page.GotoAsync("https://localhost:5273/");
@@ -120,6 +122,7 @@ public class UnitTests : PageTest
     }
 
     [Test]
+    // This is for testing if the Register button/link is visible 
     public async Task NavigationRegisterButtonTest()
     {
         await Page.GotoAsync("https://localhost:5273/");
@@ -128,6 +131,7 @@ public class UnitTests : PageTest
     }
 
     [Test]
+    // This is for testing if the register button/link actually works when being clicked
     public async Task NavigationRegisterButtonWorkTest()
     {
         await Page.GotoAsync("https://localhost:5273/");
@@ -137,6 +141,7 @@ public class UnitTests : PageTest
     }
     
     [Test]
+    // This is for testing if the Login button/link is visible 
     public async Task NavigationLoginButtonTest()
     {
         await Page.GotoAsync("https://localhost:5273/");
@@ -145,6 +150,7 @@ public class UnitTests : PageTest
     }
     
     [Test]
+    // This is for testing if the login button/link actually works when being clicked
     public async Task NavigationLoginButtonWorkTest()
     {
         await Page.GotoAsync("https://localhost:5273/");
@@ -154,6 +160,7 @@ public class UnitTests : PageTest
     }
 
     [Test]
+    // This is for testing if all the expected things are visible on the register page 
     public async Task RegisterPageTest()
     {
         await Page.GotoAsync("https://localhost:5273/");
@@ -185,6 +192,7 @@ public class UnitTests : PageTest
     }
 
     [Test]
+    // This is for testing if all the expected things are visible on the login page
     public async Task LoginPageTest()
     {
         await Page.GotoAsync("https://localhost:5273/");
@@ -228,6 +236,7 @@ public class UnitTests : PageTest
         
     }
     [Test]
+    // This is for testing that the next page button works as extended
     public async Task NextPage()
     {
         await Page.GotoAsync("https://localhost:5273/");
@@ -242,6 +251,7 @@ public class UnitTests : PageTest
     }
     
     [Test]
+    // This test that the previous page button works as expected, and it goes to the previous page
     public async Task PrevPage()
     {
         await Page.GotoAsync("https://localhost:5273/?page=4");
@@ -255,6 +265,7 @@ public class UnitTests : PageTest
         StringAssert.Contains("/?page=3", currentUrl);
     }
     [Test]
+    // This is testing that we can also use the next page button on a private timeline
     public async Task NextPageUserTimeLine()
     {
         await Page.GotoAsync("https://localhost:5273/Jacqualine%20Gilcoine");
@@ -270,6 +281,7 @@ public class UnitTests : PageTest
     }
 
     [Test]
+    // This tests that there is not a next page button on the register page
     public async Task NoNextPageRegister()
     {
         await Page.GotoAsync("https://localhost:5273/Register");
@@ -280,6 +292,7 @@ public class UnitTests : PageTest
 
     }
     [Test]
+    // This tests that there is not a previous page button when you are on the first page
     public async Task NoPreviousPage()
     {
         await Page.GotoAsync("https://localhost:5273/?page=1");
@@ -290,6 +303,7 @@ public class UnitTests : PageTest
 
     }
     [Test]
+    // This is for testing that you can still see bio's from other people even when not logged in
     public async Task BioOnUserWhenNotLoggedIn()
     {
         await Page.GotoAsync("https://localhost:5273/");

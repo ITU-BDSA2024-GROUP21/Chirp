@@ -103,6 +103,7 @@ public class ActualUnitTest : PageTest
 
 
     [Test]
+    // This is for testing if the Public timeline button/link is visible 
     public async Task NavigationPublicTimelineButtonTest()
     {
         await Page.GotoAsync("https://localhost:5273/");
@@ -111,6 +112,7 @@ public class ActualUnitTest : PageTest
     }
 
     [Test]
+    // This is for testing if the public timeline button/link actually works when being clicked
     public async Task NavigationPublicTimelineButtonWorkTest()
     {
         await Page.GotoAsync("https://localhost:5273/");
@@ -120,6 +122,7 @@ public class ActualUnitTest : PageTest
     }
 
     [Test]
+    // This is for testing if the Register button/link is visible 
     public async Task NavigationRegisterButtonTest()
     {
         await Page.GotoAsync("https://localhost:5273/");
@@ -128,6 +131,7 @@ public class ActualUnitTest : PageTest
     }
 
     [Test]
+    // This is for testing if the register button/link actually works when being clicked
     public async Task NavigationRegisterButtonWorkTest()
     {
         await Page.GotoAsync("https://localhost:5273/");
@@ -137,6 +141,7 @@ public class ActualUnitTest : PageTest
     }
     
     [Test]
+    // This is for testing if the Login button/link is visible 
     public async Task NavigationLoginButtonTest()
     {
         await Page.GotoAsync("https://localhost:5273/");
@@ -145,6 +150,7 @@ public class ActualUnitTest : PageTest
     }
     
     [Test]
+    // This is for testing if the login button/link actually works when being clicked
     public async Task NavigationLoginButtonWorkTest()
     {
         await Page.GotoAsync("https://localhost:5273/");
@@ -154,6 +160,7 @@ public class ActualUnitTest : PageTest
     }
 
     [Test]
+    // This is for testing if all the expected things are visible on the register page 
     public async Task RegisterPageTest()
     {
         await Page.GotoAsync("https://localhost:5273/");
@@ -185,6 +192,7 @@ public class ActualUnitTest : PageTest
     }
 
     [Test]
+    // This is for testing if all the expected things are visible on the login page
     public async Task LoginPageTest()
     {
         await Page.GotoAsync("https://localhost:5273/");
@@ -213,8 +221,7 @@ public class ActualUnitTest : PageTest
             .ToBeVisibleAsync();
 
         await Expect(Page.GetByRole(AriaRole.Button, new() { Name = "GitHub" })).ToBeVisibleAsync();
-                
-
+        
     }
     
     

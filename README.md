@@ -18,10 +18,10 @@ The other option is to go to your terminal, in the folder you whish to clone it 
 To Run our program you will need to have dowloaded tools like .NET. Once these tools have been doeloade you can follow these simple steps
 
 1. Open your terminal
-2. go into the directory until your in the folder Chirp.Web
+2. Go into the directory until your in the folder Chirp.Web
 3. Then write `dotnet run`
 4. Click on the link
-5. now you can se our website Nooter
+5. Now you can see our website Nooter
 
 # Running test cases
 There are two ways to run the test locally on your computer. The first way you need to have two separate terminals open. The first needs to go into the Chirp.Web folder here you need to write `dotnet run`. Now that the website is up and running, you then need to go into the test folder in the other terminal. Here you run `dotnet test` to run our test. This runs both the normal test and the Playwright test. 

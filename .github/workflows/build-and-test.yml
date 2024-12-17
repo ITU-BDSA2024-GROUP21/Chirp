@@ -41,6 +41,10 @@ jobs:
     - name: Restore Dependencies
       run: dotnet restore
 
+    - name: Set Custom Path
+      env:
+        CHIRP_PROJECT_PATH: "${GITHUB_WORKSPACE}/test/Chirp.Razor.Tests/PlaywrightTests"
+
     - name: Build
       run: dotnet build
       working-directory: test/Chirp.Razor.Tests/PlaywrightTests

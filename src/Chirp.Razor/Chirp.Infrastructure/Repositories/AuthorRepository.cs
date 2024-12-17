@@ -16,6 +16,8 @@ public class AuthorRepository : IAuthorRepository
         _chirpDbContext = chirpDbContext;
         _userManager = userManager;
     }
+    
+    //This method is used to retrieve the author from the database, by using the name to search in the database
     public async Task<Author> GetAuthorByName(string Name)
     {
         var sqlQuery =  _chirpDbContext.Authors
@@ -26,7 +28,7 @@ public class AuthorRepository : IAuthorRepository
         return result ?? throw new InvalidOperationException();
     }
     
-    
+    // This method is used to retrieve the author from the database, when the email is available 
     public async Task<Author> GetAuthorByEmail(string Email)
     {
         var sqlQuery =  _chirpDbContext.Authors
@@ -37,6 +39,8 @@ public class AuthorRepository : IAuthorRepository
         return result!;
     }
     
+    
+    // This is for converting the author from an authorDTO to an author object
     public async Task<Author> ConvertAuthors(AuthorDTO author)
     {
         var _author = await CheckAuthorExists(author);
@@ -58,6 +62,7 @@ public class AuthorRepository : IAuthorRepository
         return _author;
     }
 
+    // This is a method for checking if the author exists in the database
     public async Task<Author> CheckAuthorExists(AuthorDTO author)
     {
         var doesAuthorExist = await  _chirpDbContext.Authors.FirstOrDefaultAsync(a => a.Name == author.Name || a.Email == author.Email);
@@ -69,15 +74,18 @@ public class AuthorRepository : IAuthorRepository
         return doesAuthorExist;
     }
     
+    // This method is for deleting the author from the database by searching for the email
     public async Task DeleteAuthorByEmail(string email)
     {
+        // This is to delete the author from the Authors table
         var author = await _chirpDbContext.Authors.FirstOrDefaultAsync(a => a.Email == email);
         if (author == null)
         {
             Console.WriteLine($"Author with email {email} not found.");
             return;
         }
-
+    
+        // This is to delete the author from the AspNetUsers table
         var user = await _userManager.FindByEmailAsync(email);
         if (user != null)
         {
@@ -88,15 +96,19 @@ public class AuthorRepository : IAuthorRepository
 
         _chirpDbContext.Authors.Remove(author);
         
+        // This is to delete all the cheeps from author that is being deleted
         var cheeps = _chirpDbContext.Cheeps.Where(c => c.Author == author);
         _chirpDbContext.Cheeps.RemoveRange(cheeps);
 
+        // This is to delete the author from the AuthorFollows table, where the author is the one following other authors
         var following = _chirpDbContext.AuthorFollows.Where(a => a.Follower == author);
         _chirpDbContext.AuthorFollows.RemoveRange(following);
         
+        // This is to delete the author from the AuthorFollows, where the author is the one being followed by other authors
         var followed = _chirpDbContext.AuthorFollows.Where(a => a.Following == author);
         _chirpDbContext.AuthorFollows.RemoveRange(followed);
 
+        // This is to delete the Authors bio from the Bios table
         var bio = await _chirpDbContext.Bios.FirstOrDefaultAsync(b => b.AuthorId == author.AuthorId);
         if (bio != null)
         {
@@ -107,13 +119,14 @@ public class AuthorRepository : IAuthorRepository
         await _chirpDbContext.SaveChangesAsync();
     }
     
+    // This is to add the respective author to the database
     public async Task AddAuthorToDB(Author author)
     {
         _chirpDbContext.Authors.Add(author);
         await _chirpDbContext.SaveChangesAsync();
     }
     
-    // These are used for testing purposes only and does not reflect our refactoring
+    // The following 3 methods are used for testing purposes only and does not reflect our refactoring
     public async Task FollowAuthor(int followingAuthorId, int followedAuthorId)
     {
         var followRelation = new AuthorFollow
@@ -126,6 +139,7 @@ public class AuthorRepository : IAuthorRepository
         await _chirpDbContext.SaveChangesAsync();
     }
 
+    
     public async Task<List<String>> GetFollowedAuthors(int authorId)
     {
         return await _chirpDbContext.AuthorFollows

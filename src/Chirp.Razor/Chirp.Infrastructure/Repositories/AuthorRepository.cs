@@ -96,7 +96,7 @@ public class AuthorRepository : IAuthorRepository
 
         _chirpDbContext.Authors.Remove(author);
         
-        // This is to delete all the cheeps from author that is being deleted
+        // This is to delete all the noots from author that is being deleted
         var cheeps = _chirpDbContext.Cheeps.Where(c => c.Author == author);
         _chirpDbContext.Cheeps.RemoveRange(cheeps);
 

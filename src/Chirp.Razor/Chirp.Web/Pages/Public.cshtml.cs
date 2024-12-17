@@ -30,6 +30,7 @@ public class PublicModel : PageModel
     }
     
 
+    // This handles when retrieving all the cheeps/noots and the page number is parsed
     public async Task<ActionResult> OnGet()
     {
         if (!string.IsNullOrEmpty(Request.Query["page"]) && int.Parse(Request.Query["page"]!) > 0)
@@ -63,9 +64,9 @@ public class PublicModel : PageModel
         return Page();
     }
 
+    // This is for handling when a user tries to post / share a noot 
     public async Task<IActionResult> OnPost()
     {
-        Console.WriteLine("Hejsa");
         if (string.IsNullOrWhiteSpace(CheepInput.Text))
         {
             ModelState.AddModelError("CheepInput.Text", "The message can't be empty.");
@@ -91,6 +92,7 @@ public class PublicModel : PageModel
         return RedirectToPage("Public");
     }
 
+    // This is for handling when the user clicks the follow button 
     public async Task<IActionResult> OnPostFollow(int followingAuthorId, string followerAuthor, int page)
     {
         if (string.IsNullOrEmpty(followerAuthor))
@@ -106,6 +108,7 @@ public class PublicModel : PageModel
         FollowerMap[author.Name] = true;
         return Redirect($"/?page={page}");
     }
+    // This handles when a user clicks on the unfollow button
     public async Task<IActionResult> OnPostUnfollow(int followingAuthorId, string followerAuthor, int page)
     {
         if (string.IsNullOrEmpty(followerAuthor))

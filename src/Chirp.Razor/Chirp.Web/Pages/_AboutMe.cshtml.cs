@@ -140,7 +140,7 @@ public class AboutMeModel : PageModel
         return RedirectToPage();
     }
     
-    //This hanldes the request to create or update a user's bio, ensuring input validation and redirecting to the "About Me"
+    //This handles the request to create or update a user's bio, ensuring input validation and redirecting to the "About Me"
     //page upon success.
     public async Task<IActionResult> OnPost()
     {

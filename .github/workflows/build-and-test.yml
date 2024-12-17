@@ -43,10 +43,14 @@ jobs:
 
     - name: Set Custom Path
       run: | 
-        CHIRP_PROJECT_PATH="${GITHUB_WORKSPACE}/test/Chirp.Razor.Tests/PlaywrightTests"
-        echo "CHIRP_PROJECT_PATH=$ABSOLUTE_TEST_PATH" >> $GITHUB_ENV
-      env:
-        CHIRP_PROJECT_PATH: ${{ env.CHIRP_PROJECT_PATH }}
+        CHIRP_PROJECT_PATH="${GITHUB_WORKSPACE}/src/Chirp.Razor/Chirp.Web"
+        echo "CHIRP_PROJECT_PATH=${CHIRP_PROJECT_PATH}" >> $GITHUB_ENV
+        
+        echo "Custom path set to: $ABSOLUTE_TEST_PATH"
+
+    - name: Verify Environment Variable
+      run: |
+        echo "Environment variable CHIRP_PROJECT_PATH is: $CHIRP_PROJECT_PATH"
 
     - name: Build
       run: dotnet build
@@ -59,6 +63,7 @@ jobs:
       run: |
         export authentication_github_clientId="${{ secrets.GITHUBCLIENTID }}"
         export authentication_github_clientSecret="${{ secrets.GITHUBCLIENTSECRET }}"
+        echo "Using CHIRP_PROJECT_PATH: $CHIRP_PROJECT_PATH"
         dotnet test test/Chirp.Razor.Tests/PlaywrightTests/ --verbosity normal
       
     

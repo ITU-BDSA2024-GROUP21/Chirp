@@ -43,7 +43,8 @@ jobs:
 
     - name: Set Custom Path
       run: | 
-        CHIRP_PROJECT_PATH: "${GITHUB_WORKSPACE}/test/Chirp.Razor.Tests/PlaywrightTests"
+        CHIRP_PROJECT_PATH="${GITHUB_WORKSPACE}/test/Chirp.Razor.Tests/PlaywrightTests"
+        echo "CHIRP_PROJECT_PATH=$ABSOLUTE_TEST_PATH" >> $GITHUB_ENV
       env:
         CHIRP_PROJECT_PATH: ${{ env.CHIRP_PROJECT_PATH }}
 

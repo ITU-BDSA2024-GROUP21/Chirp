@@ -3,6 +3,7 @@
 
 @model NootBoxModel
 
+<!--This is checking if the user is authenticated, and if that's the case it should contain a cheepbox/nootbox -->
 @if (User.Identity!.IsAuthenticated)
 {
     <head>

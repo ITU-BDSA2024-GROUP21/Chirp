@@ -18,6 +18,7 @@ public class NootRepository : INootRepository
         _userManager = userManager;
     }
     
+    // This is to get all the noots from a given page 
     public async Task<List<Cheep>> GetNoots(int page)
     {
         var sqlQuery = _chirpDbContext.Cheeps
@@ -31,6 +32,7 @@ public class NootRepository : INootRepository
         return result;
     }
     
+    // This is a method that handles when a noot has to be deleted 
     public async Task DeleteNoot(int cheepId)
     {
         var cheep = await _chirpDbContext.Cheeps.FindAsync(cheepId);
@@ -43,7 +45,7 @@ public class NootRepository : INootRepository
         
     }
     
-    
+    // This is to get the noots from a given author on a specific page
     public async Task<List<Cheep>> GetNootsFromAuthor(string author, int page)
     {
         var sqlQuery = _chirpDbContext.Cheeps
@@ -58,6 +60,7 @@ public class NootRepository : INootRepository
         return result;
     }
     
+    // This is to get all noots from an author without a specific page
     public async Task<List<Cheep>> GetNootsWithoutPage(string author)
     {
         var sqlQuery = _chirpDbContext.Cheeps
@@ -70,7 +73,7 @@ public class NootRepository : INootRepository
         return result;
     }
 
-    
+    // This is a method for converting Noots from a DTO's to Noot/cheep object
     public async Task<Cheep> ConvertNoots(CheepDTO cheeps, AuthorDTO author)
     {
         var _author = await ConvertAuthors(author);
@@ -83,7 +86,8 @@ public class NootRepository : INootRepository
 
     }
     
-    
+    // This is the method for retrieving all the noots from the authors which a given author follows
+    // to be able to display them on private timeline
     public async Task<List<Cheep>> GetNootsFromFollowedAuthors(IEnumerable<string> followedAuthors, int page)
     {
         return await _chirpDbContext.Cheeps
@@ -118,6 +122,7 @@ public class NootRepository : INootRepository
         return _author;
     }
 
+    // This is a helping method to check if author exists
     public async Task<Author> CheckAuthorExists(AuthorDTO author)
     {
         var doesAuthorExist = await  _chirpDbContext.Authors.FirstOrDefaultAsync(a => a.Name == author.Name || a.Email == author.Email);

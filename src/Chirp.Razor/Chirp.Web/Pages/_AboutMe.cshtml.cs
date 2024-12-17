@@ -43,7 +43,7 @@ public class AboutMeModel : PageModel
             return Redirect("/Identity/Account/Login");
         }
         
-        //Loading The users email adress
+        //Loading The users email address
         Author author = await _nooterService.GetAuthorByName(User.Identity?.Name!);
         Email = author.Email;
 
@@ -54,7 +54,7 @@ public class AboutMeModel : PageModel
 
         int authorid = author.AuthorId;
         
-        //loading who our uses is following
+        //loading who our user is following
         FollowersList = await _nooterService.GetFollowedAuthors(authorid);
         Followers = string.Join( ", ", FollowersList.ToArray() );
         
@@ -73,6 +73,7 @@ public class AboutMeModel : PageModel
 
         return Page();
     }
+    // This is when a user wants to download the information stored about them
     public async Task<IActionResult> OnPostDownload()
     {
         var user = await _userManager.GetUserAsync(User);
@@ -97,7 +98,7 @@ public class AboutMeModel : PageModel
             personalData.Add("Email", author.Email);
             
 
-            // Følgere
+            // Followers
             var followersList = await _nooterService.GetFollowedAuthors(author.AuthorId);
             personalData.Add("Followers", followersList);
 
@@ -108,16 +109,17 @@ public class AboutMeModel : PageModel
             personalData.Add("Bio", Bio?.Text!);
         }
 
-        // Returner som JSON-fil
+        // Returns as a JSON-file
         Response.Headers.TryAdd("Content-Disposition", "attachment; filename=PersonalData.json");
         return new FileContentResult(JsonSerializer.SerializeToUtf8Bytes(personalData, new JsonSerializerOptions
         {
-            WriteIndented = true // For læsbarhed
+            WriteIndented = true // For readability
         }), "application/json");
     }
 
     
 
+    // This is what needs to happen when the user clicks the Forget Me! button and redirects to the page
     public async Task<IActionResult> OnPostForgetme(Author author)
 
     {
@@ -132,11 +134,14 @@ public class AboutMeModel : PageModel
         
         await _nooterService.DeleteAuthorAndCheepsByEmail(author1.Email);
             
+        // Signs out the user when it gets deleted
         await _signInManager.SignOutAsync();
         
         return RedirectToPage();
     }
     
+    //This handles the request to create or update a user's bio, ensuring input validation and redirecting to the "About Me"
+    //page upon success.
     public async Task<IActionResult> OnPost()
     {
         var author = await _nooterService.GetAuthorByName(User.Identity?.Name!);

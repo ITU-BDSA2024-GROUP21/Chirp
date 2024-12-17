@@ -21,6 +21,7 @@ public class UserTimelineModel : PageModel
         _followerMap = new Dictionary<string, bool>();
     }
     
+    // This handles when a user wants to delete one of their cheeps/noots
     public async Task<IActionResult> OnPostDeleteCheepAsync(int cheepId)
     {
         await _nooterService.DeleteNoot(cheepId);
@@ -30,6 +31,7 @@ public class UserTimelineModel : PageModel
     [BindProperty]
     public NootBoxModel? CheepInput { get; set; }
 
+    // This is handling retrieving all the cheeps/noots and the page number is parsed for a specific user and returns the page
     public async Task<ActionResult> OnGet(string author)
     {
         if (!string.IsNullOrEmpty(Request.Query["page"]) && int.Parse(Request.Query["page"]!) > 0)
@@ -71,6 +73,8 @@ public class UserTimelineModel : PageModel
 
         return Page();
     }
+    
+    // This is handling when the user wants to post/share a noot/cheep and clicks the share button
     public async Task<IActionResult> OnPost()
     {
         if (string.IsNullOrWhiteSpace(CheepInput?.Text))
@@ -98,6 +102,7 @@ public class UserTimelineModel : PageModel
         return RedirectToPage("Public");
     }
     
+    // This is handling when a user wants to follow another user
     public async Task<IActionResult> OnPostFollow(int followingAuthorId, string followerAuthor, int page)
     {
         Author author = await _nooterService.GetAuthorByName(followerAuthor);
@@ -113,6 +118,7 @@ public class UserTimelineModel : PageModel
         _followerMap[author.Name] = true;
         return Redirect($"/{author.Name}");
     }
+    // This is handling when a user wants to unfollow one of the users they are following
     public async Task<IActionResult> OnPostUnfollow(int followingAuthorId, string followerAuthor, int page)
     {
         Author author = await _nooterService.GetAuthorByName(followerAuthor);
@@ -130,6 +136,7 @@ public class UserTimelineModel : PageModel
         return Redirect($"/{author.Name}");
     }
 
+    // This is for retrieving the cheeps/noots which has to be on the users timeline when a user is logged in
     public async Task<List<CheepDTO>> GetCheepsWhenLoggedIn(string author)
     {
         var user = await _userManager.GetUserAsync(User);

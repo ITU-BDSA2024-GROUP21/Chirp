@@ -8,11 +8,22 @@ public class PersonalProjectPath
 
     private static string envVarName = "CHIRP_PROJECT_PATH";
 
-    public static string path = getPath();
+    public static string path;
 
-    public static string getPath()
+    public static string GetPath()
     {
-        string customPath = Environment.GetEnvironmentVariable(envVarName);
-        return !string.IsNullOrEmpty(customPath) ? customPath : defaultPath;
+        var customPath = Environment.GetEnvironmentVariable(envVarName);
+        
+        if (string.IsNullOrEmpty(customPath))
+        {
+            path = defaultPath;
+        }
+        else
+        {
+            path = customPath;
+            Console.WriteLine($"Using custom path: {customPath}");
+        }
+
+        return path;
     }
 }

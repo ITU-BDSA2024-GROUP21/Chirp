@@ -43,6 +43,7 @@ public class UIEnd2EndTest : PageTest
     }
 
     [Test]
+    // This is testing of our whole program, and checks that everything is as we expect and that it contains the expected functionality
     public async Task End2EndTest1()
     {
         await Page.GotoAsync("https://localhost:5273/");
@@ -68,7 +69,7 @@ public class UIEnd2EndTest : PageTest
         //checking that we are now direkte to our public timeline
         await Expect(Page.GetByRole(AriaRole.Heading, new() { Name = "Public timeline" })).ToBeVisibleAsync();
 
-        //Checkign That Helene is logged in and can log out
+        //Checking That Helene is logged in and can log out
         await Expect(Page.GetByRole(AriaRole.Link, new() { Name = "Logout Helene" })).ToBeVisibleAsync();
         //Checking that the Mytimeline button is visible
         await Expect(Page.GetByRole(AriaRole.Link, new() { Name = "My timeline" })).ToBeVisibleAsync();
@@ -103,6 +104,7 @@ public class UIEnd2EndTest : PageTest
 
     }
 
+    // This is also a test of the whole program, where we test that it contains everything we expect
     [Test]
     public async Task End2EndTest2()
     {
@@ -118,7 +120,6 @@ public class UIEnd2EndTest : PageTest
         await Page.GetByLabel("Password", new() { Exact = true }).FillAsync("Halløj1!");
         await Page.GetByLabel("Confirm Password").ClickAsync();
         await Page.GetByLabel("Confirm Password").FillAsync("Halløj1!");
-        // Note det er som om den ikke registrere vi kommer videre når vi klikker på linket register
 
         var _content = await Page.ContentAsync();
         Console.WriteLine(_content);

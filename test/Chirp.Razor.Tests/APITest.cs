@@ -22,6 +22,7 @@ public class APITest : IClassFixture<WebApplicationFactory<Program>>
     }
     
     [Fact]
+    // This is a test for checking that you can see the public timeline, checking for a specific noot on the public page
     public async Task CanSeePublicTimeline()
     {
         string page = "1";
@@ -57,6 +58,7 @@ public class APITest : IClassFixture<WebApplicationFactory<Program>>
     [InlineData("Helge")]
     [InlineData("Adrian")]
     [InlineData("Roger Histand")]
+    // This is for checking that we can see the private timeline of some given authors
     public async Task CanSeePrivateTimeline(string author)
     {
         var response = await _client.GetAsync($"/{author}");
@@ -70,6 +72,7 @@ public class APITest : IClassFixture<WebApplicationFactory<Program>>
 
     [Theory]
     [InlineData("Adrian")]
+    // This is testing that it contains the expected information
     public async Task CanSeeHTTPBody(string author)
     {
         var response = await _client.GetAsync($"/{author}");
@@ -82,6 +85,7 @@ public class APITest : IClassFixture<WebApplicationFactory<Program>>
     }
     [Theory]
     [InlineData("Helge")]
+    // This is for testing that we can see the noots from the author Helge
     public async Task CanSeeHTTPBody2(string author1)
     {
         var response = await _client.GetAsync($"/{author1}");
@@ -94,6 +98,7 @@ public class APITest : IClassFixture<WebApplicationFactory<Program>>
 
     [Theory]
     [InlineData("Quintin Sitts")]
+    // This is for testing that when you reach the last noot of Quintin Sitts that the page should not contain a next page button
     public async Task LastPage(string author)
     {
         int page = 1;

@@ -44,6 +44,7 @@ public class UnitTest
         return userManager;
     }
 
+    // This sets up a nootRepository
     public async Task<INootRepository> NootRepositorySetUp()
     {
         // This is to create an in-memory SQLite connection
@@ -63,6 +64,7 @@ public class UnitTest
         return new NootRepository(context, userManager);
     }
     
+    // This sets up for the repository for Author
     public async Task<IAuthorRepository> AuthorRepositorySetUp()
     {
         var repositoryFollow = FollowRepositorySetUp();
@@ -83,6 +85,7 @@ public class UnitTest
         return new AuthorRepository(context, userManager);
     }
     
+    // This sets up the repository for Follow
     public async Task<IFollowRepository> FollowRepositorySetUp()
     {
         // This is to create an in-memory SQLite connection
@@ -103,6 +106,7 @@ public class UnitTest
     }
     
     [Fact]
+    // This test that the repository is set up but contains nothing yet
     public async Task CheepRepositoryTest()
     {
         var repository1 = await NootRepositorySetUp();
@@ -114,6 +118,7 @@ public class UnitTest
     }
     
     [Fact]
+    // This test that we can retrieve the Author by email
     public async Task GetAuthorByEmailTest()
     {
         // Arrange
@@ -135,10 +140,10 @@ public class UnitTest
         // Assert
         Assert.NotNull(result);
         Assert.Equal(testAuthor.Email, result.Email);
-        //Assert.Equal(testAuthor.Name, result.Name);
     }
 
     [Fact]
+    // This test that we can retrieve the Author by name
     public async Task GetAuthorByNameTest()
     {
         var repository3 = await AuthorRepositorySetUp();
@@ -156,10 +161,10 @@ public class UnitTest
 
         Assert.NotNull(result);
         Assert.Equal(testAuthor1.Name, result.Name);
-        //Assert.Equal(testAuthor1.Email, result.Email);
     }
 
     [Fact]
+    // This is testing that we create a new author correctly
     public async Task CreateNewAuthorTest()
     {
         
@@ -179,6 +184,7 @@ public class UnitTest
     }
 
     [Fact]
+    // This is testing that we can create a noot correclty
     public async Task CreateNoot()
     {
         var repository5 = await NootRepositorySetUp();
@@ -217,6 +223,7 @@ public class UnitTest
     }
 
     [Fact]
+    // This checks that we delete an author correctly from the database, and that it no longer exists
     public async Task DeleteAuthorTest()
     {
         var repository6 = await AuthorRepositorySetUp();
@@ -239,6 +246,7 @@ public class UnitTest
     }
 
     [Fact]
+    // This tests that we delete a noot correctly from the database, and that it no longer exists
     public async Task DeleteNootTest()
     {
 
@@ -276,6 +284,7 @@ public class UnitTest
     }
       
     [Fact]
+    // This test that it stored correctly when a user follows another user
     public async Task FollowTest()
     {
         var repository6 = await AuthorRepositorySetUp();
@@ -306,6 +315,7 @@ public class UnitTest
         
     }
     [Fact]
+    // This test that it stored correctly when a user wants to unfollows another user
     public async Task UnfollowTest()
     {
         var repository7 = await AuthorRepositorySetUp();

@@ -60,6 +60,7 @@ public class IntegrationTests : PageTest
         return userManager;
     }
 
+    // This sets up a repository which is used for testing purporses
     public async Task<IAuthorRepository> RepositorySetUp()
     {
         // This is to create an in-memory SQLite connection
@@ -134,6 +135,7 @@ public class IntegrationTests : PageTest
     }
 
     [Test]
+    // This is testing that the length is 160 characters when inserting a string of 160 characters
     public async Task NootChatBoxCharacterLimit()
     {
        
@@ -157,6 +159,8 @@ public class IntegrationTests : PageTest
         Assert.Equal(160,length);
     }
     [Test]  
+    // This is for testing that even if you try to write more than 160 characters, the lenght will still be 160
+    // because the user should not be able to write more than 160
     public async Task NootChatBoxCharacterLimitMoreCharacters()
     {
        
@@ -182,6 +186,7 @@ public class IntegrationTests : PageTest
     }
 
     [Test]
+    // This is for testing if you can send cheeps when logged in and that it is visible after being shared
     public async Task SendingCheepsWorks()
     {
         await Page.GotoAsync("https://localhost:5273/");
@@ -208,6 +213,7 @@ public class IntegrationTests : PageTest
     }
     
     [Test]
+    // This is for testing that we can handle XSS attacks 
     public async Task CheckingThatWeHandleXSSAttacks()
     {
         await Page.GotoAsync("https://localhost:5273/");
@@ -235,6 +241,7 @@ public class IntegrationTests : PageTest
     }
 
     [Test]
+    // This is to test that we can handle SQL injections 
     public async Task CheckingThatWeHandleSQLInjections()
     {
         await Page.GotoAsync("https://localhost:5273/");
@@ -258,6 +265,7 @@ public class IntegrationTests : PageTest
     }
     
     [Test]
+    // Testing that you can register on our program correctly, and deleting the author afterwards so that it will pass next time we run the test
     public async Task RegisterTest()
     {
         var repo = await RepositorySetUp();
@@ -281,6 +289,7 @@ public class IntegrationTests : PageTest
     }
     
     [Test]
+    // This for testing that the noots actually get deleted, when the user tries to delete one of its noots
     public async Task DeleteTest()
     {
         await Page.GotoAsync("https://localhost:5273/");
@@ -311,6 +320,7 @@ public class IntegrationTests : PageTest
     }
     
     [Test]
+    // This is for testing if the follow function works, and that the image changes to an unfollow icon when the user has followed someone
     public async Task FollowTest1()
     {
         await Page.GotoAsync("https://localhost:5273/");
@@ -350,6 +360,7 @@ public class IntegrationTests : PageTest
     }
     
     [Test]
+    // This is test that the followed user's noots also is on the user timeline. Then it tests that the user can unfollow the user
     public async Task UnFollowTest()
     {
         await Page.GotoAsync("https://localhost:5273/");
@@ -398,6 +409,7 @@ public class IntegrationTests : PageTest
     }
     
     [Test]
+    // This tests that our ForgetMe button works as expected, and deletes the user from the database
     public async Task ForgetAboutMeTest()
     {
         await Page.GotoAsync("https://localhost:5273");
@@ -431,6 +443,7 @@ public class IntegrationTests : PageTest
     }
 
     [Test]
+    // This is for testing that there isn't any bio when firstly registered, and that the user can create their own bio
     public async Task FirstBio()
     {
         await Page.GotoAsync("https://localhost:5273/");
@@ -476,6 +489,7 @@ public class IntegrationTests : PageTest
     }
     
     [Test]
+    // This is for testing, that you can change your bio without the program crashing (previous bio gets deleted)
     public async Task ChangingBio()
     {
         await Page.GotoAsync("https://localhost:5273/");
@@ -528,6 +542,7 @@ public class IntegrationTests : PageTest
     }
 
     [Test]
+    // This is for testing that all the expected things and functionality is on the About Me page
     public async Task AboutmePageTest()
     {
         var repo = await RepositorySetUp();
@@ -575,7 +590,5 @@ public class IntegrationTests : PageTest
         await Expect(Page.GetByText("Lief siger hej")).ToBeVisibleAsync();
         
         await Page.GetByRole(AriaRole.Button, new() { Name = "Forget Me!" }).ClickAsync();
-        
-        await repo.DeleteAuthorByEmail("Lief3@mail.dk");
     }
 }

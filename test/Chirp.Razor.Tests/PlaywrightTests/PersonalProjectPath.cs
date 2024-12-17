@@ -8,7 +8,7 @@ public class PersonalProjectPath
 
     private static string envVarName = "CHIRP_PROJECT_PATH";
 
-    public static string path = GetPath();
+    public static string path = getPath();
 
     public static string getPath()
     {

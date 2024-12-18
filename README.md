@@ -18,6 +18,8 @@ Nooter is a version of the Chirp-project from the BDSA2024 course on the IT-Univ
      - Linux: `sudo apt install sqlite3`
      - macOS: `brew install sqlite`
      - Windows: Typically pre-installed.
+3. [Powershell](https://github.com/PowerShell/PowerShell)
+   - Required for installing Playwright browsers to run Playwright test suite
 
 ## Step 1: Clone the repository
 
@@ -35,7 +37,7 @@ The application is built on .NET, which makes running the program fairly easy. T
 dotnet run --project src/Chirp.Razor/Chirp.Web
 ```
 
-This will host the local Nooter clone on localhost. The default port is: [https://localhost:5273](https://localhost:5273). You can now utilize the full funcionality of Nooter. However, please note that it operates on a local sqlite database, meaning that you will not be able to interact with other users in real time. That happens on the [Official Nooter](https://bdsagroup021chirprazor.azurewebsites.net/).
+This will host the local Nooter clone on localhost. The default port is: [https://localhost:5273](https://localhost:5273). You can now utilize the full funcionality of Nooter. However, please note that it operates on a local sqlite database, meaning that you will not be able to interact with other users in real time. Neither will you be able to use your GitHub account to register, as that requires organization secrets. Both of these things are however possible on the [Official Nooter Website](https://bdsagroup021chirprazor.azurewebsites.net/).
 
 
 # How to run tests

@@ -19,7 +19,7 @@ Nooter is a version of the Chirp-project from the BDSA2024 course on the IT-Univ
      - macOS: `brew install sqlite`
      - Windows: Typically pre-installed.
 3. [Powershell](https://github.com/PowerShell/PowerShell)
-   - Required for installing Playwright browsers to run Playwright test suite
+   - Required for installing Playwright browsers to run the Playwright test suite
 
 ## Step 1: Clone the repository
 
@@ -37,14 +37,14 @@ The application is built on .NET, which makes running the program fairly easy. T
 dotnet run --project src/Chirp.Razor/Chirp.Web
 ```
 
-This will host the local Nooter clone on localhost. The default port is: [https://localhost:5273](https://localhost:5273). You can now utilize the funcionality of Nooter. However, please note that it operates on a local sqlite database, meaning that you will not be able to interact with other users in real time. Neither will you be able to use your GitHub account to register, as that requires organization secrets. Both of these things are however possible on the [Official Nooter Website](https://bdsagroup021chirprazor.azurewebsites.net/).
+This will host the local Nooter clone on localhost. The default port is: [https://localhost:5273](https://localhost:5273). You can now utilize the functionality of Nooter. However, please note that it operates on a local SQLite database, meaning that you will not be able to interact with other users in real-time. Neither will you be able to use your GitHub account to register, as that requires organization secrets. Both of these things are however possible on the [Official Nooter Website](https://bdsagroup021chirprazor.azurewebsites.net/).
 
 
 # How to run tests
 
 ### Assertion testing
    
-In order to run the assertion test suite, you need to navigate to the root of your local clone of Nooter in a terminal of your choice. Then, run the following command:
+To run the assertion test suite, you need to navigate to the root of your local clone of Nooter in a terminal of your choice. Then, run the following command:
 ```bash
 dotnet test test/Chirp.Razor.Tests
 ```
@@ -52,7 +52,7 @@ dotnet test test/Chirp.Razor.Tests
 ### Playwright testing
    - In order to run the Playwright test suite, you need to have one of two prerequisites:
     
-       1. Have the program running locally in the backround, as described in ["Running Nooter"](#step-2-running-nooter)
+       1. Have the program running locally in the background, as described in ["Running Nooter"](#step-2-running-nooter)
        2. Change the defaultPath variable in `PersonalProjectPath.cs` to the string of the absolute path of `src/Chirp.Razor/Chirp.Web` on your computer. `PersonalProjectPath.cs` is located in `test/Chirp.Razor.Tests/PlaywrightTests`.
           
    - Once either of these prerequisites are met, simply run this command from the root of your local clone of Nooter:
@@ -62,11 +62,11 @@ dotnet test test/Chirp.Razor.Tests
 
 # Functionality 
 
-The website is intuitive and exploration is encouraged. The functionality includes, but is not limited to:
+The website is intuitive and exploration is encouraged. The functionality includes but is not limited to:
 
-- Registering as user
-    - Register using a Github acccount
-    - Register as an orignal account
+- Registering as a user
+    - Register using a GitHub acccount
+    - Register as an original account
 - Sharing Noots (messages)
 - Deleting Noots
 - Following other users

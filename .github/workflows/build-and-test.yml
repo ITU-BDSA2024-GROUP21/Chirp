@@ -2,7 +2,7 @@ name: .NET Build and Test
 
 on:
   push:
-    branches: main
+    branches: [ main, WorkflowPlaywright ]
   pull_request:
     branches: main
 jobs:
@@ -28,3 +28,42 @@ jobs:
         export authentication_github_clientId="${{ secrets.GITHUBCLIENTID }}"
         export authentication_github_clientSecret="${{ secrets.GITHUBCLIENTSECRET }}"
         dotnet test test/Chirp.Razor.Tests --verbosity normal 
+        
+  PlayWrightTest: # Inspiration from https://playwright.dev/docs/ci-intro
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-node@v4
+      with:
+        node-version: lts/*
+        
+    - name: Restore Dependencies
+      run: dotnet restore
+
+    - name: Set Custom Path
+      run: | 
+        CHIRP_PROJECT_PATH="${GITHUB_WORKSPACE}/src/Chirp.Razor/Chirp.Web"
+        echo "CHIRP_PROJECT_PATH=${CHIRP_PROJECT_PATH}" >> $GITHUB_ENV
+        
+        echo "Custom path set to: $ABSOLUTE_TEST_PATH"
+
+    - name: Verify Environment Variable
+      run: |
+        echo "Environment variable CHIRP_PROJECT_PATH is: $CHIRP_PROJECT_PATH"
+
+    - name: Build
+      run: dotnet build
+      working-directory: test/Chirp.Razor.Tests/PlaywrightTests
+
+    - name: Install playwright browser
+      run: pwsh test/Chirp.Razor.Tests/PlaywrightTests/bin/Debug/net8.0/playwright.ps1 install --with-deps
+
+    - name: Run Playwright tests
+      run: |
+        export authentication_github_clientId="${{ secrets.GITHUBCLIENTID }}"
+        export authentication_github_clientSecret="${{ secrets.GITHUBCLIENTSECRET }}"
+        echo "Using CHIRP_PROJECT_PATH: $CHIRP_PROJECT_PATH"
+        dotnet test test/Chirp.Razor.Tests/PlaywrightTests/ --verbosity normal
+      
+    

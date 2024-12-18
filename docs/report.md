@@ -19,8 +19,8 @@ The penultimate layer of our architecture contains all the classes that built th
 Finally, the outermost layer contains our test suite. Specifically the playwright tests interact exclusively with the user interface, but in order to make thorough testing, the assertion test suite tests all layers. 
 
 Onion diagram:  
-<div style="text-align: center;">
-  <img src="img/" alt="ActivityLogin.diagram" style="width: 50%;">
+<div align="center">
+  <img src="img/OnionDiagram.png" alt="Onion Diagram" />
 </div>
 
 

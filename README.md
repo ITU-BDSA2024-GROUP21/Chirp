@@ -37,7 +37,7 @@ The application is built on .NET, which makes running the program fairly easy. T
 dotnet run --project src/Chirp.Razor/Chirp.Web
 ```
 
-This will host the local Nooter clone on localhost. The default port is: [https://localhost:5273](https://localhost:5273). You can now utilize the full funcionality of Nooter. However, please note that it operates on a local sqlite database, meaning that you will not be able to interact with other users in real time. Neither will you be able to use your GitHub account to register, as that requires organization secrets. Both of these things are however possible on the [Official Nooter Website](https://bdsagroup021chirprazor.azurewebsites.net/).
+This will host the local Nooter clone on localhost. The default port is: [https://localhost:5273](https://localhost:5273). You can now utilize the funcionality of Nooter. However, please note that it operates on a local sqlite database, meaning that you will not be able to interact with other users in real time. Neither will you be able to use your GitHub account to register, as that requires organization secrets. Both of these things are however possible on the [Official Nooter Website](https://bdsagroup021chirprazor.azurewebsites.net/).
 
 
 # How to run tests

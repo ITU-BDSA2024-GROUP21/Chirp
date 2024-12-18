@@ -1,7 +1,7 @@
 ﻿@page "/"
 @model Chirp.Web.Pages.PublicModel
 @{
-    ViewData["Title"] = "Twitter";
+    ViewData["Title"] = "Nooter";
     Layout = "Shared/_Layout";
         
     // This is to parse the current page from the query string, defaulting to 1 if parsing fails
@@ -69,6 +69,7 @@
     {
         <em>There are no cheeps so far.</em>
     }
+    <!-- This is to decide which buttons should be displayed, depending on which page you are on and if there are more noots to display -->
     @if (currPage > 1 && Model.Cheeps.Count < 32)
     {
         <button onclick="document.location='/?page=@prevPage'" class="PageButton" >Previous Page</button>

@@ -1,7 +1,7 @@
 ﻿@page "/{author}"
 @model Chirp.Web.Pages.UserTimelineModel
 @{
-    ViewData["Title"] = "Twitter";
+    ViewData["Title"] = "Nooter";
     Layout = "Shared/_Layout";
     var routeName = HttpContext.GetRouteValue("author");
 
@@ -19,7 +19,7 @@
 
 }
 
-
+<!-- This is what should be rendered on the private timeline of a user --> 
     <partial name ="Shared/_NootBoxPartial" model="Model.CheepInput"/>
     
         @if( routeName!.ToString()!.EndsWith("s"))
@@ -112,6 +112,7 @@ else
     {
         <em>There are no cheeps so far.</em>
     }
+    <!-- This is for deciding which buttons should be in the bottom depending on which page it is on --> 
     @if (currPage > 1 && Model.Cheeps.Count < 32)
     {
     <button onclick="document.location='/@routeName/?page=@prevPage'" class="PageButton" >Previous Page</button>

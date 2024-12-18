@@ -5,6 +5,8 @@ using Microsoft.Data.Sqlite;
 
 namespace Chirp.Infrastructure.Services;
 
+// This is our nooterService which is used for communication between ChirpCore, ChirpWeb and ChirpInfrastructure.
+// So they only have to communicate with the service instead of the respective repositories
 public class NooterService : INooterService
 {
     private readonly INootRepository _nootRepository;
@@ -19,6 +21,7 @@ public class NooterService : INooterService
         _followRepository = followRepository;
     }
 
+    // This is a method for converting unixTimeStamp to a dateTimeString
     public static string UnixTimeStampToDateTimeString(double unixTimeStamp)
     {
         // Unix timestamp is seconds past epoch
@@ -27,6 +30,7 @@ public class NooterService : INooterService
         return dateTime.ToString("MM/dd/yy H:mm:ss");
     }
     
+    // This is to create a cheep/noot
     public async Task<Cheep> CreateCheep(string username,  string email, string message, string timestamp, int id)
     {
         AuthorDTO newAuthor = new AuthorDTO
@@ -49,6 +53,8 @@ public class NooterService : INooterService
         return cheep;
     }
 
+    // This is for retrieving the cheeps/noots from a given page
+    // calls the respective repository
     public async Task<List<CheepDTO>> GetCheeps(int page)
     {
         var result = await _nootRepository.GetNoots(page);
@@ -56,6 +62,8 @@ public class NooterService : INooterService
         return cheeps;
     }
 
+    // This is for retrieving the cheeps/noots from a given author and page
+    // calls the respective repository
     public async Task<List<CheepDTO>> GetCheepsFromAuthor(string author, int page)
     {
         var result = await _nootRepository.GetNootsFromAuthor(author, page);
@@ -63,12 +71,27 @@ public class NooterService : INooterService
         return cheeps;
     }
 
+    // This is for retrieving the cheeps/noots from a given author
+    // calls the respective repository
+    public async Task<List<Cheep>> GetNootsWithoutPage(string author)
+    {
+        var result = await _nootRepository.GetNootsWithoutPage(author);
+        return result;
+    }
+
+    // This is to get a specific author by its a name, calls the respective repository
     public async Task<Author> GetAuthorByName(string name)
     {
         return await _authorRepository.GetAuthorByName(name);
     }
 
-
+    // This is to delete a noot, calls the respective repository
+    public async Task DeleteNoot(int nootId)
+    {
+        await _nootRepository.DeleteNoot(nootId);
+    }
+    
+    // This is for converting cheeps/noots to a DTO
     private static List<CheepDTO> DTOConversion(List<Cheep> cheeps)
     {
         var list = new List<CheepDTO>();
@@ -86,16 +109,22 @@ public class NooterService : INooterService
         return list;
     }
 
+    // This is for following a specific author
+    // calls the respective repository
     public async Task Follow(int followingAuthorId, int followedAuthorId)
     {
         await _followRepository.FollowAuthor(followingAuthorId, followedAuthorId);
     }
 
+    // This is for retrieving which authors a specific author follows
+    // calls the respective repository
     public async Task<List<string>> GetFollowedAuthors(int authorId)
     {
         return await _followRepository.GetFollowedAuthors(authorId);
     }
     
+    // This is for retrieving all the cheeps/noots from a followed author
+    // calls the respective repository
     public async Task<List<CheepDTO>> GetCheepsFromFollowedAuthor(IEnumerable<string> followedAuthors, int authorId)
     {
         var cheep = await _nootRepository.GetNootsFromFollowedAuthors(followedAuthors, authorId);
@@ -103,21 +132,27 @@ public class NooterService : INooterService
         return cheeps;
     }
 
+    // This is to check if a given author is following another given author
+    // calls the respective repository
     public async Task<bool> IsFollowing(int followingAuthorId, int followedAuthorId)
     {
         return await _followRepository.IsFollowing(followingAuthorId, followedAuthorId);
     }
 
+    // This is to get an author to unfollow another given author
     public async Task Unfollow(int followingAuthorId, int followedAuthorId)
     {
         await _followRepository.Unfollow(followingAuthorId, followedAuthorId);
     }
 
+    // This is to delete author by its email
+    // calls the respective repository
     public async Task DeleteAuthorAndCheepsByEmail(string email)
     {
         await _authorRepository.DeleteAuthorByEmail(email);
     }
     
+    // Checks if an author exists, and if it does not exists, then it will be created
     public Task CheckFollowerExistElseCreate(ApplicationUser user)
     {
             AuthorDTO newAuthor = new AuthorDTO
@@ -129,7 +164,8 @@ public class NooterService : INooterService
             return Task.CompletedTask;
     }
     
-    public async Task<Bio> CreateBIO(string username,  string email, string message, int id)
+    // This is a method for creating a bio
+    public async Task<Bio> CreateBio(string username,  string email, string message, int id)
     {
         AuthorDTO newAuthor = new AuthorDTO
         {
@@ -151,6 +187,7 @@ public class NooterService : INooterService
         return bio;
     }
     
+    // This is a method for convert the bio to a BioDTO
     private static BioDTO DTOConversionBio(Bio bio)
     {
         return (new BioDTO
@@ -163,11 +200,25 @@ public class NooterService : INooterService
         
     }
     
+    // This is for retrieving the bio, calls respective repository
     public async Task<BioDTO> GetBio(string author)
     {
         var result = await _bioRepository.GetBio(author);
         var bio = DTOConversionBio(result!);
         return bio;
+    }
+
+    //Checks if the author has a bio, calls respective repository
+    public async Task<bool> AuthorHasBio(string author)
+    {
+        var result = await _bioRepository.AuthorHasBio(author);
+        return result;
+    }
+
+    // This is for deleting a bio, calls respective repository
+    public async Task DeleteBio(Author author)
+    {
+        await _bioRepository.DeleteBio(author);
     }
 
 }

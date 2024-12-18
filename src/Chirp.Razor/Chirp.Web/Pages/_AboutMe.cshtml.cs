@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using System.Text.Json;
-using Chirp.Infrastructure.Repositories;
 using Microsoft.Build.Framework;
 namespace Chirp.Web.Pages;
 
@@ -13,9 +12,6 @@ public class AboutMeModel : PageModel
     private readonly SignInManager<ApplicationUser> _signInManager;
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly INooterService _nooterService;
-    private readonly INootRepository _nootRepository;
-    private readonly IBioRepository _bioRepository;
-    private readonly IFollowRepository _followRepository;
 
     [BindProperty]
     public required string? Email { get; set; }
@@ -26,15 +22,12 @@ public class AboutMeModel : PageModel
     public required string Cheeps { get; set; }
     public BioDTO? Bio { get; set; }
 
-    public AboutMeModel(INootRepository nootRepository, SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager, INooterService nooterService, IBioRepository bioRepository, IFollowRepository followRepository)
+    public AboutMeModel(SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager, INooterService nooterService)
     {
         _signInManager = signInManager;
         _userManager = userManager;
         _nooterService = nooterService;
         CheepsListString = new List<string>();
-        _nootRepository = nootRepository;
-        _bioRepository = bioRepository;
-        _followRepository = followRepository;
         
     }
 
@@ -50,23 +43,23 @@ public class AboutMeModel : PageModel
             return Redirect("/Identity/Account/Login");
         }
         
-        //Loading The users email adress
+        //Loading The users email address
         Author author = await _nooterService.GetAuthorByName(User.Identity?.Name!);
         Email = author.Email;
 
-        if (await _bioRepository.AuthorHasBio(author.Name))
+        if (await _nooterService.AuthorHasBio(author.Name))
         {
             Bio = await _nooterService.GetBio(User.Identity?.Name!);
         }
 
         int authorid = author.AuthorId;
         
-        //loading who our uses is following
+        //loading who our user is following
         FollowersList = await _nooterService.GetFollowedAuthors(authorid);
         Followers = string.Join( ", ", FollowersList.ToArray() );
         
         //loading all the cheeps
-        CheepsList = await _nootRepository.GetNootsWithoutPage(author.Name);
+        CheepsList = await _nooterService.GetNootsWithoutPage(author.Name);
 
         foreach (Cheep cheep in CheepsList)
         {
@@ -80,6 +73,7 @@ public class AboutMeModel : PageModel
 
         return Page();
     }
+    // This is when a user wants to download the information stored about them
     public async Task<IActionResult> OnPostDownload()
     {
         var user = await _userManager.GetUserAsync(User);
@@ -89,7 +83,7 @@ public class AboutMeModel : PageModel
             return NotFound("User not found.");
         }
         Author author1 = await _nooterService.GetAuthorByName(User.Identity?.Name!);
-        if (await _bioRepository.AuthorHasBio(author1.Name))
+        if (await _nooterService.AuthorHasBio(author1.Name))
         {
             Bio = await _nooterService.GetBio(User.Identity?.Name!);
         }
@@ -104,27 +98,28 @@ public class AboutMeModel : PageModel
             personalData.Add("Email", author.Email);
             
 
-            // Følgere
+            // Followers
             var followersList = await _nooterService.GetFollowedAuthors(author.AuthorId);
             personalData.Add("Followers", followersList);
 
             // Cheeps
-            var cheepsList = await _nootRepository.GetNootsWithoutPage(author.Name);
+            var cheepsList = await _nooterService.GetNootsWithoutPage(author.Name);
             personalData.Add("Noots", cheepsList.Select(c => c.Text)); // Kun tekst
             
             personalData.Add("Bio", Bio?.Text!);
         }
 
-        // Returner som JSON-fil
+        // Returns as a JSON-file
         Response.Headers.TryAdd("Content-Disposition", "attachment; filename=PersonalData.json");
         return new FileContentResult(JsonSerializer.SerializeToUtf8Bytes(personalData, new JsonSerializerOptions
         {
-            WriteIndented = true // For læsbarhed
+            WriteIndented = true // For readability
         }), "application/json");
     }
 
     
 
+    // This is what needs to happen when the user clicks the Forget Me! button and redirects to the page
     public async Task<IActionResult> OnPostForgetme(Author author)
 
     {
@@ -139,19 +134,22 @@ public class AboutMeModel : PageModel
         
         await _nooterService.DeleteAuthorAndCheepsByEmail(author1.Email);
             
+        // Signs out the user when it gets deleted
         await _signInManager.SignOutAsync();
         
         return RedirectToPage();
     }
     
+    //This handles the request to create or update a user's bio, ensuring input validation and redirecting to the "About Me"
+    //page upon success.
     public async Task<IActionResult> OnPost()
     {
         var author = await _nooterService.GetAuthorByName(User.Identity?.Name!);
         Console.WriteLine("HEJ" + author.Name);
         var user = await _userManager.GetUserAsync(User);
-        if (await _bioRepository.AuthorHasBio(User.Identity?.Name!))
+        if (await _nooterService.AuthorHasBio(User.Identity?.Name!))
         {
-            await _bioRepository.DeleteBio(author);
+            await _nooterService.DeleteBio(author);
             Console.WriteLine("Has to have an author");
         } 
 
@@ -174,7 +172,7 @@ public class AboutMeModel : PageModel
         var guid = Guid.NewGuid();
         var bioId = BitConverter.ToInt32(guid.ToByteArray(), 0);
 
-        await _nooterService.CreateBIO(User.Identity?.Name!, email!,BioInput?.Text!, bioId);
+        await _nooterService.CreateBio(User.Identity?.Name!, email!,BioInput?.Text!, bioId);
         return RedirectToPage("./_AboutMe");
     }
     

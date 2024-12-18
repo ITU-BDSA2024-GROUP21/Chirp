@@ -20,6 +20,7 @@ public class BioRepository : IBioRepository
     }
 
 
+    // This is to convert the bio when given a BioDTO and an AuthorDTO, and converting both to Author and Bio obejcts
     public async Task<Bio> ConvertBio(BioDTO bio, AuthorDTO author)
     {
         var _author = await ConvertAuthors(author);
@@ -33,6 +34,7 @@ public class BioRepository : IBioRepository
 
     }
     
+    // This is for retrieving the bio from a given author
     public async Task<Bio?> GetBio(string author)
     {
         var sqlQuery = _chirpDbContext.Bios
@@ -44,6 +46,7 @@ public class BioRepository : IBioRepository
         return result;
     }
 
+    // This to check if the author has a bio 
     public async Task<bool> AuthorHasBio(string author)
     {
         if (await _chirpDbContext.Bios.AnyAsync(bio => bio.Author.Name == author))
@@ -56,6 +59,7 @@ public class BioRepository : IBioRepository
         }
     }
 
+    // This is to delete only the bio from the author 
     public async Task DeleteBio(Author author)
     {
         var FindBio = await _chirpDbContext.Bios.FirstOrDefaultAsync(b => b.AuthorId == author.AuthorId);
@@ -67,7 +71,7 @@ public class BioRepository : IBioRepository
         await _chirpDbContext.SaveChangesAsync();
     }
     
-    //This is helping methods for converting author
+    //The two following methods are helping methods for converting author
     public async Task<Author> ConvertAuthors(AuthorDTO author)
     {
         var _author = await CheckAuthorExists(author);

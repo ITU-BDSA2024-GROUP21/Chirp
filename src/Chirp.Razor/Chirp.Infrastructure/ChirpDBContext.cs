@@ -14,6 +14,7 @@ public class ChirpDBContext : IdentityDbContext<ApplicationUser>
     public DbSet<AuthorFollow> AuthorFollows { get; set; }
     public DbSet<Bio> Bios { get; set; }
     
+    // This method configures relationships in our database model
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);

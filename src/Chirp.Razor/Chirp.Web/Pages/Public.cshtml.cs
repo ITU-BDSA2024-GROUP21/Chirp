@@ -13,7 +13,6 @@ namespace Chirp.Web.Pages;
 public class PublicModel : PageModel
 {
     private readonly INooterService _nooterService;
-    private readonly IFollowRepository _followRepository;
     public required List<CheepDTO> Cheeps { get; set; }
     private int _page;
     private readonly UserManager<ApplicationUser> _userManager;
@@ -23,15 +22,15 @@ public class PublicModel : PageModel
     public required NootBoxModel CheepInput { get; set; }
     
 
-    public PublicModel(INooterService nooterService, UserManager<ApplicationUser> userManager, IFollowRepository followRepository)
+    public PublicModel(INooterService nooterService, UserManager<ApplicationUser> userManager)
     {
         _nooterService = nooterService;
         _userManager = userManager;
         FollowerMap = new Dictionary<string, bool>();
-        _followRepository = followRepository;
     }
     
 
+    // This handles when retrieving all the cheeps/noots and the page number is parsed
     public async Task<ActionResult> OnGet()
     {
         if (!string.IsNullOrEmpty(Request.Query["page"]) && int.Parse(Request.Query["page"]!) > 0)
@@ -65,9 +64,9 @@ public class PublicModel : PageModel
         return Page();
     }
 
+    // This is for handling when a user tries to post / share a noot 
     public async Task<IActionResult> OnPost()
     {
-        Console.WriteLine("Hejsa");
         if (string.IsNullOrWhiteSpace(CheepInput.Text))
         {
             ModelState.AddModelError("CheepInput.Text", "The message can't be empty.");
@@ -93,6 +92,7 @@ public class PublicModel : PageModel
         return RedirectToPage("Public");
     }
 
+    // This is for handling when the user clicks the follow button 
     public async Task<IActionResult> OnPostFollow(int followingAuthorId, string followerAuthor, int page)
     {
         if (string.IsNullOrEmpty(followerAuthor))
@@ -104,10 +104,11 @@ public class PublicModel : PageModel
         Author author = await _nooterService.GetAuthorByName(followerAuthor);
         int id = author.AuthorId;
         
-        await _followRepository.FollowAuthor(id,followingAuthorId);
+        await _nooterService.Follow(id,followingAuthorId);
         FollowerMap[author.Name] = true;
         return Redirect($"/?page={page}");
     }
+    // This handles when a user clicks on the unfollow button
     public async Task<IActionResult> OnPostUnfollow(int followingAuthorId, string followerAuthor, int page)
     {
         if (string.IsNullOrEmpty(followerAuthor))
@@ -120,7 +121,7 @@ public class PublicModel : PageModel
         int id = author.AuthorId;
         
         Console.WriteLine(followingAuthorId);
-        await _followRepository.Unfollow(id,followingAuthorId);
+        await _nooterService.Unfollow(id,followingAuthorId);
         FollowerMap[author.Name] = false;
         return Redirect($"/?page={page}");
     }

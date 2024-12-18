@@ -6,7 +6,7 @@ namespace Chirp.Razor.Tests.PlaywrightTests;
     {
         public static Task<Process> StartServer()
         {
-            string projectPath = PersonalProjectPath.GetPath();
+            string? projectPath = PersonalProjectPath.GetPath();
 
             var serverProcess = new Process
             {

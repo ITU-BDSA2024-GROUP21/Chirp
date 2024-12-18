@@ -4,13 +4,13 @@ public class PersonalProjectPath
 {
     // Personal absolute path to web app. Done this way to be able to include in gitignore
 
-    private static string defaultPath = @"src\Chirp.Razor\Chirp.Web";
+    private static string? defaultPath = @"src\Chirp.Razor\Chirp.Web";
 
     private static string envVarName = "CHIRP_PROJECT_PATH";
 
-    public static string path;
+    public static string? path;
 
-    public static string GetPath()
+    public static string? GetPath()
     {
         var customPath = Environment.GetEnvironmentVariable(envVarName);
         

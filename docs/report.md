@@ -8,7 +8,7 @@
 
 ## Domain Model
 
-![Tegning 1](https://hackmd.io/_uploads/SyJkVC0Nyl.png)
+![Tegning 1](img/Class%20Diagram.png)
 The diagram seen above illustrates the classes and interfaces that make up our program, with connections drawn between classes that rely on other parts. As can be seen above, and will be further discussed below, the NooterService class separates the core and infrastructure parts of the system from the user interface. This is evident when looking at the diagram, as there is a clear distinction above and below NooterService.
 
 
@@ -20,14 +20,14 @@ Finally, the outermost layer contains our test suite. Specifically the playwrigh
 
 Onion diagram:  
 <div style="text-align: center;">
-  <img src="https://hackmd.io/_uploads/HkjKcp0Vyg.png" alt="ActivityLogin.diagram" style="width: 50%;">
+  <img src="img/" alt="ActivityLogin.diagram" style="width: 50%;">
 </div>
 
 
 
 ## Architecture of deployed application
-<div style="text-align: center;">
-     <img src="https://hackmd.io/_uploads/rywBl0AEJg.jpg" alt="ActivityLogin.diagram">
+<div align="center">
+  <img src="img/Component-Diagram.jpg" alt="Component Diagram" />
 </div>
 
 The diagram above shows the different components of our Nooter application. It shows that the client interacts with the web server and, through that, the web application. It also shows how the web application interacts with the application service to store and fetch data about the users, noots, who they are following, and so on. As illustrated, it is all deployed on Microsoft Azure, which is why that component is drawn as a large component outside of our application.
@@ -37,52 +37,51 @@ The diagram above shows the different components of our Nooter application. It s
 ## User activities 
 
 
-
-<div style="text-align: center;">
-     <img src="https://hackmd.io/_uploads/rkIbtcaEyg.jpg" alt="ActivityLogin.diagram" style="width: 10%;">
+<div align="center">
+  <img src="img/NonAuthorizedActivityDiagram.jpg" alt="Non Authorized Activity Diagram" />
 </div>
 
 The activity diagram above visualizes the process of an unauthenticated user, who wants to experience the website without being authenticated. The root page of the website is the public timeline, which is displayed first, before they press the register button and the register page is displayed. Finally, they press the login button, which displays the login page. The user has now gone through all the different pages an unauthenticated user can visit, save from the multiple pages of the public timeline.
 
 
-<div style="text-align: center;">
-     <img src="https://hackmd.io/_uploads/Hk-qf9pNyx.jpg" alt="ActivityLogin.diagram" style="width: 20%;">
+<div align="center">
+  <img src="img/RegisterActivityDiagram.jpg" alt="Register Activity Diagram" />
 </div>
 
 This activity diagram shows an unauthenticated user who wants to register an account and display their private timeline. When the user clicks the register link, they will be redirected to the register page, where the user has to enter their username, email, and the password they want for their account. If the information for username, email, or password is invalid, the user stays on the register page and is provided an error message. If the information is valid, the user is logged in and redirected to the public timeline, where the user then has the option to navigate to their own private timeline. 
 
-<div style="text-align: center;">
-     <img src="https://hackmd.io/_uploads/S1GWmsTVkl.jpg" alt="ActivityLogin.diagram" style="width: 20%;">
+
+<div align="center">
+  <img src="img/LoginActivityDiagram.jpg" alt="Login Activity Diagram" />
 </div>
 
 
 The purpose of this activity diagram is to show the user activity when a user logs in and navigates to their private timeline. The user starts on the root, which is the public timeline. By clicking the login link, the user will then be redirected to the login page. The user can then enter their email and password for their account and then click the login button. If the login attempt is valid, the user will be logged in and redirected to the public timeline. The user can then click on the *My timeline* button, and be redirected to their private timeline. 
 
 
-
-<div style="text-align: center;">
-     <img src="https://hackmd.io/_uploads/HkNXNj6Vye.jpg" alt="ActivityLogin.diagram" style="width: 20%;">
+<div align="center">
+  <img src="img/LogoutActivityDiagram.jpg" alt="Logout Activity Diagram" />
 </div>
 
 The activity diagram shown above is a continuation of the previous diagram, where the user has just logged in before navigating to their private timeline. The user is now authenticated and have more options with the program. In this diagram the user wants to log out again. They start by clicking the logout *username* and will be redirected to the logout page. The logout page contains a button *Click here to log out*. When the user clicks that button, the user is logged out and redirected to the login page. 
 
 
-<div style="text-align: center;">
-     <img src="https://hackmd.io/_uploads/BJlof9TVkg.jpg" alt="ActivityLogin.diagram" style="width: 20%;">
+<div align="center">
+  <img src="img/Follow_UnfollowActivityDiagram.jpg" alt="Follow/Unfollow Activity Diagram" />
 </div>
 
 In the diagram above, the process of an authenticated user who follows and unfollows another user is portrayed. When the authenticated user is on the public timeline, the Noots from other users are shown along with a follow icon. The user clicks the follow button and now follows the other account. Then user navigates to the private timeline. Both the user's noots and the noots from the users who they follow will now appear. The user will then click the unfollow icon, and the private timeline will reload without the now unfollowed users' noots.
 
-<div style="text-align: center;">
-     <img src="https://hackmd.io/_uploads/ByvhG5TEyl.jpg" alt="ActivityLogin.diagram" style="width: 20%;">
-         <img src="https://hackmd.io/_uploads/H1rxknpNyg.jpg" alt="ActivityLogin.diagram" style="width: 24%;">
+<div align="center">
+     <img src="img/SendNootActivityDiagram.jpg" alt="Private Send Noot Activity Diagram" style="width: 20%;">
+         <img src="img/PublicSendNootActivityDiagram.jpg" alt="Public Send Noot Activity Diagram" style="width: 24%;">
 </div>
 
 The authenticated user can also send a noot. Firstly the user has to log in. In the leftmost diagram, the user types the noot they want to share in their private timeline. In the diagram on the right, it shows the user typing the noot whilst on the public timeline. The program does not explicitly check if the noot is valid, because it is not possible to type an invalid noot, due to our implementation of the Nootbox. When the noot is shared, no matter if the user shared it whilst on the private or public timeline, they will be redirected to the public timeline, and the new noot is shown along other noots. 
 
 
-<div style="text-align: center;">
-     <img src="https://hackmd.io/_uploads/Hy3sM5TEyl.jpg" alt="ActivityLogin.diagram" style="width: 20%;">
+<div align="center">
+  <img src="img/ForgetMeActivityDiagram.jpg" alt="Forgetme Activity Diagram" />
 </div>
 
 The activity diagram above showcases another feature, to which an authenticated user has access. When the user is logged in, the user will click the *About Me* link, which will redirect the user to the *About Me* page, where it is possible to click the *Forget Me!* button. When this button is pressed, the account will then be deleted, along with all their noots, follows, and other personal data. The now unauthenticated user will be redirected to the login page.
@@ -90,7 +89,7 @@ The activity diagram above showcases another feature, to which an authenticated 
 
 
 ## Sequence of functionality/calls through Chirp!
-![Sequence Diagram BDSA 2024.drawio (1)](https://hackmd.io/_uploads/rkC7kC1Hkg.png)
+![Sequence Diagram BDSA 2024.drawio.png](img/Sequence%20Diagram%20BDSA%202024.drawio.png)
  
 The sequence diagram models an interaction, where an unauthenticated user requests the root page. The user does this, by clicking the URL to the website hosted on Azure. Clicking this link on the browser, makes the browser send an HTTP GET / request, in order to request the root page. 
 The root page looks different, depending on whether or not the user is authenticated. If an authenticated user sees this page, it will include access to additional functionalities, such as the buttons for private timeline, "Nooting" and following other users. However, if the user is not authenticated, these will of course be hidden. Therefore, it is vital for the server to know if the user is authenticated, in order to respond to the HTTP request with the appropriate data.
@@ -103,16 +102,16 @@ The server then sends a request to the backend in order to authenticate the clie
 
 ## Build, test, release, and deployment
 
-<div style="text-align: center;">
-    <img src="https://hackmd.io/_uploads/S1FbMA1BJl.png" alt="ActivityLogin.diagram" style="width: 50%;">
+<div align="center">
+  <img src="img/Build-And-Test-Activity-Diagram.drawio.png" alt="BuildTest Activity Diagram" />
 </div>
 
 Our build and test workflow is the most essential, as the program shall at all times be able to do these things. We activate this workflow on pushes or pull requests on main, such that branches with experimental features and logic can exist, but nothing can be merged to main without passing this workflow. As our test suite is essentially split into two, so is our workflow; into a Playwright test suite and an assertion test suite. The assertion test suite only does the standard .NET procedure of restoring dependencies, then building the project, and then running the test suite. In theory, any of those steps can break the workflow. However, as seen in the diagram, it is assumed that mainly the test suite itself is subject to failure. If it does fail, the activity ends, and the tested software will have to be rewritten.
 
 Likewise with the playwright test suite, but there are some minor additions. Primarily, our Playwright test suite implementation requires an absolute path. This is fixed by using `${GITHUB_WORKSPACE}` and assigning it to an environmental variable that, if set, has priority in the codebase. Furthermore, the Playwright browsers also needs to be installed each time the workflow runs. This means that it takes a lot more time and computational power to run the Playwright test suite than it does to run assertation tests. Therefore, this is the only workflow that includes the playwright test suite, whilst the others also contain the assertation test suite in order to not deploy or release bug-inducing code.
 
-<div style="text-align: center;">
-    <img src="https://hackmd.io/_uploads/B1jo-nyHkx.png" alt="ActivityLogin.diagram" style="width: 70%;">
+<div align="center">
+  <img src="img/Build-And-Deploy-Activity-Diagram.drawio.png" alt="BuildDeploy Activity Diagram" />
 </div>
 
 
@@ -120,8 +119,8 @@ The build and deploy workflow is responsible for the automatic deployment of the
 
 The first step in the Deploy job is to download the aforementioned artifacts, before logging in to Azure. Now that the workflow has the artifacts needed to run the program, as well as being logged in to the correct Azure account, it can deploy the artifacts directly to the Azure Web App.
 
-<div style="text-align: center;">
-    <img src="https://hackmd.io/_uploads/BJso-nySyg.png" alt="ActivityLogin.diagram" style="width: 50%;">
+<div align="center">
+  <img src="img/Build-And-Release-Activity-Diagram.drawio.png" alt="BuildRelease Activity Diagram" />
 </div>
 
 
@@ -130,7 +129,7 @@ The build and release workflow is activated each time a new version tag is relea
 
 
 ## Team work
-![Skærmbillede 2024-12-17 kl. 12.50.05](https://hackmd.io/_uploads/S1boSJkByx.png)
+![Skærmbillede 2024-12-17 kl. 12.50.05](img/Project%20Board.png)
 
 
 After each lecture, we had a short meeting and wrote down the issues for the coming week on our project board. We tried to split the given assignments into smaller issues. This meeting gave us an overview of how far we were with the issues from the previous week, and what needed to be implemented during the following week. As the workload varied between weeks, this gave us the opportunity to adapt to each week and make sure we did not get behind schedule. We primarily met to work on the project on Monday, Tuesday, and Wednesday, where we focused on the bigger implementations and the parts where we felt it was important everyone took part in the process.  

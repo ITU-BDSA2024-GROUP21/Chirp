@@ -2,7 +2,7 @@ name: .NET Build and Test
 
 on:
   push:
-    branches: main
+    branches: workflow_env_variables
   pull_request:
     branches: main
 jobs:
@@ -28,6 +28,12 @@ jobs:
         export authentication_github_clientId="${{ secrets.GITHUBCLIENTID }}"
         export authentication_github_clientSecret="${{ secrets.GITHUBCLIENTSECRET }}"
         dotnet test test/Chirp.Razor.Tests --verbosity normal 
+        
+    - name: AddSecrets
+      env:
+        LOCAL_CLIENT_ID: ${{ secrets.LOCAL_CLIENT_ID }}
+        LOCAL_CLIENT_SECRET: ${{ secrets.LOCAL_CLIENT_SECRET }}
+      run: echo "Added secrets to env variables"
         
   PlayWrightTest: # Inspiration from https://playwright.dev/docs/ci-intro
     timeout-minutes: 60

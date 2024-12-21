@@ -15,7 +15,11 @@ public partial class Program
 
         var chirpDbPath = Environment.GetEnvironmentVariable("CHIRPDBPATH")
                           ?? Path.Combine(Path.GetTempPath(), "chirp.db");
-
+        var clientId = Environment.GetEnvironmentVariable("LOCAL_CLIENT_ID");
+        var clientSecret = Environment.GetEnvironmentVariable("LOCAL_CLIENT_SECRET");    
+        
+        Console.WriteLine("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+        Console.WriteLine(clientId);
         
         // Add services to the container.
         builder.Services.AddRazorPages();
@@ -35,8 +39,8 @@ public partial class Program
             .AddCookie()
             .AddGitHub(o =>
             {
-                o.ClientId = builder.Configuration["authentication_github_clientId"] ?? throw new InvalidOperationException("Client ID is null");
-                o.ClientSecret = builder.Configuration["authentication_github_clientSecret"] ?? throw new InvalidOperationException("Client Secret is null");
+                o.ClientId = (builder.Configuration["authentication_github_clientId"] ?? builder.Configuration["clientId"]) ?? throw new InvalidOperationException();
+                o.ClientSecret = (builder.Configuration["authentication_github_clientSecret"] ?? builder.Configuration["clientSecret"]) ?? throw new InvalidOperationException();
                 o.Scope.Add("user:email"); // Makes sure Github sends email & username
                 o.Scope.Add("read:user");
                 o.CallbackPath = "/signin-github";

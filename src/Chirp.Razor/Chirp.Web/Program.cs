@@ -15,11 +15,16 @@ public partial class Program
 
         var chirpDbPath = Environment.GetEnvironmentVariable("CHIRPDBPATH")
                           ?? Path.Combine(Path.GetTempPath(), "chirp.db");
-        var clientId = Environment.GetEnvironmentVariable("LOCAL_CLIENT_ID");
+        string clientId = Environment.GetEnvironmentVariable("authentication_github_clientId");
         var clientSecret = Environment.GetEnvironmentVariable("LOCAL_CLIENT_SECRET");    
         
         Console.WriteLine("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
         Console.WriteLine(clientId);
+        
+        if (string.IsNullOrEmpty(clientId))
+        {
+            throw new InvalidOperationException("Required environment variables are not set.");
+        }
         
         // Add services to the container.
         builder.Services.AddRazorPages();

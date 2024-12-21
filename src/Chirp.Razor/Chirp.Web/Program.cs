@@ -15,7 +15,7 @@ public partial class Program
 
         var chirpDbPath = Environment.GetEnvironmentVariable("CHIRPDBPATH")
                           ?? Path.Combine(Path.GetTempPath(), "chirp.db");
-        string clientId = Environment.GetEnvironmentVariable("authentication_github_clientId");
+        var clientId = Environment.GetEnvironmentVariable("LOCAL_CLIENT_ID");
         var clientSecret = Environment.GetEnvironmentVariable("LOCAL_CLIENT_SECRET");    
         
         Console.WriteLine("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");

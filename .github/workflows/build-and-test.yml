@@ -34,8 +34,8 @@ jobs:
         LOCAL_CLIENT_ID: "clientIdWorks"
         LOCAL_CLIENT_SECRET: ${{ secrets.LOCAL_CLIENT_SECRET }}
       run: |
-        export LOCAL_CLIENT_ID=LOCAL_CLIENT_ID
-        export LOCAL_CLIENT_SECRET=LOCAL_CLIENT_SECRET
+        export LOCAL_CLIENT_ID="$LOCAL_CLIENT_ID"
+        export LOCAL_CLIENT_SECRET="$LOCAL_CLIENT_SECRET"
         echo "LOCAL_CLIENT_ID: $LOCAL_CLIENT_ID"
         echo "LOCAL_CLIENT_SECRET: $LOCAL_CLIENT_SECRET"
         

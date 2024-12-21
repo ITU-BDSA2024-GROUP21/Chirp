@@ -32,7 +32,7 @@ If this fails, navigate to the online repository: `https://github.com/ITU-BDSA20
 
 ## Step 2: Running Nooter 
 
-The application is built on .NET, which makes running the program fairly easy. The terminal used in [Step #1](#step-1-clone-the-repository) should still be in the root of your local clone of Nooter. If not, navigate to it, in a terminal of your choice. Then run the following command:
+The application is built on .NET, which makes running the program fairly easy. Typing `cd Chirp` in the terminal used in [Step #1](#step-1-clone-the-repository) should navigate to the root of your local clone of Nooter. If not, navigate to it, in a terminal of your choice. Then run the following command:
 ```bash
 dotnet run --project src/Chirp.Razor/Chirp.Web
 ```

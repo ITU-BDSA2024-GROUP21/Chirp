@@ -33,7 +33,11 @@ jobs:
       env:
         LOCAL_CLIENT_ID: ${{ secrets.LOCAL_CLIENT_ID }}
         LOCAL_CLIENT_SECRET: ${{ secrets.LOCAL_CLIENT_SECRET }}
-      run: echo "Added secrets to env variables"
+      run: |
+        export LOCAL_CLIENT_ID="YOUR_TEST_CLIENT_ID"
+        export LOCAL_CLIENT_SECRET="YOUR_TEST_CLIENT_SECRET"
+        echo "LOCAL_CLIENT_ID: $LOCAL_CLIENT_ID"
+        echo "LOCAL_CLIENT_SECRET: $LOCAL_CLIENT_SECRET"
 
     - name: Print Environment Variables
       run: |
